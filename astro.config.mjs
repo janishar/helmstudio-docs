@@ -30,6 +30,7 @@ export default defineConfig({
         ]),
       ],
       sidebar: [
+        { label: 'Tour', link: '/tour/' },
         { label: 'Start here', items: [{ autogenerate: { directory: 'start' } }] },
         { label: 'Using the studio', items: [{ autogenerate: { directory: 'studio' } }] },
         { label: 'Models', items: [{ autogenerate: { directory: 'models' } }] },
