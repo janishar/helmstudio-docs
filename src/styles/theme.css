@@ -493,8 +493,18 @@ h4,
   color: var(--sl-color-gray-3);
 }
 /* splash pages: the hero text centred above the shot */
+/* no hero image: one centred column at every width (Starlight keeps a 7fr/4fr grid otherwise) */
+[data-has-hero] .hero {
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+}
 [data-has-hero] .hero .stack {
   align-items: center;
+  text-align: center;
+}
+[data-has-hero] .hero h1,
+[data-has-hero] .hero .tagline {
+  align-self: stretch;
   text-align: center;
 }
 [data-has-hero] .hero .actions {
