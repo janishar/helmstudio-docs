@@ -1,0 +1,136 @@
+---
+title: Hosts and runners
+description: How Macs and NVIDIA machines run models, where a run goes, how memory is managed, and how to add an NVIDIA host.
+sidebar:
+  order: 5
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+A **host** is a machine with model runners. A **runner** is a process that loads a model's weights and makes takes.
+The studio's services can run on one machine while the runners run on several.
+
+## Macs
+
+A Mac with Apple Silicon is one host, named `mac`. It runs three runners, each in its own process:
+
+- `torch`: PyTorch on the Mac's GPU.
+- `mlx`: MLX.
+- `native`: native binaries, such as MiniMax H3 video and ZONOS3.
+
+On a Mac the CPU and GPU share one memory. So the three runners share **one memory budget**: the Mac's memory minus a
+reserve. Before a run starts, the studio checks that the run's planned peak, plus everything already loaded on the
+host, fits the budget. If it does not, the studio asks the runners to unload the least recently used parts, and the
+run waits until they have.
+
+Start the Mac's runners with `make runners`. See [Install and run](/start/install/).
+
+## NVIDIA hosts
+
+A Linux machine with an NVIDIA GPU joins as one more host. It runs the `torch` runner as a container, and a `native`
+runner for MiniMax H3 video and ZONOS3. Its budget is the GPU's memory minus a reserve.
+
+Some model variants run on one kind of host only:
+
+| Only on a Mac | Only on NVIDIA |
+|---|---|
+| LTX-2.5 Distilled and Dev, MiniMax H3 Base video, Qwen3.8 27B | Every fp8 and int8 community variant |
+
+Each family's page under [Models](/models/) lists its variants.
+
+## Where a run goes
+
+On Create, **Run on** picks the host:
+
+- **Auto** sends the run to an eligible host: one that has the runner, the weights and the memory. It prefers a host
+  that already has the model loaded.
+- **A named host** sends it there only. A run set to a host never moves.
+
+A host that cannot take the run is greyed out, with the reason. Generate shows the run's estimated time and peak
+memory. A run too big for every host fails at once and says why.
+
+Each host does **one run at a time**. Other runs wait in a queue, in order. If a host goes offline during a run, the
+run is tried once more on another eligible host, or it fails with the reason.
+
+## Memory settings
+
+An admin sets each host's memory in [Admin](/studio/admin/) › Hosts. The settings apply to every runner on that host.
+
+| Setting | What it does |
+|---|---|
+| After the queue drains | **Unload everything** stops the runner processes, the only way to be sure memory goes back to the system. **Keep warm** keeps models loaded until memory is needed or the idle timeout passes. **Keep pinned only** keeps pinned parts and unloads the rest. |
+| Idle timeout, minutes | How long Keep warm waits before unloading. 0 means never. |
+| Memory reserve, GB | Memory kept back for everything else. The budget is the host's memory (the GPU's memory on NVIDIA) minus this. |
+| Pins | Keep a model part loaded between runs. |
+
+The same settings are available from the command line:
+
+```sh
+helm hosts                                         # each host's memory, device, runners and what they hold
+helm hosts after-run <host> keep_warm --idle-min 10 --reserve-gb 12
+helm hosts unload <host> --all
+```
+
+See [The helm CLI](/mcp/helm-cli/) for the rest.
+
+## Add an NVIDIA host
+
+An NVIDIA host runs only the runner. It talks to the stack's message bus (NATS) and object store, both over TLS, with
+its own credentials. Its weights stay on its own disk.
+
+<Aside type="caution">
+  Never publish the stack's NATS port to the internet. Reach it through an SSH tunnel, or through a TLS-only proxy
+  that only the GPU hosts can reach.
+</Aside>
+
+<Steps>
+
+1. **On the machine that runs the stack**, make the host's credentials and turn on TLS. Pick a short host name of
+   lower-case letters and digits for `<h>`.
+
+   ```sh
+   make gpu-host-secrets GPU_HOSTS=<h>
+   ```
+
+   Then set `STACK_TLS=on` in `deploy/.env` and run `make up`.
+
+2. **On the GPU host**, install the NVIDIA driver, the NVIDIA Container Toolkit, and Docker with Compose 2.20 or later.
+   The repository's `deploy/gpu-host/setup.sh` does this on a fresh Ubuntu 24.04 machine.
+
+3. **Copy the runner to the GPU host**: the `runner_service` folder, the `deploy/gpu-host` folder, and the host's
+   secret files from `deploy/secrets/`. Then, in `deploy/gpu-host`, copy `.env.example` to `.env` and set:
+
+   - `GPU_HOST`: the host name from step 1.
+   - `MODELS_DIR`: the host's models folder.
+   - `MODELS_MODE`: `rw` to allow downloads from the studio, `ro` to keep the folder read only.
+
+   For gated models such as LTX-2.5, put a Hugging Face token in `secrets/hf_token`.
+
+4. **Connect the host to the stack.** The simplest way publishes nothing: an SSH reverse tunnel from the stack's
+   machine puts the stack's NATS and object store on the GPU host's loopback.
+
+   ```sh
+   make gpu-host-tunnel VM=<user>@<address> ZONE=<ssh port>   # plain SSH: ZONE takes the port
+   make gpu-host-tunnel-stop      # later, to close it
+   ```
+
+5. **Build and start the runner** on the GPU host.
+
+   ```sh
+   cd deploy/gpu-host
+   docker compose build
+   docker compose up -d
+   docker compose ps              # healthy means it reached the stack
+   ```
+
+   MiniMax H3 video and ZONOS3 need the `native` runner too: build and start with `--profile native`.
+
+6. **Check it in the studio.** [Admin](/studio/admin/) › Hosts lists the new host with its GPU and memory. Download
+   models to it in [Models](/studio/models/), or with `helm model pick --host <h>`.
+
+</Steps>
+
+The repository's `deploy/gpu-host/README.md` has every detail, including a TLS proxy for a host the tunnel cannot
+reach.
+
+To stop a host cleanly, run `docker compose down` on it. A host that drops off goes offline after about 30 seconds.

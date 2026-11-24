@@ -1,0 +1,91 @@
+---
+title: Run in production on a Mac
+description: Run helmstudio as a production stack on a Mac, next to the local stack, with its own ports, data and secrets.
+sidebar:
+  order: 3
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+The production stack runs the current checkout for real work. It is separate from the local stack of
+[Install and run](/start/install/): its own ports, data, images and secrets. Both can run on the same Mac at once.
+
+Compared with the local stack, production:
+
+- has no test host and no Echo workflow;
+- restarts its services unless you stop them;
+- caps each service's logs and memory.
+
+## Start it
+
+<Steps>
+
+1. Set the admin account in `auth_service/.env` (`ADMIN_EMAIL` and `ADMIN_PASSWORD`), as for the local stack. If you
+   have not made the `.env` files yet, run `make envs` first.
+
+2. Build and start production.
+
+   ```sh
+   make prod
+   ```
+
+   The first run makes a fresh secrets folder, `deploy/secrets-prod/`, with its own keys. It then builds the images,
+   starts every service and waits until they are healthy.
+
+3. Open the studio at `http://localhost:8400` and sign in as the admin.
+
+4. Join the Mac's native runners to production. Runners join one stack at a time, so stop any that run for the local
+   stack first.
+
+   ```sh
+   make runners-stop
+   make runners STACK=prod
+   ```
+
+</Steps>
+
+<Aside>
+  Production starts with empty data. Takes, sessions and accounts on the local stack stay there; they are not copied.
+</Aside>
+
+## Daily commands
+
+| Command | What it does |
+|---|---|
+| `make prod` | Build and start production, wait until healthy |
+| `make prod-down` | Stop production. Its data stays. |
+| `make prod-logs` | Follow every service's logs |
+| `make prod-logs s=studio` | Follow one service's logs |
+| `make prod-ps` | Show what is running |
+| `make runners STACK=prod` | Start the native runners for production |
+
+## Ports
+
+Production publishes its own ports, on `127.0.0.1` only:
+
+| Port | What |
+|---|---|
+| 8400 | The studio and its API |
+| 5465 | Postgres |
+| 4324 | NATS, for the native runners |
+| 8435 | The object store, for the native runners |
+
+## The admin and secrets
+
+- The admin comes from `auth_service/.env`. Its password is set only when the account is first made; change it later
+  in the app's [Settings](/studio/settings/), and the change survives a restart.
+- Production's secrets live in `deploy/secrets-prod/`. `make prod` makes them once and never overwrites them. The
+  folder is ignored by git.
+- Keys for remote model providers, pasted in [Admin](/studio/admin/) › Model providers, are kept in
+  `deploy/secrets-prod/providers/`.
+
+## Use helm and MCP with production
+
+Sign the `helm` client in to production with port 8400 and production's API key file:
+
+```sh
+cli/bin/helm login --url http://127.0.0.1:8400 --email <admin email> \
+  --api-key-file deploy/secrets-prod/helm_api_key
+```
+
+`helm` keeps one address, so it points at one stack at a time. See [The helm CLI](/mcp/helm-cli/).

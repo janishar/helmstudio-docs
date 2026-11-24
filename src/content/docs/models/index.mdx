@@ -1,0 +1,114 @@
+---
+title: Models
+description: The model families helmstudio runs, their variants, add-ons and licences, and how to choose one.
+sidebar:
+  order: 0
+  label: Overview
+---
+
+import { Aside, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+helmstudio runs open models on your own machines. Models come in **families**. Each family has one or more
+**workflows** on Create, named after the family, and one or more **variants**: different weights of the same model.
+
+## The families
+
+| Family | Makes | Runtime | Mac | NVIDIA |
+|---|---|---|---|---|
+| [Qwen Image 2.1](/models/qwen-image/) | Images, edits | PyTorch | Base, Turbo | Base, Turbo, Base fp8, Turbo fp8 |
+| [MiniMax H3 Image](/models/minimax-h3-image/) | Images, edits | PyTorch | Base | Base, Base fp8 |
+| [LTX-2.5](/models/ltx/) | Video with sound | MLX on a Mac, PyTorch on NVIDIA | Distilled, Dev | Distilled fp8, Dev int8 |
+| [MiniMax H3](/models/minimax-h3/) | Video with sound | Native (h3 on a Mac, SGLang on NVIDIA) | Base | Base fp8 |
+| [Qwen3-TTS](/models/qwen3-tts/) | Voice | PyTorch | Custom voice, Voice design | Custom voice, Voice design |
+| [ZONOS3](/models/zonos3/) | Voice | Native | Mini | Mini |
+| [Ask](/models/ask/) | Text answers about takes | MLX (Qwen3.8 27B), PyTorch (Qwen3-VL 8B) | Both | Qwen3-VL 8B |
+
+A workflow can do more than one task. Qwen Image and MiniMax H3 Image make an image from text, and turn into an edit
+as soon as you add reference images. The mode shows as a badge on Create.
+
+## Variants
+
+A variant is one set of weights for a family. You pick it with the model chip on Create.
+
+- **Base** is the full-quality model.
+- **Turbo** runs a small, fixed number of steps. It is much faster and good for drafts.
+- **Distilled** (LTX-2.5) runs 8 steps without guidance, about 10 times faster than **Dev**, the guided model.
+- **fp8 and int8 community variants** are smaller, pre-quantised weights published by the community. They run on
+  NVIDIA hosts only.
+
+## Precision
+
+Some families quantise their weights when they load. **Precision** sets how: `int8` uses about half the memory of
+`bf16`, and `int4` (LTX-2.5) less again. Lower precision uses less memory and can change the result slightly.
+Community variants are already quantised, so their precision is fixed.
+
+## Add-ons
+
+Add-ons are optional extra downloads for a family:
+
+- Qwen Image's **Text enhancer** and **Edit enhancer**, and MiniMax H3 Image's **Enhancer**, which rewrite your prompt.
+- LTX-2.5's **Detailer** (for the Detail recipe) and **Distilled LoRA** (for Audio to video on Dev).
+- MiniMax H3's **Turbo LoRA** and **Turbo Ref LoRA** (for the Turbo preset).
+
+A setting that needs a missing add-on is greyed out on Create, with the reason.
+
+## LoRAs
+
+LoRAs are small files that adjust a model, such as a style or a character. You upload them to the LoRA library on
+the [Models screen](/studio/models/) and add them as rows on Create, where the family takes them: Qwen Image and
+LTX-2.5 (on a Mac). Each workflow takes up to 8 rows, each with a strength from 0 to 2 (default 1).
+
+## Downloads and licences
+
+An admin downloads weights on the [Models screen](/studio/models/), one machine at a time. The download card shows
+the size, the machine and the licence. Some licences must be accepted before the download starts.
+
+| Family | Licence |
+|---|---|
+| Qwen Image 2.1 | Apache License 2.0 |
+| Qwen Image enhancers (add-ons) | Qwen Research License Agreement (non-commercial) |
+| MiniMax H3 Image | MiniMax-H3-Image Community License |
+| LTX-2.5 | LTX-2 Community License |
+| MiniMax H3 | MiniMax H3 Community License |
+| Qwen3-TTS | Apache License 2.0 |
+| ZONOS3 | Apache License 2.0 |
+| Qwen3.8 27B | Apache License 2.0 |
+
+<Aside type="note">
+LTX-2.5 is gated on Hugging Face. The host that downloads it needs a Hugging Face access token.
+</Aside>
+
+Read each licence before you use a model's output commercially.
+
+## Where a run goes
+
+Each host runs one job at a time. With **Run on: Auto**, helmstudio picks a host that has the runtime, the weights
+and the memory, and prefers one that already has the model loaded. You can also pick one host by name. A host that
+cannot take the run is greyed out, with the reason. See [Hosts](/start/hosts/).
+
+Generate shows the estimated time and peak memory before you run. A run too big for every host fails at once, with
+the reason.
+
+## Choosing a model
+
+**Draft fast, then make the final.** Start with a fast setting: Turbo, Distilled, the Draft or Fast presets, fewer
+steps or a smaller size. Once you like a draft and its seed, switch to Base, the Quality preset or the Reference
+preset for the final.
+
+| You want | Use |
+|---|---|
+| Most stills, and edits of one or more images | [Qwen Image 2.1](/models/qwen-image/) |
+| Large, detailed stills, or edits with many references | [MiniMax H3 Image](/models/minimax-h3-image/) |
+| Fast clips, keyframes, retake or extend a clip, video that follows a sound | [LTX-2.5](/models/ltx/) |
+| Higher-quality clips, first and last frames, video from references | [MiniMax H3](/models/minimax-h3/) |
+| Preset speakers with a style in words, or a voice designed from a description | [Qwen3-TTS](/models/qwen3-tts/) |
+| Cloned voices, many languages, fine control of delivery | [ZONOS3](/models/zonos3/) |
+| Questions about takes, in pipelines and the Assistant | [Ask](/models/ask/) |
+
+**Mind memory.** Larger sizes, longer clips, `bf16` and Base variants raise the peak. If a run does not fit, lower
+the size, the length or the precision, or pick another host.
+
+<CardGrid>
+  <LinkCard title="Qwen Image 2.1" href="/models/qwen-image/" description="Everyday images and multi-reference edits." />
+  <LinkCard title="LTX-2.5" href="/models/ltx/" description="Fast video with sound, keyframes, retake and extend." />
+</CardGrid>

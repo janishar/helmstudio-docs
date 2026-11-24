@@ -1,0 +1,150 @@
+/* helmstudio's own themes (web_service/styles/tokens.css): Forest ink for dark, Parchment for light.
+   Headings in Bricolage Grotesque, text in Inter, code in JetBrains Mono, the app's organic radius. */
+:root {
+  --sl-font: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --sl-font-mono: 'JetBrains Mono Variable', ui-monospace, monospace;
+  --hs-display: 'Bricolage Grotesque Variable', 'Inter Variable', sans-serif;
+  --hs-radius: 18px 18px 18px 8px;
+
+  /* Forest ink */
+  --hs-g: #0e1512;
+  --hs-p0: #131c17;
+  --hs-s1: #16201b;
+  --hs-s2: #1e2a24;
+  --hs-ln: #3d5146;
+  --hs-a1: #b9e37a;
+  --hs-on1: #17200a;
+  --hs-a2: #ff8552;
+
+  --sl-color-accent-low: #26351a;
+  --sl-color-accent: #b9e37a;
+  --sl-color-accent-high: #e2f4c4;
+  --sl-color-white: #f0f2e8;
+  --sl-color-gray-1: #dfe5d8;
+  --sl-color-gray-2: #cfdacb;
+  --sl-color-gray-3: #a9b8ab;
+  --sl-color-gray-4: #5a7265;
+  --sl-color-gray-5: #3d5146;
+  --sl-color-gray-6: #1e2a24;
+  --sl-color-black: #0e1512;
+  --sl-color-bg-nav: #0e1512;
+  --sl-color-bg-sidebar: #0e1512;
+  --sl-color-hairline-light: #26342d;
+  --sl-color-hairline: #26342d;
+  --sl-color-hairline-shade: #090e0c;
+  --sl-color-text-accent: #b9e37a;
+}
+
+:root[data-theme='light'] {
+  /* Parchment */
+  --hs-g: #f3ede2;
+  --hs-p0: #f8f3ea;
+  --hs-s1: #fbf7ef;
+  --hs-s2: #ffffff;
+  --hs-ln: #cdbfa8;
+  --hs-a1: #c8553d;
+  --hs-on1: #ffffff;
+  --hs-a2: #2f5d8a;
+
+  --sl-color-accent-low: #f2d8cc;
+  --sl-color-accent: #c8553d;
+  --sl-color-accent-high: #7d2f1f;
+  --sl-color-white: #1f1a14;
+  --sl-color-gray-1: #3a3228;
+  --sl-color-gray-2: #554b3e;
+  --sl-color-gray-3: #6e6455;
+  --sl-color-gray-4: #a8987f;
+  --sl-color-gray-5: #cdbfa8;
+  --sl-color-gray-6: #efe7d9;
+  --sl-color-gray-7: #f8f3ea;
+  --sl-color-black: #f3ede2;
+  --sl-color-bg-nav: #f3ede2;
+  --sl-color-bg-sidebar: #f3ede2;
+  --sl-color-hairline-light: #e6ddcd;
+  --sl-color-hairline: #dcd1be;
+  --sl-color-hairline-shade: #cdbfa8;
+  --sl-color-text-accent: #b04a33;
+}
+
+body {
+  background-color: var(--hs-g);
+}
+
+/* the app's faint warm light from the top left */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1100px 620px at 14% -12%, rgba(255, 196, 120, 0.09), transparent 62%),
+    radial-gradient(900px 640px at 108% 112%, color-mix(in srgb, var(--hs-a1) 6%, transparent), transparent 60%);
+}
+.page,
+.main-frame,
+header.header {
+  background: transparent;
+}
+header.header {
+  backdrop-filter: blur(10px);
+  background-color: color-mix(in srgb, var(--hs-g) 82%, transparent);
+}
+
+h1,
+h2,
+h3,
+h4,
+.sl-markdown-content :is(h1, h2, h3, h4),
+.hero h1 {
+  font-family: var(--hs-display);
+  letter-spacing: -0.02em;
+}
+.sl-markdown-content h2 {
+  font-weight: 700;
+}
+
+/* cards, asides and link cards take the organic radius */
+.card,
+.sl-link-card,
+.starlight-aside {
+  border-radius: var(--hs-radius);
+}
+.card {
+  background: var(--hs-s1);
+  border-color: var(--hs-ln);
+}
+.sl-link-card {
+  background: var(--hs-s1);
+}
+
+/* the hero: wordmark-sized title with the lime-to-orange accent */
+.hero h1 {
+  font-size: clamp(2.6rem, 6vw, 4.2rem);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+}
+.hero .hs-grad {
+  background: linear-gradient(155deg, var(--hs-a1), var(--hs-a2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.hero .tagline {
+  color: var(--sl-color-gray-2);
+}
+.sl-link-button.primary {
+  background: linear-gradient(155deg, var(--hs-a1), var(--hs-a2));
+  border: 0;
+  color: var(--hs-on1);
+  border-radius: 999px 999px 999px 6px;
+  font-weight: 600;
+}
+.sl-link-button.secondary {
+  border-radius: 999px 999px 999px 6px;
+}
+.hero > img,
+.hero .hero-html {
+  width: min(70%, 15rem);
+  filter: drop-shadow(0 24px 48px color-mix(in srgb, var(--hs-a2) 22%, transparent));
+}

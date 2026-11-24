@@ -1,0 +1,64 @@
+---
+title: helmstudio
+description: A local-first studio for images, video and sound on your own Mac and NVIDIA machines.
+template: splash
+hero:
+  title: Wire the models.<br><span class="hs-grad">Direct the film.</span>
+  tagline: A self-hosted studio for images, video and sound. It runs open models on your own Macs and NVIDIA machines, and keeps every take with how it was made.
+  image:
+    file: ../../assets/app-icon.svg
+  actions:
+    - text: Get started
+      link: /start/introduction/
+      icon: right-arrow
+    - text: View on GitHub
+      link: https://github.com/janishar/helmstudio
+      icon: external
+      variant: secondary
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+
+## Four rooms, one gallery between them
+
+<CardGrid>
+  <Card title="Create" icon="pencil">
+    Pick a model, write a prompt, make takes. Call your characters and places by name with @, and set a look once.
+  </Card>
+  <Card title="Gallery" icon="seti:image">
+    Every take lands here with the settings and inputs that made it. Send any take to Create, a pipeline or the
+    timeline.
+  </Card>
+  <Card title="Pipelines" icon="random">
+    Chain workflows and run them over a list while you are away. Agent nodes judge, rewrite and retry.
+  </Card>
+  <Card title="Timeline" icon="seti:video">
+    Cut takes into a sequence, direct new shots and voice lines in place, and export an MP4.
+  </Card>
+</CardGrid>
+
+## Runs where your GPUs are
+
+<CardGrid>
+  <Card title="Apple Silicon" icon="laptop">
+    MLX, PyTorch MPS and native runners share one memory budget on each Mac.
+  </Card>
+  <Card title="NVIDIA hosts" icon="rocket">
+    Add CUDA machines. Each run goes to a host with the weights and the memory, or to the one you pick.
+  </Card>
+  <Card title="Private per person" icon="seti:lock">
+    Every user sees only their own takes, sessions and pipelines. Accounts come from the admin.
+  </Card>
+  <Card title="Agents welcome" icon="puzzle">
+    An in-app Assistant works every screen, and `helm mcp` gives Claude and other agents the same tools.
+  </Card>
+</CardGrid>
+
+## Start here
+
+<CardGrid>
+  <LinkCard title="What is helmstudio" href="/start/introduction/" description="The ideas: workflows, takes, sessions, hosts." />
+  <LinkCard title="Install and run" href="/start/install/" description="Run the stack and the native runners on a Mac." />
+  <LinkCard title="Models" href="/models/" description="Every model family, its variants and settings." />
+  <LinkCard title="Use it from Claude" href="/mcp/" description="Set up helm mcp for Claude Code or Claude Desktop." />
+</CardGrid>

@@ -1,0 +1,100 @@
+---
+title: The Mac app
+description: helmstudio for Mac runs the whole studio on one Mac in a single window. It is a preview.
+sidebar:
+  order: 4
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+<Aside type="caution" title="Preview">
+  The Mac app is an early prototype. It works, but expect rough edges. For steady use, run
+  [production on a Mac](/start/production/).
+</Aside>
+
+The app runs the whole studio on one Mac: the services in a small VM of their own, the model runners on the Mac's
+GPU, and the studio in one window. It does not touch your own Docker. It can run beside the local and production
+stacks, on its own port: the studio is at `http://127.0.0.1:8310`.
+
+## Requirements
+
+- A Mac with Apple Silicon, macOS 13 or later, and about 6 GB of free disk (plus your models).
+- The production images in this Mac's Docker: run `make prod` once in the repository. The app copies them into its VM;
+  nothing is pulled from a registry.
+- The internet, for the first open only. The app fetches the VM's system disk (about 320 MB) and the runners' Python
+  packages (about 2 GB).
+
+## Build it
+
+From the repository:
+
+```sh
+make prod                # once, for the images
+make -C desktop app      # builds desktop/dist.noindex/helmstudio.app
+```
+
+Copy `helmstudio.app` to `/Applications`. `make -C desktop dmg` packs it as a disk image instead.
+
+## First open
+
+<Steps>
+
+1. Open `/Applications/helmstudio.app`. The app is ad-hoc signed: a copy from another Mac needs right-click › Open
+   the first time.
+
+2. A list of steps runs: Check this Mac, Start the VM, Load the images, Make the secrets, Set up the runners, Start.
+   It takes about 2 minutes, or about 5 on a Mac that has never fetched the VM disk or the runner packages.
+
+3. Set the admin account: an email and a password of 12 characters or more, with no quote. This is your sign-in to
+   the studio. It is kept only in the app's folder.
+
+4. Choose the models folder. The default is `~/helmstudio-models`; Choose… picks an existing folder.
+
+5. The studio window opens. Sign in with the admin account.
+
+</Steps>
+
+If a step fails, the screen says which one. **Show log** opens its log; **Try again** goes on from that step.
+
+Every later open shows the start screen for about a minute (VM, services, runners), then the studio.
+
+## The menu bar
+
+The helmstudio icon in the menu bar has a status dot: green is Ready, yellow is Starting…, red is Something is down.
+Its menu:
+
+| Item | What it does |
+|---|---|
+| Open | Shows the studio window |
+| Restart runners | Restarts the model runners, after a runner stalls or a new model is added |
+| Open logs | The app's log and one log per runner |
+| Keep running | On by default. Closing the window or Cmd+Q only hides the app; the studio keeps running. |
+| Open at login | Off by default |
+| Quit | Stops the runners, the services and the VM (about 25 seconds). Your takes and data stay. |
+
+## Remote models
+
+Remote model providers are on in the app. In [Admin](/studio/admin/) › Model providers, pick a provider and paste
+its key. Remote providers only power text jobs, such as the [Assistant](/studio/assistant/) and pipeline agents.
+
+## Use it from Claude
+
+`helm` ships inside the app. Sign in once (it asks for the admin password), then add it to Claude Code:
+
+```sh
+/Applications/helmstudio.app/Contents/Resources/bin/helm login --url http://127.0.0.1:8310 --email <admin email> \
+  --api-key-file ~/Library/Application\ Support/helmstudio/stack/deploy/secrets/helm_api_key
+claude mcp add -s user helmstudio -- /Applications/helmstudio.app/Contents/Resources/bin/helm mcp
+```
+
+`helm` keeps one address, so signing in to the app replaces a sign-in to another stack. More in
+[Use helmstudio from Claude](/mcp/).
+
+## Where things are
+
+| Folder | Holds |
+|---|---|
+| `~/Library/Application Support/helmstudio` | Settings, logs, secrets and the runners' Python |
+| `~/.helmstudio-vm` | The VM. Its disks hold the images and your data. |
+
+Deleting the app leaves both folders. To remove everything, quit the app, then delete them.

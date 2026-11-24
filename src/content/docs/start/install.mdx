@@ -1,0 +1,129 @@
+---
+title: Install and run
+description: Run the helmstudio stack on a Mac, sign in, and start the native model runners.
+sidebar:
+  order: 2
+---
+
+import { Steps, Aside } from '@astrojs/starlight/components';
+
+helmstudio runs as a set of services in Docker, plus model runners that run natively on each machine so they can
+use its GPU. This page sets up the local stack on one Mac. To keep a stack running for real work, see
+[Run in production on a Mac](/start/production/). For a one-window install, see [The Mac app](/start/mac-app/).
+
+## Requirements
+
+- A Mac with Apple Silicon.
+- Docker with Compose 2.20 or later (OrbStack or Docker Desktop).
+- `make` and `openssl`.
+- For the native runners: [uv](https://docs.astral.sh/uv/), the Xcode Command Line Tools, CMake and Rust (`cargo`).
+- For the `helm` command-line client: Go.
+- Model weights on disk. See [Models](/models/).
+
+## Start the stack
+
+<Steps>
+
+1. Clone the repository.
+
+   ```sh
+   git clone https://github.com/janishar/helmstudio.git
+   cd helmstudio
+   ```
+
+2. Make the `.env` files from their examples.
+
+   ```sh
+   make envs
+   ```
+
+3. Set the admin account. Open `auth_service/.env` and fill in `ADMIN_EMAIL` and `ADMIN_PASSWORD`. This is the only
+   admin. There is no public sign-up: the admin creates every other account.
+
+4. Build and start the stack.
+
+   ```sh
+   make up
+   ```
+
+   The first run makes the secrets in `deploy/secrets/`, builds the images, starts every service and waits until all
+   of them are healthy.
+
+5. Open the studio at `http://localhost:8300` and sign in as the admin.
+
+6. Add accounts for other people in [Admin](/studio/admin/) › Users.
+
+</Steps>
+
+<Aside>
+  The admin password from `auth_service/.env` is set only when the account is first made. After that, change it in
+  the app's [Settings](/studio/settings/).
+</Aside>
+
+The local stack also runs a small test host with an Echo workflow, so you can try the studio before any model is
+installed. Real models need the native runners below.
+
+## Start the native runners
+
+The runners are the processes that load models and make takes. On a Mac there are three, each in its own process:
+
+| Runner | Runs |
+|---|---|
+| `torch` | PyTorch on the Mac's GPU: Qwen Image, MiniMax H3 Image, Qwen3-TTS |
+| `mlx` | MLX: LTX-2.5 and the local text models |
+| `native` | Native binaries: MiniMax H3 video and ZONOS3 |
+
+Start all three in the background:
+
+```sh
+make runners
+```
+
+They read weights from the folder in `HELMSTUDIO_MODELS` (default `~/GenAI/models`). Set it to your models folder
+when you start them:
+
+```sh
+HELMSTUDIO_MODELS=~/helmstudio-models make runners
+```
+
+`make runners` builds the native binaries the first time; that takes a couple of minutes. You can also start one
+runner on its own with `make runner-torch`, `make runner-mlx` or `make runner-native`.
+
+Each runner writes a log to `runner_service/.run/runner-mac-<env>.log`. A runner that stalls or is stopped by the
+system restarts on its own. Once they are up, the Mac shows as host `mac` in [Admin](/studio/admin/) › Hosts.
+
+Stop them with:
+
+```sh
+make runners-stop
+```
+
+## Daily commands
+
+| Command | What it does |
+|---|---|
+| `make up` | Build and start the stack, wait until healthy |
+| `make down` | Stop the stack. Your data stays. |
+| `make logs` | Follow every service's logs |
+| `make logs s=studio` | Follow one service's logs |
+| `make ps` | Show what is running |
+| `make runners` | Start the native runners |
+| `make runners-stop` | Stop the native runners |
+
+## Ports
+
+Everything is published on `127.0.0.1` only. The ports are set in `deploy/.env`.
+
+| Port | What |
+|---|---|
+| 8300 | The studio and its API (`KONG_HTTP_PORT`) |
+| 5463 | Postgres (`POSTGRES_HOST_PORT`) |
+| 4322 | NATS, for the native runners (`NATS_HOST_PORT`) |
+| 8433 | The object store, for the native runners (`S3_HOST_PORT`) |
+
+## Next
+
+- Take a tour of [Create](/studio/create/).
+- Download models in [Models](/studio/models/) (admins only).
+- Add an NVIDIA machine: [Hosts and runners](/start/hosts/).
+- Use the studio from Claude: [MCP](/mcp/).

@@ -1,0 +1,120 @@
+---
+title: Use helmstudio from Claude (MCP)
+description: Connect Claude Code or Claude Desktop to helmstudio with helm mcp, so an agent can run workflows, read takes and edit timelines.
+sidebar:
+  order: 1
+---
+
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
+
+`helm mcp` is an MCP server that runs on your machine. It lets Claude, or any MCP client, do what you do in the
+studio: find a workflow, run it, wait, look at the takes, start a batch, answer a review gate, put takes on a timeline
+and export it.
+
+It calls the studio as you, with your `helm login`, so the agent sees only your own work. Admin tools are not offered.
+
+## Set up
+
+<Steps>
+
+1. Build the `helm` client. In the repository:
+
+   ```sh
+   make -C cli build          # makes cli/bin/helm
+   ```
+
+   With the [Mac app](/start/mac-app/), skip this: `helm` is inside the app at
+   `/Applications/helmstudio.app/Contents/Resources/bin/helm`.
+
+2. Sign in once. Run this in a real terminal: it asks for your password.
+
+   <Tabs>
+     <TabItem label="Local stack">
+       ```sh
+       cli/bin/helm login --url http://127.0.0.1:8300 --email <your email> \
+         --api-key-file deploy/secrets/helm_api_key
+       ```
+     </TabItem>
+     <TabItem label="Production">
+       ```sh
+       cli/bin/helm login --url http://127.0.0.1:8400 --email <your email> \
+         --api-key-file deploy/secrets-prod/helm_api_key
+       ```
+     </TabItem>
+     <TabItem label="Mac app">
+       ```sh
+       /Applications/helmstudio.app/Contents/Resources/bin/helm login --url http://127.0.0.1:8310 \
+         --email <admin email> \
+         --api-key-file ~/Library/Application\ Support/helmstudio/stack/deploy/secrets/helm_api_key
+       ```
+     </TabItem>
+   </Tabs>
+
+   `helm` keeps one address, so it points at one stack at a time.
+
+3. Add it to your client. Use the absolute path to `helm`.
+
+   <Tabs>
+     <TabItem label="Claude Code">
+       ```sh
+       claude mcp add -s user helmstudio -- /absolute/path/to/cli/bin/helm mcp
+       ```
+
+       `-s user` makes it available in every project.
+     </TabItem>
+     <TabItem label="Claude Desktop">
+       Add this to `~/Library/Application Support/Claude/claude_desktop_config.json`, then restart Claude Desktop.
+
+       ```json
+       { "mcpServers": { "helmstudio": { "command": "/absolute/path/to/cli/bin/helm", "args": ["mcp"] } } }
+       ```
+
+       Claude Desktop does not read your shell's `PATH`, so the path must be absolute.
+     </TabItem>
+   </Tabs>
+
+</Steps>
+
+## Check it works
+
+1. `helm whoami` prints your account.
+2. `claude mcp list` shows `helmstudio` as connected. If not, run `helm mcp` by hand: an error on start gives the
+   reason, most often an expired sign-in.
+3. Open a **new** Claude Code session (a session already open does not see a server added later) and type `/mcp`.
+   helmstudio is listed with its tools.
+4. In Claude Desktop, after the restart, Settings › Developer shows helmstudio as running.
+
+If your sign-in expires, run `helm login` again. The server picks up the new sign-in the next time it starts.
+
+## Which tools ask first
+
+The tools tell your client what kind of action each one is. What your client does with that depends on its settings.
+
+| Kind | Tools | Asks first? |
+|---|---|---|
+| Reads | Listing workflows, searching takes, reading batches and timelines, waiting for a run | Never |
+| Writes | Starting runs and batches, uploading images, answering gates, adding to a timeline, exporting | Depends on your client |
+| Destructive | Editing or restoring a timeline, deleting a take, run or session | Most clients ask before each one |
+
+Deletes cannot be undone. A timeline edit can: Undo in the app, or `restore_timeline`. Every tool is listed in
+[MCP tools](/mcp/tools/).
+
+## Good to know
+
+- One `helm mcp` keeps at most 4 of its runs waiting or running at a time, so an agent cannot fill the queue.
+- `wait_run` waits up to 10 minutes, with progress.
+- Local paths (an image to upload, a folder to save files in) must be absolute or start with `~/`. The server runs in
+  your client's folder, not yours.
+- Errors come back as the studio's own text, for example `404: take not found`.
+- Timeline edits made through MCP show as `via mcp` in the sequence's history.
+
+## Try it
+
+Ask Claude:
+
+> Using helmstudio, make a Qwen still of a lighthouse at dusk, then a short LTX clip from it. Put both on a new
+> timeline and export it to ~/Desktop/lighthouse.mp4.
+
+Then:
+
+> Cut the clip at 1 s, drop the second half and show me the frame at 0.5 s.
