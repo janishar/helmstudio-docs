@@ -1,0 +1,163 @@
+---
+import Showcase from '../layouts/Showcase.astro';
+import Win from '../components/Win.astro';
+---
+<Showcase title="Tour · helmstudio" description="Every screen of helmstudio, room by room, with the Assistant first.">
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Tour</p>
+    <h1>A look <span class="grad">inside the studio.</span></h1>
+    <p class="lede">Every screen, room by room. Start with the Assistant, then follow a take from Create to the Gallery, the Timeline and a pipeline.</p>
+    <div class="ctas">
+      <a class="btn primary" href="/start/install/">Install helmstudio →</a>
+      <a class="btn" href="/start/introduction/">Read the docs</a>
+    </div>
+  </header>
+</div>
+
+<section class="stage" id="assistant" aria-labelledby="assistant-h">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="eyebrow">The Assistant</p>
+      <h2 id="assistant-h">Tell it the shot. <span class="grad">Watch it set up.</span></h2>
+      <p>The Assistant lives in a drawer on every screen. It sees what you see, works the same controls you do, and stops to ask before anything that uses the GPU, downloads weights or deletes work.</p>
+    </div>
+    <div style="margin-top:40px">
+      <Win src="assistant-create" caption="Create · ringed controls are the ones it just changed" alt="Create with the Assistant drawer: the elements, prompt, model and lighting it changed are ringed, and a card asks before generating 4 images" />
+    </div>
+    <div class="duo">
+      <Win src="assistant-steer" caption="Steer while it answers · your words are read at the next step" alt="Steering: the box stays open while it works; messages wait for the next step; then it switches to Qwen Image Turbo at 16:9" />
+      <Win src="assistant-timeline" caption="Timeline · from a written scene to new shots, each placed with Undo" alt="Timeline with the Assistant: it looked at four takes, named the sharpest, then placed three new shots from a written scene" />
+    </div>
+    <div class="duo">
+      <div class="copy">
+        <h3>On your phone too.</h3>
+        <p>At phone width the dock becomes a bar and the Assistant slides up from the bottom. Ask for a still, press Generate, and find it in the Gallery later.</p>
+        <ul>
+          <li>Knows every model's settings and limits</li>
+          <li>Remembers what you like, and lets you edit what it remembers</li>
+          <li>Runs on a local model or a provider your admin sets</li>
+        </ul>
+        <a href="/studio/assistant/">Read the Assistant guide →</a>
+      </div>
+      <Win src="assistant-phone" alt="The Assistant at phone width: the dock as a bar, the Assistant sheet over Create, asking before generating" />
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="rooms" aria-label="Rooms">
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Create</p>
+        <h3>One screen for every image, clip and voice.</h3>
+        <p>Pick a model, write a prompt, make takes. Switch between image, video and audio without losing your prompt.</p>
+        <ul>
+          <li>Presets from Draft to Final, with time and peak memory before you run</li>
+          <li>Call characters and places by name with @</li>
+          <li>A live preview while it samples</li>
+        </ul>
+        <a href="/studio/create/">Read the Create guide →</a>
+      </div>
+      <Win src="create" alt="Create with Qwen Image: live preview at step 12 of 40, presets, two references, canvas, quality and a LoRA" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Video</p>
+        <h3>Clips with sound, from a line of text.</h3>
+        <p>LTX-2.5 and MiniMax H3 make video with matching sound. Animate a still, extend a clip, or retake a few seconds of it.</p>
+        <ul>
+          <li>Fast, Quality and Low memory presets</li>
+          <li>Length from the prompt, or set by hand</li>
+          <li>Pin images at chosen times as keyframes</li>
+        </ul>
+        <a href="/models/ltx/">Read about LTX-2.5 →</a>
+      </div>
+      <Win src="create-video" alt="Create with LTX-2.5 text to video: an airship over cliffs at sunset in the preview, with presets, canvas, length and quality settings" />
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Graph</p>
+        <h3>The same workflow, as nodes.</h3>
+        <p>Every workflow is a small graph of typed steps. Flip from the form to the graph to see how a run is wired. Editing one edits the other.</p>
+        <a href="/studio/create/">How Studio and Graph views work →</a>
+      </div>
+      <Win src="graph" alt="Graph view of Qwen Image: prompt, encode, model, sample and decode nodes wired together, with the sample node's settings" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Gallery</p>
+        <h3>Every take remembers how it was made.</h3>
+        <p>Prompt, model, seed, size and inputs travel with each take. Send any of them back to work in one click.</p>
+        <ul>
+          <li>Lineage: what a take was made from and where it was used</li>
+          <li>Use in… Animate, Edit, Extend or Retake</li>
+          <li>Save as an element, a look or a pipeline</li>
+        </ul>
+        <a href="/studio/gallery/">Read the Gallery guide →</a>
+      </div>
+      <Win src="gallery" alt="Gallery grid of takes with filters, and the side panel showing how the selected take was made and its Use in actions" />
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Timeline</p>
+        <h3>Cut the film where you make it.</h3>
+        <p>Direct new shots in the gaps, retake a section, add voice lines, and export one MP4.</p>
+        <ul>
+          <li>A new shot can start from the last frame of the one before</li>
+          <li>The sequence's cast and look apply to every shot</li>
+          <li>Export copies streams when it can, re-encodes when it must</li>
+        </ul>
+        <a href="/studio/timeline/">Read the Timeline guide →</a>
+      </div>
+      <Win src="timeline" alt="Timeline with shots of a fox in the snow, a new shot being composed in a gap, and clip actions for Extend, Retake and Replace" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Pipelines</p>
+        <h3>Batches that check their own work.</h3>
+        <p>Chain workflows and run them over a list while you are away. A judge looks at each take against your checklist and keeps the best.</p>
+        <ul>
+          <li>Review gates where you pick, or agree with the judge</li>
+          <li>It learns from the takes you keep and reject</li>
+          <li>Every retry is capped and logged</li>
+        </ul>
+        <a href="/studio/pipelines/">Read the Pipelines guide →</a>
+      </div>
+      <Win src="judge" alt="Judge review: the judge suggests take 3 as clean and sharp, with checklist chips and the pipeline's memory of past picks" />
+    </article>
+  </section>
+
+  <div class="gallery2" aria-label="More screens">
+    <Win src="pipelines" caption="Pipelines · saved pipelines and recent batches" alt="Pipelines list: saved pipelines as small graphs, and recent batches with their progress" />
+    <Win src="pipeline" caption="A pipeline · pick one image to animate" alt="An image to video pipeline paused at a review step: pick one of four sneaker images to animate" />
+    <Win src="director" caption="Director · a script fans out into shots" alt="A shot list director pipeline with its chat: the director turns a script into shots" />
+    <Win src="models" caption="Models · variants, add-ons and which machine has them" alt="Models: Qwen Image 2.1 variants with sizes and hosts, optional add-ons, and the components panel" />
+  </div>
+
+  <section class="band" id="machines" aria-labelledby="machines-h">
+    <div class="copy" style="max-width:46rem">
+      <p class="eyebrow">Your machines</p>
+      <h3 id="machines-h">Runs where your GPUs are.</h3>
+      <p>Pick Auto and each run goes to a machine with the weights and the memory, or pick one by name. Admins see every host, its runners and what is loaded.</p>
+    </div>
+    <div class="gallery2">
+      <Win src="run-on" caption="Run on · Auto or a named host, with the reason a host can't take it" alt="Run on menu: Auto or a named host, with hosts that cannot take the run greyed out with the reason" />
+      <Win src="hosts" caption="Admin › Hosts · memory, loaded parts and pins" alt="Admin Hosts: each host's memory, current run, resident model components and pins" />
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="start-h">
+    <h2 id="start-h">Your studio is <span class="grad">one clone away.</span></h2>
+    <div class="ctas">
+      <a class="btn primary" href="/start/install/">Install helmstudio →</a>
+      <a class="btn" href="/mcp/">Use it from Claude</a>
+    </div>
+  </section>
+</div>
+</Showcase>

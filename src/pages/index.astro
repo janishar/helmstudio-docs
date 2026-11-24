@@ -1,0 +1,173 @@
+---
+import Showcase from '../layouts/Showcase.astro';
+---
+<Showcase title="helmstudio · Wire the models. Direct the film." description="A self-hosted studio for images, video and voices on your own Mac and NVIDIA machines, with an assistant that works every screen.">
+<div class="wrap">
+  <header class="hero" id="top">
+    <p class="eyebrow">Self-hosted AI studio · Apple Silicon and NVIDIA</p>
+    <h1>Wire the models.<br><span class="grad">Direct the film.</span></h1>
+    <p class="lede">Images, video with sound, and voices from open models, on machines you own. An assistant that works every screen with you. Every take kept with exactly how it was made.</p>
+    <div class="ctas">
+      <a class="btn primary" href="#start">Install helmstudio →</a>
+      <a class="btn" href="#assistant">Meet the Assistant</a>
+    </div>
+    <div class="models" aria-label="Model families">
+      <span>Qwen Image 2.1</span><span>MiniMax H3 Image</span><span>LTX-2.5</span><span>MiniMax H3</span><span>Qwen3-TTS</span><span>ZONOS3</span><span>Qwen3.8</span>
+    </div>
+    <figure class="hero-shot" style="margin-inline:0">
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+        <img src="/screens/assistant-create.jpg" alt="Create with the Assistant drawer: it has written the prompt, set the model to Qwen Image Turbo, added @mara and Blue hour lighting, and asks before generating 4 images">
+      </div>
+    </figure>
+  </header>
+</div>
+
+<section class="stage" id="assistant" aria-labelledby="assistant-h">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="eyebrow">The Assistant</p>
+      <h2 id="assistant-h">A co-director that <span class="grad">works the screen</span> with you.</h2>
+      <p>Say what you want in a sentence. The Assistant opens the right screen, picks the model, writes the prompt and sets the look. You watch every change land, with Undo on each one. It never spends GPU time without asking.</p>
+    </div>
+    <ol class="flow">
+      <li><b>Ask</b><span>"Make a rainy London evening still of @mara, cinematic."</span></li>
+      <li><b>It does the work</b><span>Opens Create, sets Qwen Image Turbo, writes the prompt, adds Blue hour. Each step can be undone.</span></li>
+      <li><b>It asks first</b><span>A card shows the model, size, seeds, the host and the time it will take. You press Generate.</span></li>
+      <li><b>Steer it live</b><span>Type while it works. "Use Turbo instead" is read at the next step, and it changes course.</span></li>
+    </ol>
+    <div class="duo">
+      <div>
+        <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+          <img src="/screens/assistant-steer.jpg" alt="Three moments of steering: the box stays open while it works, a sent message waits for the next step, then the Assistant switches to Qwen Image Turbo at 16:9">
+        </div>
+        <p class="cap">Steer while it answers · Enter adds your words to this answer, Stop ends it</p>
+      </div>
+      <div>
+        <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+          <img src="/screens/assistant-timeline.jpg" alt="Timeline with the Assistant: it picked the sharpest of four takes, then turned a written scene into three new shots on the timeline">
+        </div>
+        <p class="cap">Script to shots · it looks at your takes and places new shots on the Timeline</p>
+      </div>
+    </div>
+    <div class="chips" aria-label="What the Assistant does">
+      <span class="chip">Sees the screen you are on</span>
+      <span class="chip">Looks at your takes</span>
+      <span class="chip">Knows every model's settings</span>
+      <span class="chip">Asks before costly runs</span>
+      <span class="chip">Undo on every step</span>
+      <span class="chip">Remembers what you like</span>
+      <span class="chip">Runs on a local model or your provider</span>
+    </div>
+    <p style="margin-top:24px"><a class="btn" href="/studio/assistant/">Read the Assistant guide →</a></p>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="rooms" id="rooms" aria-label="Tour">
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Create</p>
+        <h3>One screen for every image, clip and voice.</h3>
+        <p>Pick a model, write a prompt, make takes. Switch between image, video and audio without losing your prompt.</p>
+        <ul>
+          <li>Presets from Draft to Final, with time and peak memory before you run</li>
+          <li>Call characters and places by name with @</li>
+          <li>The same workflow as a form or as a node graph</li>
+        </ul>
+        <a href="/studio/create/">Read the Create guide →</a>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/create.jpg" alt="Create with Qwen Image: live preview at step 12 of 40, presets, references, canvas, quality and LoRA panels" loading="lazy"></div>
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Gallery</p>
+        <h3>Every take remembers how it was made.</h3>
+        <p>Prompt, model, seed, size and inputs travel with each take. Send any of them back to work in one click.</p>
+        <ul>
+          <li>Lineage: what a take was made from and where it was used</li>
+          <li>Use in… Animate, Edit, Extend or Retake</li>
+          <li>Save as an element, a look or a pipeline</li>
+        </ul>
+        <a href="/studio/gallery/">Read the Gallery guide →</a>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/gallery.jpg" alt="Gallery grid with filters and the side panel showing how the selected take was made and its Use in actions" loading="lazy"></div>
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Timeline</p>
+        <h3>Cut the film where you make it.</h3>
+        <p>Direct new shots in the gaps, retake a section, add voice lines, and export one MP4.</p>
+        <ul>
+          <li>A new shot can start from the last frame of the one before</li>
+          <li>The sequence's cast and look apply to every shot</li>
+          <li>Export copies streams when it can, re-encodes when it must</li>
+        </ul>
+        <a href="/studio/timeline/">Read the Timeline guide →</a>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/timeline.jpg" alt="Timeline with five shots, a new shot being composed in a gap, and clip actions for Extend, Retake and Replace" loading="lazy"></div>
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Pipelines</p>
+        <h3>Batches that check their own work.</h3>
+        <p>Run a workflow over a list while you are away. A judge looks at each take against your checklist, keeps the best and sends the rest back.</p>
+        <ul>
+          <li>It suggests first; switch to auto when you trust it</li>
+          <li>It learns from the takes you keep and reject</li>
+          <li>Every retry is capped and logged</li>
+        </ul>
+        <a href="/studio/pipelines/">Read the Pipelines guide →</a>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/judge.jpg" alt="Judge review: the judge suggests take 3 as clean and sharp, with checklist chips and the pipeline's memory of past picks" loading="lazy"></div>
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Models</p>
+        <h3>Every model, every machine, one place.</h3>
+        <p>See each family's variants and add-ons and which machine has them. Admins download weights to the machine that needs them.</p>
+        <ul>
+          <li>Base, Turbo, Distilled, and smaller fp8 weights for NVIDIA</li>
+          <li>Shared parts are stored once</li>
+          <li>A LoRA library for everyone</li>
+        </ul>
+        <a href="/models/">Browse the models →</a>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/models.jpg" alt="Models: Qwen Image 2.1 variants with sizes and hosts, optional add-ons, and the components panel" loading="lazy"></div>
+    </article>
+  </section>
+
+  <section class="band" id="machines" aria-labelledby="machines-h">
+    <div class="duo" style="margin-top:0">
+      <div class="copy">
+        <p class="eyebrow">Your machines</p>
+        <h3 id="machines-h">Runs where your GPUs are.</h3>
+        <p>Each run goes to a machine with the weights and the memory, or to the one you pick. Nothing you make leaves your machines.</p>
+      </div>
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div><img src="/screens/run-on.jpg" alt="Run on menu: Auto or a named host, with hosts that cannot take the run greyed out with the reason" loading="lazy"></div>
+    </div>
+    <div class="specs">
+      <div class="spec"><small>Apple Silicon</small><b>MLX, PyTorch and native</b><span>Runners share one memory budget on each Mac.</span></div>
+      <div class="spec"><small>NVIDIA</small><b>One server or many</b><span>PyTorch and native runners, with smaller fp8 and int8 weights.</span></div>
+      <div class="spec"><small>Your team</small><b>Private per person</b><span>Each user sees only their own takes, sessions and pipelines.</span></div>
+    </div>
+  </section>
+
+  <section class="close" id="start" aria-labelledby="start-h">
+    <p class="eyebrow">Two commands, then sign in</p>
+    <h2 id="start-h">Your studio is <span class="grad">one clone away.</span></h2>
+    <div class="term"><pre><span class="c"># the services, in containers</span>
+<span class="p">$</span> git clone https://github.com/janishar/helmstudio.git && cd helmstudio
+<span class="p">$</span> make up
+<span class="c"># the GPU runners, native on your Mac</span>
+<span class="p">$</span> make runners</pre></div>
+    <div class="ctas">
+      <a class="btn primary" href="/start/install/">Read the install guide →</a>
+      <a class="btn" href="https://github.com/janishar/helmstudio">View on GitHub</a>
+    </div>
+  </section>
+</div>
+</Showcase>

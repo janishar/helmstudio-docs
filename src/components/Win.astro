@@ -1,0 +1,11 @@
+---
+// A screen in an app window, as in the approved Tour design.
+interface Props { src: string; alt: string; caption?: string }
+const { src, alt, caption } = Astro.props;
+---
+<figure style="margin:0;min-width:0">
+  <div class="window"><div class="bar" aria-hidden="true"><i></i><i></i><i></i></div>
+    <img src={`/screens/${src}.jpg`} alt={alt} loading="lazy" decoding="async" />
+  </div>
+  {caption && <figcaption class="cap">{caption}</figcaption>}
+</figure>

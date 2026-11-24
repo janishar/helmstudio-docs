@@ -1,0 +1,52 @@
+---
+// The approved helmstudio Tour design: its own nav and footer, outside the docs theme.
+import '@fontsource-variable/inter';
+import '@fontsource-variable/bricolage-grotesque';
+import '@fontsource-variable/jetbrains-mono';
+import '../styles/showcase.css';
+interface Props { title: string; description: string }
+const { title, description } = Astro.props;
+const base = Astro.url.pathname === '/' ? '' : '/';
+---
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>{title}</title>
+  <meta name="description" content={description} />
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
+  <meta property="og:title" content={title} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={new URL('/screens/assistant-create.jpg', Astro.site)} />
+  <script is:inline>
+    // follow the docs' theme choice (Starlight keeps it under this key)
+    try { const t = localStorage.getItem('starlight-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="wrap">
+    <nav class="nav" aria-label="Site">
+      <a class="brand" href="/" aria-label="helmstudio home">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 16C8 12.4 10.4 10.6 13.3 10.6S18.4 12.6 18.4 16V21" fill="none" stroke="var(--a1)" stroke-width="3.2" stroke-linecap="round"/><path d="M8 7V21" stroke="var(--a2)" stroke-width="3.2" stroke-linecap="round"/><path d="M5.3 1.6H10.7A.9.9 0 0 1 11.6 2.5V5L8 8.4L4.4 5V2.5A.9.9 0 0 1 5.3 1.6Z" fill="var(--a2)"/></svg>
+        helmstudio
+      </a>
+      <div class="navlinks">
+        <a href={`${base}#assistant`}>Assistant</a>
+        <a href="/tour/">Tour</a>
+        <a href={`${base}#machines`}>Your machines</a>
+        <a href="/start/introduction/">Docs</a>
+        <a href="https://github.com/janishar/helmstudio">GitHub</a>
+      </div>
+    </nav>
+  </div>
+  <slot />
+  <div class="wrap">
+    <footer>
+      <span>helmstudio · Apache-2.0 · <a href="/start/introduction/" style="color:inherit">Docs</a></span>
+      <span>Every picture on these screens was made with helmstudio (Qwen Image Turbo on an NVIDIA host).</span>
+    </footer>
+  </div>
+</body>
+</html>
