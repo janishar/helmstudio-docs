@@ -11,6 +11,10 @@ export default defineConfig({
       description: 'A local-first studio for images, video and sound on your own Mac and NVIDIA machines.',
       logo: { dark: './src/assets/logo-dark.svg', light: './src/assets/logo-light.svg', replacesTitle: true },
       favicon: '/favicon.svg',
+      head: [
+        { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
+        { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+      ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/janishar/helmstudio' }],
       editLink: { baseUrl: 'https://github.com/janishar/helmstudio-docs/edit/main/' },
       customCss: [
