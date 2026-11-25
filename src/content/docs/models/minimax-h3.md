@@ -9,7 +9,7 @@ MiniMax H3 makes higher-quality clips with sound. It animates between a first an
 references: images, videos and sounds together. It is slower than [LTX-2.5](/models/ltx/).
 
 - **Media:** video with sound (MP4, H.264 and AAC, 24 fps)
-- **Runtime:** native: the h3 engine on a Mac, SGLang on an NVIDIA host
+- **Runtime:** native: the h3 engine on a Mac, SGLang on an NVIDIA host ([install it](/start/install/#minimax-h3-video-sglang-optional))
 - **Licence:** MiniMax H3 Community License. You accept it before the download.
 
 ## Workflows
@@ -66,7 +66,8 @@ references: images, videos and sounds together. It is slower than [LTX-2.5](/mod
 | Default | 20 steps, 45 layers, Reuse 2 |
 | Reference | 50 steps, every layer |
 
-On NVIDIA a preset sets only the steps and the LoRA, so Fast and Default run the same there.
+On NVIDIA a preset sets only the steps, so Fast and Default run the same there. The Turbo LoRA does not work on Base
+fp8 yet.
 
 ## Image to video
 

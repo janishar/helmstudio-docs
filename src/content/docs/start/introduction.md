@@ -7,7 +7,7 @@ sidebar:
 
 helmstudio is a studio for making images, video and sound with open models. It runs on your own machines: Macs with
 Apple Silicon and NVIDIA hosts. Nothing you make leaves them. Install it on a Mac with the app, or on Windows and
-Linux with Docker.
+Linux with Docker, with an NVIDIA card's runners on the machine itself.
 
 It is self-hosted and multi-user. An admin runs it and adds accounts. Each person sees only their own work.
 

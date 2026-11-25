@@ -32,7 +32,8 @@ More in [Assistant](/studio/assistant/).
 
 - Each release has one `compose.yml` for Docker. The first start makes the secrets and your admin account; no
   install script. See [Install and run](/start/install/#windows-and-linux-with-docker).
-- The images run on Intel/AMD and ARM machines. `--profile nvidia` adds a GPU runner for an NVIDIA card.
+- The images run on Intel/AMD and ARM machines. No NVIDIA image ships: on an NVIDIA card the runners run on the
+  machine itself, on Linux or Windows with WSL2. See [An NVIDIA card](/start/install/#an-nvidia-card).
 - Windows is untested so far.
 - The Mac app works as before.
 
