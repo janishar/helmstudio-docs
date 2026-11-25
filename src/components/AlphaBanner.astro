@@ -2,19 +2,32 @@
 // Site-wide notice while helmstudio is in alpha. Used by the home/Tour layout and, via the Banner override, every docs page.
 ---
 <div class="alpha-banner" role="note" data-pagefind-ignore>
-  <b>Alpha</b> · helmstudio is early software: things will change, and some will break. <a href="/start/whats-new/">What's new</a> · <a href="https://github.com/janishar/helmstudio/issues">Report an issue</a>
+  <span class="tag">Alpha</span><span class="msg">helmstudio is early software: things will change, and some will break.</span><span class="links"><a href="/start/whats-new/">What's new</a><span aria-hidden="true">·</span><a href="https://github.com/janishar/helmstudio/issues">Report an issue</a></span>
 </div>
 
 <style>
   .alpha-banner {
-    padding: 8px 16px;
-    background: var(--a1, var(--hs-a1));
-    color: var(--on1, var(--hs-on1));
-    font-size: 14px;
-    line-height: 1.4;
-    text-align: center;
-    text-wrap: balance;
+    --lime: var(--a1, var(--hs-a1));
+    --orange: var(--a2, var(--hs-a2));
+    --ink: var(--on1, var(--hs-on1));
+    --text: var(--t1, var(--sl-color-white));
+    --soft: var(--t2, var(--sl-color-gray-3));
+    display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 12px;
+    padding: 9px max(16px, env(safe-area-inset-left, 0px));
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--lime) 16%, transparent), color-mix(in srgb, var(--orange) 16%, transparent));
+    border-bottom: 1px solid color-mix(in srgb, var(--lime) 22%, transparent);
+    color: var(--text);
+    font-size: 13.5px; line-height: 1.4; text-align: center; text-wrap: balance;
   }
-  .alpha-banner b { font-weight: 700; }
-  .alpha-banner a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .tag {
+    padding: 2px 9px; border-radius: 999px;
+    background: linear-gradient(120deg, var(--lime), var(--orange));
+    color: var(--ink);
+    font: 700 11px/1.5 var(--mono, var(--sl-font-mono)); letter-spacing: .08em; text-transform: uppercase;
+  }
+  .msg { color: var(--text); }
+  .links { display: inline-flex; gap: 8px; color: var(--soft); }
+  .links a { color: var(--text); text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--lime) 55%, transparent); }
+  .links a:hover { border-bottom-color: var(--lime); }
 </style>
