@@ -15,6 +15,8 @@ and state can only change there. See [Install and run](/start/install/).
 
 Every account, with its roles, state and last sign-in.
 
+![System › Users: every account with its roles, state and last sign-in](/screens/system-users.jpg)
+
 - **Add a user**: enter the **Name**, **Email** and a temporary password (at least 10 characters, or press
   **Generate**). Pick the roles and press **Create user**. Share the email and password with the person; they can
   change the password in [Settings](/studio/settings/). There is no public sign-up.
