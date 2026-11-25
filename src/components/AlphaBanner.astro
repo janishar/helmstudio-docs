@@ -1,0 +1,20 @@
+---
+// Site-wide notice while helmstudio is in alpha. Used by the home/Tour layout and, via the Banner override, every docs page.
+---
+<div class="alpha-banner" role="note" data-pagefind-ignore>
+  <b>Alpha</b> · helmstudio is early software: things will change, and some will break. <a href="/start/whats-new/">What's new</a> · <a href="https://github.com/janishar/helmstudio/issues">Report an issue</a>
+</div>
+
+<style>
+  .alpha-banner {
+    padding: 8px 16px;
+    background: var(--a1, var(--hs-a1));
+    color: var(--on1, var(--hs-on1));
+    font-size: 14px;
+    line-height: 1.4;
+    text-align: center;
+    text-wrap: balance;
+  }
+  .alpha-banner b { font-weight: 700; }
+  .alpha-banner a { color: inherit; text-decoration: underline; text-underline-offset: 2px; }
+</style>

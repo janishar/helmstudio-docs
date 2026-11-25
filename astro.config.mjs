@@ -17,6 +17,7 @@ export default defineConfig({
       ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/janishar/helmstudio' }],
       editLink: { baseUrl: 'https://github.com/janishar/helmstudio-docs/edit/main/' },
+      components: { Banner: './src/components/Banner.astro' },
       customCss: [
         '@fontsource-variable/inter',
         '@fontsource-variable/bricolage-grotesque',
