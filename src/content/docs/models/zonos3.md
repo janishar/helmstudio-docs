@@ -9,7 +9,8 @@ ZONOS3 is a fast, small voice model, about 2 GB. It speaks 44 languages, clones 
 fine control of emotion, energy, whispering and pace.
 
 - **Media:** audio (44.1 kHz)
-- **Runtime:** native, on a Mac (not yet on NVIDIA)
+- **Runtime:** native, on a Mac or a [separate NVIDIA host](/start/hosts/#a-separate-nvidia-host) (not yet with
+  NVIDIA on the stack's own machine)
 - **Variant:** Mini
 - **Licence:** Apache License 2.0
 

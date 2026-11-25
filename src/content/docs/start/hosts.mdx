@@ -5,7 +5,7 @@ sidebar:
   order: 5
 ---
 
-import { Aside } from '@astrojs/starlight/components';
+import { Steps, Aside } from '@astrojs/starlight/components';
 
 A **host** is a machine with model runners. A **runner** is a process that loads a model's weights and makes takes.
 The studio's services can run on one machine while the runners run on several.
@@ -27,10 +27,16 @@ The Mac app starts its runners itself. From source, start them with `make runner
 
 ## NVIDIA hosts
 
-A Linux machine (or Windows with WSL2) with an NVIDIA GPU joins as one more host. Its runners run on the machine
-itself, on the card's own driver: the `torch` runner, and a `native` runner for MiniMax H3 video when SGLang is
-installed. Its budget is the GPU's memory minus a reserve. Set it up as in
-[An NVIDIA card](/start/install/#an-nvidia-card).
+A machine with an NVIDIA GPU joins as one more host, in one of two ways:
+
+- **On the stack's own machine** (Linux, or Windows with WSL2): the runners run on the machine itself, on the card's
+  own driver. The `torch` runner, and a `native` runner for MiniMax H3 video when SGLang is installed. See
+  [An NVIDIA card](/start/install/#an-nvidia-card).
+- **A separate NVIDIA host** (Linux): the runners run as containers built on that machine, and reach a stack on
+  another machine. The `torch` runner, and a `native` runner for MiniMax H3 video and ZONOS3. See
+  [Add an NVIDIA host](#add-an-nvidia-host).
+
+Its budget is the GPU's memory minus a reserve.
 
 Some model variants run on one kind of host only:
 
@@ -77,8 +83,10 @@ See [The helm CLI](/mcp/helm-cli/) for the rest.
 
 ## Add an NVIDIA host
 
-An NVIDIA machine runs the stack in Docker and its runners on the machine itself, from a clone of the repository. Every
-step is in [An NVIDIA card](/start/install/#an-nvidia-card), for Linux and for Windows with WSL2.
+### On the stack's own machine
+
+The stack runs in Docker and the runners run on the machine itself, from a clone of the repository. Every step is in
+[An NVIDIA card](/start/install/#an-nvidia-card), for Linux and for Windows with WSL2.
 
 - With the Docker stack the host is named `gpu` (`HELMSTUDIO_GPU_HOST` in `.env` names it otherwise). From source it
   is the name you give `make up GPU_HOSTS=<h>`.
@@ -87,6 +95,66 @@ step is in [An NVIDIA card](/start/install/#an-nvidia-card), for Linux and for W
 - To stop the host cleanly, run `make runners-nvidia-stop` on it. A host that drops off goes offline after about 30
   seconds.
 
+### A separate NVIDIA host
+
+These steps join a separate Linux NVIDIA machine to a stack run [from source](/start/install/#from-source). They are
+done by hand. The host runs only the runner. It talks to the stack's message bus (NATS) and object store, both over
+TLS, with its own credentials. Its weights stay on its own disk.
+
 <Aside type="caution">
-  The stack publishes its message bus (NATS) and object store on `127.0.0.1` only. Never publish them to the internet.
+  Never publish the stack's NATS port to the internet. Reach it through an SSH tunnel, or through a TLS-only proxy
+  that only the GPU hosts can reach.
 </Aside>
+
+<Steps>
+
+1. **On the machine that runs the stack**, make the host's credentials and turn on TLS. Pick a short host name of
+   lower-case letters and digits for `<h>`.
+
+   ```sh
+   make gpu-host-secrets GPU_HOSTS=<h>
+   ```
+
+   Then set `STACK_TLS=on` in `deploy/.env` and run `make up`.
+
+2. **On the GPU host**, install the NVIDIA driver, the NVIDIA Container Toolkit, and Docker with Compose 2.20 or later.
+   The repository's `deploy/gpu-host/setup.sh` does this on a fresh Ubuntu 24.04 machine.
+
+3. **Copy the runner to the GPU host**: the `runner_service` folder, the `deploy/gpu-host` folder, and the host's
+   secret files from `deploy/secrets/` into `deploy/gpu-host/secrets/`, owned by the runner's user (uid 10001) and
+   readable by nobody else. Then, in `deploy/gpu-host`, copy `.env.example` to `.env` and set:
+
+   - `GPU_HOST`: the host name from step 1.
+   - `MODELS_DIR`: the host's models folder.
+   - `MODELS_MODE`: `rw` to allow downloads from the studio, `ro` to keep the folder read only.
+
+   For gated models such as LTX-2.5, put a Hugging Face token in `secrets/hf_token`.
+
+4. **Connect the host to the stack.** The simplest way publishes nothing: an SSH reverse tunnel from the stack's
+   machine puts the stack's NATS and object store on the GPU host's loopback.
+
+   ```sh
+   make gpu-host-tunnel VM=<user>@<address> ZONE=<ssh port>   # plain SSH: ZONE takes the port
+   make gpu-host-tunnel-stop      # later, to close it
+   ```
+
+5. **Build and start the runner** on the GPU host. The build makes the runner's CUDA image on that machine.
+
+   ```sh
+   cd deploy/gpu-host
+   docker compose build
+   docker compose up -d
+   docker compose ps              # healthy means it reached the stack
+   ```
+
+   MiniMax H3 video and ZONOS3 need the `native` runner too: build and start with `--profile native`.
+
+6. **Check it in the studio.** [System](/studio/system/) › **Hosts** lists the new host with its GPU and memory.
+   Download models to it in [Models](/studio/models/), or with `helm model pick --host <h>`.
+
+</Steps>
+
+The repository's `deploy/gpu-host/README.md` has every detail, including a TLS proxy for a host the tunnel cannot
+reach.
+
+To stop a host cleanly, run `docker compose down` on it. A host that drops off goes offline after about 30 seconds.

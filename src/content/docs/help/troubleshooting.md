@@ -53,13 +53,16 @@ A workflow whose weights are on no host cannot run. An admin downloads the model
 variant and the host, read the licence and accept it. Downloads happen per host, so a model on one machine is not on
 another.
 
+On a separate NVIDIA host, downloads need `MODELS_MODE=rw` in its `deploy/gpu-host/.env`.
+
 ## A download says the repo is gated
 
 Some models, such as [LTX-2.5](/models/ltx/), are gated on Hugging Face. The host needs a Hugging Face token whose
 account has access to the repo.
 
-Put the token in `deploy/secrets/hf_token` in the helmstudio folder the runners start from (on a Mac or an NVIDIA
-machine), readable only by you.
+- **On a Mac, or an NVIDIA card on the stack's machine:** put the token in `deploy/secrets/hf_token` in the
+  helmstudio folder the runners start from, readable only by you.
+- **On a separate NVIDIA host:** put it in `deploy/gpu-host/secrets/hf_token`, readable only by the runner.
 
 If the download still fails with "the token was refused", check that the token's account has accepted the model's
 terms on Hugging Face.

@@ -261,7 +261,8 @@ of the repository, on the card's own driver. Run the stack either way:
 
 ### MiniMax H3 video: SGLang (optional)
 
-MiniMax H3 video on NVIDIA (**Base fp8**) needs SGLang 0.5.23, in its own environment. In the clone:
+MiniMax H3 video on NVIDIA (**Base fp8**) needs SGLang 0.5.23, in its own environment. On the stack's own machine
+this works on Linux x86_64 (Intel/AMD) only. In the clone:
 
 <Steps>
 
@@ -316,28 +317,30 @@ Each runner logs to `runner_service/.run/runner-<host>-<env>.log`. Stop the runn
 
 ### What runs on NVIDIA
 
-| Model | On NVIDIA |
-|---|---|
-| Qwen Image 2.1, LTX-2.5, Qwen3-TTS | Yes |
-| MiniMax H3 Image | Yes, as **Base fp8** |
-| MiniMax H3 (video) | Yes, as **Base fp8**, with [SGLang](#minimax-h3-video-sglang-optional) |
-| ZONOS3 | Not yet |
-| Qwen3.8 (Ask, the local LLM) | No: Macs only |
+| Model | This machine | [A separate NVIDIA host](/start/hosts/#a-separate-nvidia-host) |
+|---|---|---|
+| Qwen Image 2.1, LTX-2.5, Qwen3-TTS | Yes | Yes |
+| MiniMax H3 Image | Yes, as **Base fp8** | Yes, as **Base fp8** |
+| MiniMax H3 (video) | **Base fp8**, with [SGLang](#minimax-h3-video-sglang-optional) | **Base fp8**, with the `native` runner |
+| ZONOS3 | Not yet (needs a CUDA toolkit build) | Yes, with the `native` runner |
+| Ask | Qwen3-VL 8B | Qwen3-VL 8B |
+| Ask's local LLM (Qwen3.8 27B) | No: Macs only | No: Macs only |
 
 The Turbo LoRA does not work on MiniMax H3 Base fp8 yet.
 
 ## From source
 
-For developers on a Mac: the services in Docker, the model runners native on the Mac so they can use its GPU. To keep
-a stack running for real work, see [Run in production on a Mac](/start/production/). On Linux with an NVIDIA card,
-see [An NVIDIA card](#an-nvidia-card).
+For developers: the services in Docker, the model runners native on the machine so they can use its GPU. To keep a
+stack running for real work on a Mac, see [Run in production on a Mac](/start/production/). On Linux with an NVIDIA
+card, see [An NVIDIA card](#an-nvidia-card).
 
 ### Requirements
 
-- A Mac with Apple Silicon.
+- A Mac with Apple Silicon, or Linux (with an NVIDIA card to make takes). On Windows, only inside WSL2.
 - Docker with Compose 2.20 or later (OrbStack or Docker Desktop).
 - `make` and `openssl`.
-- For the native runners: [uv](https://docs.astral.sh/uv/), the Xcode Command Line Tools, CMake and Rust (`cargo`).
+- For the native runners on a Mac: [uv](https://docs.astral.sh/uv/), the Xcode Command Line Tools, CMake and Rust
+  (`cargo`). On Linux, see [An NVIDIA card](#an-nvidia-card).
 - For the `helm` command-line client: Go.
 - Model weights on disk. See [Models](/models/).
 
