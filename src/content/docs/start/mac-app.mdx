@@ -1,6 +1,6 @@
 ---
 title: The Mac app
-description: helmstudio for Mac runs the whole studio on one Mac in a single window. It is a preview.
+description: helmstudio for Mac runs the whole studio on one Mac in a single window, and updates itself. It is a preview.
 sidebar:
   order: 4
 ---
@@ -13,42 +13,43 @@ import { Steps, Aside } from '@astrojs/starlight/components';
 </Aside>
 
 The app runs the whole studio on one Mac: the services in a small VM of their own, the model runners on the Mac's
-GPU, and the studio in one window. It does not touch your own Docker. It can run beside the local and production
-stacks, on its own port: the studio is at `http://127.0.0.1:8310`.
+GPU, and the studio in one window. It brings its own VM and Docker tools, so you need neither Docker nor OrbStack,
+and it does not touch a Docker you already have. It can run beside the local and production stacks, on its own
+port: the studio is at `http://127.0.0.1:8310`.
 
 ## Requirements
 
 - A Mac with Apple Silicon, macOS 13 or later, and about 6 GB of free disk (plus your models).
-- The production images in this Mac's Docker: run `make prod` once in the repository. The app copies them into its VM;
-  nothing is pulled from a registry.
-- The internet, for the first open only. The app fetches the VM's system disk (about 320 MB) and the runners' Python
-  packages (about 2 GB).
+- The internet, for the first open only. The app fetches the VM's system disk (about 320 MB), the images (a 0.6 GB
+  download, 2.2 GB on disk) and the runners' Python packages (about 2 GB).
 
-## Build it
+## Install
 
-From the repository:
+<Steps>
 
-```sh
-make prod                # once, for the images
-make -C desktop app      # builds desktop/dist.noindex/helmstudio.app
-```
+1. Download `helmstudio.dmg` from the [GitHub releases](https://github.com/janishar/helmstudio/releases). To check
+   it, compare `shasum -a 256 helmstudio.dmg` with the release's `SHA256SUMS`.
 
-Copy `helmstudio.app` to `/Applications`. `make -C desktop dmg` packs it as a disk image instead.
+2. Open it and drag helmstudio to Applications.
+
+3. The app is ad-hoc signed: the first time, right-click it › **Open**, then **Open** again.
+
+</Steps>
 
 ## First open
 
 <Steps>
 
-1. Open `/Applications/helmstudio.app`. The app is ad-hoc signed: a copy from another Mac needs right-click › Open
-   the first time.
+1. Open helmstudio from Applications.
 
-2. A list of steps runs: Check this Mac, Start the VM, Load the images, Make the secrets, Set up the runners, Start.
-   It takes about 2 minutes, or about 5 on a Mac that has never fetched the VM disk or the runner packages.
+2. A list of steps runs: **Check this Mac**, **Start the VM**, **Download the images**, **Make the secrets**,
+   **Set up the runners**, **Start**. It takes about 5 minutes on a Mac that has never fetched them. The images step
+   labels both sizes, for example **0.4 of 0.6 GB download · 2.2 GB on disk**.
 
 3. Set the admin account: an email and a password of 12 characters or more, with no quote. This is your sign-in to
    the studio. It is kept only in the app's folder.
 
-4. Choose the models folder. The default is `~/helmstudio-models`; Choose… picks an existing folder.
+4. Choose the models folder. The default is `~/helmstudio-models`; **Choose…** picks an existing folder.
 
 5. The studio window opens. Sign in with the admin account.
 
@@ -58,6 +59,46 @@ If a step fails, the screen says which one. **Show log** opens its log; **Try ag
 
 Every later open shows the start screen for about a minute (VM, services, runners), then the studio.
 
+## Updates
+
+From 0.1.0-alpha.2 the app updates itself. An older app has no updater: download the new `.dmg` and replace it by
+hand once.
+
+![The update window: checking, up to date, a new version is out, downloading, checking the download and ready to install](/screens/mac-update.jpg)
+
+The app checks for a new release when it opens and every 24 hours. While it is an alpha, it offers pre-releases too.
+To check now, choose **Check for updates…** in the menu bar menu.
+
+When a new version is out, a small window says so (for example **0.1.0-alpha.3 is out**), with your version, the
+download size, what changed and a **Release notes** link. The menu shows **Update to …** and the menu bar icon gets a
+small blue dot.
+
+<Steps>
+
+1. Press **Install**. Nothing downloads before you do. **Later** closes the window; the menu keeps the update.
+
+2. The window shows **Updating to …**: **Download** with its progress, then **Check**, which checks the download
+   against the release's SHA256 (**SHA256 ok**). **Cancel** stops the download and deletes it.
+
+3. **Ready to install**: press **Restart**. The app quits, swaps itself and opens again. The studio is offline for
+   about a minute.
+
+</Steps>
+
+The first open after an update shows **Updating helmstudio**: VM, **Update the images** (with a progress bar for the
+new images), Services, Runners (the new runner code and packages), then **Remove old images**, which says how much
+it freed. The old images are removed only once the new version runs; if a step fails, they stay and the next open
+tries again. Your takes, models and settings stay.
+
+If something goes wrong, the window says so and nothing changes ("Nothing changed. You still have …"):
+
+| Message | Means |
+|---|---|
+| **Could not check for updates** | GitHub could not be reached. Check the internet connection and press **Try again**. |
+| **Download failed** | The download stopped. Check the internet connection and press **Try again**. |
+| **Check failed** | The download does not match its SHA256. It was deleted. **Try again** downloads it again. |
+| **Cannot install here** | The app runs from a place it cannot change, such as the `.dmg` itself. Drag it to Applications, open it from there, then update. |
+
 ## The menu bar
 
 The helmstudio icon in the menu bar has a status dot: green is Ready, yellow is Starting…, red is Something is down.
@@ -65,12 +106,20 @@ Its menu:
 
 | Item | What it does |
 |---|---|
-| Open | Shows the studio window |
-| Restart runners | Restarts the model runners, after a runner stalls or a new model is added |
-| Open logs | The app's log and one log per runner |
-| Keep running | On by default. Closing the window or Cmd+Q only hides the app; the studio keeps running. |
-| Open at login | Off by default |
-| Quit | Stops the runners, the services and the VM (about 25 seconds). Your takes and data stay. |
+| **Update to …** | Shown when an update waits, with a blue dot. Opens the update window. While it downloads it reads **Updating… N%**. |
+| **Open** | Shows the studio window |
+| **Restart runners** | Restarts the model runners, after a runner stalls or a new model is added |
+| **Open logs** | The app's log and one log per runner |
+| **Keep running** | On by default. Closing the window or Cmd+Q only hides the app; the studio keeps running. |
+| **Open at login** | Off by default |
+| **Check for updates…** | Checks for a new version now |
+| **Quit** | Stops the runners, the services and the VM (about 25 seconds). Your takes and data stay. |
+
+## Plugins
+
+The app ships the built-in [plugins](/plugins/): [Web search](/plugins/web-search/) and the
+[skills](/plugins/skills/). A plugin that starts itself, such as Web search, is started by the app's runners while it
+is on, and starts again each time you open the app. Your own plugins go in `~/.helm/plugins/`.
 
 ## Remote models
 
@@ -90,11 +139,17 @@ claude mcp add -s user helmstudio -- /Applications/helmstudio.app/Contents/Resou
 `helm` keeps one address, so signing in to the app replaces a sign-in to another stack. More in
 [Use helmstudio from Claude](/mcp/).
 
+## Build it yourself
+
+From the repository, `make -C desktop app` builds `desktop/dist.noindex/helmstudio.app`, and `make -C desktop dmg`
+packs it as a disk image. The build uses the released images.
+
 ## Where things are
 
 | Folder | Holds |
 |---|---|
-| `~/Library/Application Support/helmstudio` | Settings, logs, secrets and the runners' Python |
+| `~/Library/Application Support/helmstudio` | Settings, logs, secrets, downloaded updates and the runners' Python |
 | `~/.helmstudio-vm` | The VM. Its disks hold the images and your data. |
+| `~/.helm` | Your plugins (`plugins/`) and the logs of plugins that start themselves (`logs/`) |
 
-Deleting the app leaves both folders. To remove everything, quit the app, then delete them.
+Deleting the app leaves these folders. To remove everything, quit the app, then delete them.

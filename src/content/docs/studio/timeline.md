@@ -10,8 +10,8 @@ lines where they belong, and export an MP4.
 
 ## Sequences
 
-The sequence bar at the top shows the open sequence with its size, frame rate and length, its cast and look
-defaults, undo and redo, **New sequence** and **Export**.
+The sequence bar at the top shows the open sequence with its size, frame rate and length, the render time of its
+shots in all (for example ⏱ 12:40), its cast and look defaults, undo and redo, **New sequence** and **Export**.
 
 - **New sequence**: give it a name. Its width, height and frame rate come from the first clip; with no clip yet it is
   1280 × 720 at 24 fps. Sound is 48 kHz.
@@ -92,7 +92,7 @@ points. A sequence holds up to 200.
 ### The clip inspector
 
 Select a clip to set its in and out, a dissolve (**Transition in**), its gain in dB and mute, or to **Replace with
-another take**.
+another take**. The line under its title names the take it comes from and the take's render time (⏱).
 
 ## Generate in place
 

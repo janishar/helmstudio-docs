@@ -19,6 +19,9 @@ can repeat it or build on it. Every image, video or sound input in helmstudio is
 
 A batch's **Open in gallery** shows only that batch's takes, with a chip you can clear.
 
+The grid draws only the rows near the screen, so a gallery of thousands of takes stays fast and keeps its scroll
+position and selection. The Gallery picker on Create works the same way.
+
 ## Upload
 
 Drop images or sounds (wav, mp3 or m4a) on the grid, or upload them from the Gallery picker wherever an input asks
@@ -28,10 +31,12 @@ for one. An upload becomes a take like any other.
 
 Click a take to see it in the side panel:
 
-- **Made with**: the workflow, the host it ran on, its looks, LoRAs, size, seed and length.
+- **Made with**: the workflow, the host it ran on, its looks, LoRAs, size, seed, length and **Render time** (for
+  example ⏱ 1:14).
 - **Lineage**: **Made from** shows the takes it was built from, and **Used in** the takes built from it. Click one to
   open it.
-- Open it **Full screen** (**F**).
+- Open it **Full screen** (**F**), or double-click the take in the grid: an image opens full size, a video or sound
+  plays. A single click only selects it.
 
 ## Take actions
 

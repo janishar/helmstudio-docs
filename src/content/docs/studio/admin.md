@@ -91,14 +91,36 @@ If the provider does not list a model, type its **Model id** and press **Add**. 
 This tab says which model does each AI job, and what each job sends out of the machine. Press **Edit** on a row to
 change it.
 
+![Admin › AI agents: the Assistant's model and caps per user, Context and cache, and session names](/screens/admin-agents.jpg)
+
 ### Assistant
 
 - **Assistant on**: turns the in-app [Assistant](/studio/assistant/) on or off for everyone.
 - **Provider and model**: any enabled provider and one of its models.
-- **Web search**: off unless you pick a search provider (added in Model providers).
-- **Caps per user**: messages a minute, model calls a day, tokens a day, and takes it may look at an hour.
+- **Chat window, tokens**: the chosen model's real limit (60000 until set; each model keeps its own). Past 70% the
+  oldest half of a chat folds once into a short summary, so plans and decisions stay. A smaller window costs less per
+  answer.
+- **Web search**: comes from the Web search plugin when it is on in [Plugins](/plugins/); the Assistant asks before
+  it sends anything off the machine. Otherwise pick a search provider added in Model providers.
+- **Caps per user**:
 
-The thinking level is set per model in Model providers.
+| Cap | What it limits |
+|---|---|
+| **Model calls a day** | Calls to the Assistant's model. |
+| **Tokens a day** | Tokens the Assistant's model uses. |
+| **Look at, an hour** | Takes it may look at with Look at. |
+| **Messages a minute** | Messages a user sends. |
+| **Auto takes, an hour** | Takes [Auto mode](/studio/assistant/#auto-mode) may start without asking (default 8). |
+| **Auto GPU minutes, an hour** | GPU minutes Auto mode may use without asking (default 30). |
+
+The thinking level is set per model in Model providers. Assistant tools such as web search, and skills, come from
+plugins; see [Plugins](/plugins/).
+
+### Prompt cache
+
+Below the Assistant settings, **Prompt cache, last 30 days** lists each model with its **Calls** and **Cache hits**:
+the share of prompt tokens the provider read from its cache, as each reply reported. Hits cost less. A model whose
+replies report none is not listed. See [How it keeps long chats](/studio/assistant/#how-it-keeps-long-chats).
 
 ### Session names
 

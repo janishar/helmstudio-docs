@@ -39,6 +39,7 @@ export default defineConfig({
         { label: 'Using the studio', items: [{ autogenerate: { directory: 'studio' } }] },
         { label: 'Models', items: [{ autogenerate: { directory: 'models' } }] },
         { label: 'Agents and MCP', items: [{ autogenerate: { directory: 'mcp' } }] },
+        { label: 'Plugins', items: [{ autogenerate: { directory: 'plugins' } }] },
         { label: 'Reference', items: [{ autogenerate: { directory: 'reference' } }, ...openAPISidebarGroups] },
         { label: 'Help', items: [{ autogenerate: { directory: 'help' } }] },
       ],

@@ -14,6 +14,9 @@ admin turns them on and adds a provider in [Admin](/studio/admin/) › Model pro
 [Assistant](/studio/assistant/), pipeline agents and session names. They never make images, video or sound. On the
 local and production stacks they are off until `REMOTE_MODELS=on` is set in `deploy/.env`.
 
+If the Assistant's remote model can see images, downscaled pictures of the takes you hand it go to that provider too.
+If web search is on, the Assistant asks before each search leaves the machine.
+
 Model downloads come from Hugging Face, when an admin starts one.
 
 ## Which models does it run?

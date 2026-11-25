@@ -89,6 +89,20 @@ On the local and production stacks, calls to remote providers are off by default
 `deploy/.env` and run `make up` (or `make prod`) again. Then add a provider in [Admin](/studio/admin/) › Model
 providers.
 
+## The Assistant
+
+- **It does not open.** The admin has not turned it on, or picked no model. See
+  [Admin › AI agents](/studio/admin/#ai-agents).
+- **The message box is shut.** You reached a per-user cap. It opens again when the cap resets, or when the admin
+  raises it.
+- **"The model gave a broken answer twice."** Press **Retry**. If it keeps happening, the model may be too small for
+  the job; try another in AI agents.
+- **Auto mode keeps asking.** A step past this hour's Auto cap, a delete, anything sent off the machine, or a run with
+  no time estimate yet always asks. Its line says why. See [Auto mode](/studio/assistant/#auto-mode).
+- **It forgot the start of a long chat.** The oldest part folds into a summary once the chat fills the model's window.
+  Plans and shot lists stay: a film's shot list lives in Memory › Projects. The admin can raise the
+  **Chat window** in AI agents if the model allows it.
+
 ## The Mac app
 
 - **A first-open step failed.** The screen says which step. **Show log** opens its log; **Try again** goes on from

@@ -17,6 +17,9 @@ shows on the stage, joins the session's strip and lands in the [Gallery](/studio
   and **Generate**.
 - **Inspector** (right): the **Preset** chips and the workflow's settings, grouped in sections.
 
+In a narrow window the row of input fields (for example First frame, Elements, Film, Camera and Lighting) wraps onto
+more lines. The fields keep one width, as an even grid.
+
 Before the first run, the stage gives way to a short "What will you make?" headline with the composer in the middle.
 
 ## Pick a workflow
@@ -38,6 +41,10 @@ Your own workflows can be renamed, duplicated and deleted from the workflow chip
 first.
 
 Switching workflow keeps your prompt, references, elements, looks, canvas and seed where they still fit.
+
+Picture and sound keep separate texts. Image and video workflows share one prompt; audio workflows keep their own
+script. Switching to an audio workflow brings back the last script, never the picture prompt, and switching back
+brings back the prompt.
 
 ## Studio and Graph
 
@@ -99,7 +106,10 @@ A session is a project on Create: your prompts and their takes.
 
 ## Takes
 
-Click a take in the strip to show it on the stage. On the stage you can:
+Click a take in the strip to show it on the stage. The label at the top shows its render time, the time from the
+start of the run to the file, for example **Take · ⏱ 1:14**.
+
+On the stage you can:
 
 - **Star** it.
 - **Compare** it with another take (a wipe between two takes, or a grid of seeds).
