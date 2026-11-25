@@ -75,8 +75,10 @@ Assistant shows a card with the tool and what it will send, and you answer **Yes
 
 ## Plugins that start themselves
 
-Some plugins, such as [Web search](/plugins/web-search/), run a small program. When the manifest says how to start
-it, helmstudio does it for you:
+Some plugins run as a small program on the Mac and start themselves when turned on ([Web search](/plugins/web-search/));
+others run inside helmstudio's own services and only need turning on ([Media tools](/plugins/media-tools/)).
+
+When a plugin's manifest says how to start its program, helmstudio does it for you:
 
 - Turn the plugin on and it starts on the Mac. Its side panel says **Starts: On its own, on the Mac**.
 - If it stops, it starts again after a short wait (1 second, doubling up to 1 minute).
