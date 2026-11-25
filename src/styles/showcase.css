@@ -68,13 +68,6 @@ p { margin: 0; }
 .window .bar i { width: 11px; height: 11px; border-radius: 50%; background: var(--ln); }
 .window img { display: block; width: 100%; height: auto; }
 .hero-shot { width: 100%; margin-top: 12px; position: relative; }
-/* the glow behind the hero screen: a soft radial gradient (no filter: Safari tiles large blurs into hard edges),
-   fading out inside its own box, above the next section */
-.hero-shot::before { content: ""; position: absolute; inset: -4% 0 -8%; z-index: -1; pointer-events: none; opacity: .55;
-  background:
-    radial-gradient(closest-side at 30% 55%, color-mix(in srgb, var(--a1) 45%, transparent), transparent),
-    radial-gradient(closest-side at 72% 50%, color-mix(in srgb, var(--a2) 40%, transparent), transparent); }
-
 /* the Assistant stage */
 .stage { margin-top: 96px; padding-block: 72px; background: var(--s1); border-block: 1px solid var(--ln); }
 .stage-head { display: grid; gap: 16px; max-width: 46rem; }
