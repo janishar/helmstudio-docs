@@ -134,7 +134,8 @@ docker compose --profile nvidia up -d --wait
 - Use `--profile nvidia` on every later command, or put `COMPOSE_PROFILES=nvidia` in `.env`.
 - Models download into a Docker volume. To use a folder of your own, set `HELMSTUDIO_MODELS_DIR=/path/to/models`
   in `.env`.
-- ZONOS3 and MiniMax H3 do not run on this runner yet.
+- ZONOS3 does not run on this runner yet. [MiniMax H3](/models/minimax-h3/) and
+  [MiniMax H3 Image](/models/minimax-h3-image/) run here as their **Base fp8** variants.
 
 Without `--profile nvidia` there is no model runner: the studio opens (the Assistant, the Gallery, editing pipelines,
 uploads) but cannot make takes. On a Mac, use the [Mac app](#mac-the-app) to generate.
