@@ -15,11 +15,12 @@ Plugins are new in 0.1.0-alpha.2.
 
 | Kind | What it adds | Example |
 |---|---|---|
-| **Assistant tools** | Tools the Assistant can call, served by a small program of its own. | [Web search](/plugins/web-search/) |
+| **Assistant tools** | Tools the Assistant can call, served by a small program of its own. | [Web search](/plugins/web-search/), [Media tools](/plugins/media-tools/) |
 | **Skill** | Text that teaches the Assistant a craft. It never runs anything. | [Cinematic filmmaker, Animator](/plugins/skills/) |
 | **Model provider** | A model endpoint you add as a provider in one click. | |
 
-More kinds, such as media tools for the Assistant and the Gallery, are coming.
+Built in: [Web search](/plugins/web-search/) lets the Assistant search the web, and [Media tools](/plugins/media-tools/)
+adds **Edit** to the Gallery (crop, trim, resize and more) and the same edits for the Assistant.
 
 ## Where plugins come from
 

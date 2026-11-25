@@ -2,7 +2,7 @@
 title: Write a plugin
 description: The plugin.json manifest, its fields per kind, how a plugin starts itself, and a minimal skill.
 sidebar:
-  order: 4
+  order: 5
 ---
 
 A plugin is a folder whose name is the plugin's name, with a `plugin.json` manifest in it. Put yours in

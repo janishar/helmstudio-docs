@@ -134,6 +134,26 @@ looks. With a text-only model, it runs **Look at**: an "Ask" workflow's model on
 takes at a time (a video as a few keyframes). Look at needs a card, except on takes you attached or picked in that
 chat. See [Ask](/models/ask/).
 
+## Edit takes and look at video
+
+With the [Media tools](/plugins/media-tools/) plugin on, it can crop, resize, rotate, flip, extend and convert
+images; trim videos, change their speed, mute them or give them a new sound; save a video frame as an image; and trim,
+level and join sounds. Ask "Crop this to 9:16" or "Trim the first second off". Each edit makes a new take next to the
+original, with **Undo**, so it needs no **Yes** card.
+
+It can also pull frames from a video to look at it: at times you name, evenly spaced, or at each scene change, up to 8
+at a time with their timecodes. Ask "Where are the cuts in my export?". This makes no take.
+
+## How it knows the models
+
+Each model ships with a guide for the Assistant. For every model you have downloaded, it always has a short card: what
+the model is good and weak at, and when to pick it over another. So "make a fast draft" or "which model for a close
+likeness?" gets an answer that fits the models you have.
+
+When it works with a model, it reads that model's full guide first, and a line such as **Read the LTX-2.5 guide** says
+so. A guide also holds named settings, such as **Quick look** or **Low memory** for LTX-2.5, which it applies
+exactly.
+
 ## Steer it, or stop it
 
 You do not have to wait for it to finish. While it works, the message box reads **Steer the answer…**: type and press

@@ -123,6 +123,9 @@ workflow, seed and inputs; each result becomes its slot's take.
 2. Start the export. You can leave the screen: the export keeps going.
 3. The MP4 lands in the Gallery as a take (**From Timeline**). Open it from the dialog when it is done.
 
+With [Media tools](/plugins/media-tools/) on, you can trim or re-sound an export in the Gallery, and the Assistant can
+look at its frames.
+
 ## Revisions
 
 Every edit is saved as a revision; helmstudio keeps the last 100. Undo and redo walk through them. If the sequence

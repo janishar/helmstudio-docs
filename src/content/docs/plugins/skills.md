@@ -2,7 +2,7 @@
 title: Skills
 description: Skills teach the Assistant a craft, such as making a short film. Use the built-in ones or drop in your own.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 A skill is a plugin of kind **Skill**: a guide the [Assistant](/studio/assistant/) reads to learn a craft, with an

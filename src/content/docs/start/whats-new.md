@@ -18,7 +18,9 @@ sidebar:
 - **Auto mode** runs safe steps without asking, within limits an admin sets, each with **Stop** and **Undo**.
 - It keeps your film's shot list, and asks when the next shot is unclear.
 - **Stop** works at once, even while it is thinking. Long chats are folded into a summary instead of being cut.
-- It can search the web and use skills (see Plugins).
+- It can search the web, edit takes and look at a video's frames, and use skills (see Plugins).
+- It knows each model you have downloaded: what it is good and weak at and when to pick it. When it works with a
+  model it reads that model's full guide, and can apply its named settings, such as a quick look.
 
 More in [Assistant](/studio/assistant/).
 
@@ -31,7 +33,12 @@ More in [Assistant](/studio/assistant/).
   your own by dropping a folder or `.zip` into `~/.helm/plugins/`.
 - Plugins with a program of their own start themselves on the Mac while they are on.
 - [Write your own](/plugins/writing-a-plugin/).
-- Coming: media tools (crop, trim, resize and more) for the Assistant and the Gallery.
+- [Media tools](/plugins/media-tools/): **Edit** in the Gallery crops, resizes, rotates, flips, extends and converts
+  images; trims videos, changes their speed, mutes them or gives them a new sound, and saves a frame as an image;
+  trims sounds, sets their volume and joins 2 to 8 of them. Each edit is a new take with **Undo**; the original never
+  changes.
+- With Media tools on, the Assistant makes the same edits, and pulls frames from a video (at given times, evenly
+  spaced, or at scene changes) to look at it.
 
 ## Create, Gallery and Timeline
 

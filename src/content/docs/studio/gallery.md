@@ -51,8 +51,23 @@ Click a take to see it in the side panel:
 | **Save as element** | Makes an element from an image take. See [Elements and Looks](/studio/elements-and-looks/). |
 | **Save as look** | Makes a look from the take's prompt, LoRAs or the image itself. |
 | **Save as pipeline** | Turns the take's lineage into a pipeline, one step per workflow. See [Pipelines](/studio/pipelines/). |
+| **Edit** | Crops, trims, resizes and more, and saves the result as a new take. Shows while [Media tools](/plugins/media-tools/) is on. See [Edit a take](#edit-a-take). |
 | **Export file** | Downloads the file. |
 | **Delete** | Removes the take from the Gallery and Create. This cannot be undone. |
+
+## Edit a take
+
+With the [Media tools](/plugins/media-tools/) plugin on, a selected take has **Edit**:
+
+- **Image**: **Crop** (**Free**, **16:9**, **9:16**, **1:1**, **4:3**), **Resize**, **Rotate**, **Flip**, **Extend**
+  and **Convert**.
+- **Video**: **Trim** on the trim bar, **Speed** (0.25× to 4×), **Mute**, **New sound** and **Frame as image**.
+- **Audio**: **Trim** on the waveform, **Volume** (−30 to +20 dB) and **Join** (2 to 8 sounds in order).
+
+![The Edit panel for an image, a video and a sound](/screens/gallery-edit.jpg)
+
+**Save as new** puts the result next to the original as a new take, with **Undo** in the toast. The original never
+changes. See [Media tools](/plugins/media-tools/) for every control.
 
 ## Work on several takes
 
