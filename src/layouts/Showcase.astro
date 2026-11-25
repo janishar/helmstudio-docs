@@ -23,6 +23,11 @@ const base = Astro.url.pathname === '/' ? '' : '/';
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
   <meta property="og:image" content={new URL('/screens/assistant-create.jpg', Astro.site)} />
+  <meta property="og:image:alt" content="helmstudio's Create screen with the Assistant beside it" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
+  <meta property="og:site_name" content="helmstudio" />
+  <meta name="twitter:card" content="summary_large_image" />
   <script is:inline>
     // follow the docs' theme choice (Starlight keeps it under this key)
     try { const t = localStorage.getItem('starlight-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}

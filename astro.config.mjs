@@ -14,6 +14,8 @@ export default defineConfig({
       head: [
         { tag: 'link', attrs: { rel: 'icon', href: '/favicon.ico', sizes: '32x32' } },
         { tag: 'link', attrs: { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' } },
+        { tag: 'meta', attrs: { property: 'og:image', content: 'https://helmstudio.in/screens/assistant-create.jpg' } },
+        { tag: 'meta', attrs: { property: 'og:image:alt', content: "helmstudio's Create screen with the Assistant beside it" } },
       ],
       social: [{ icon: 'github', label: 'GitHub', href: 'https://github.com/janishar/helmstudio' }],
       editLink: { baseUrl: 'https://github.com/janishar/helmstudio-docs/edit/main/' },
