@@ -98,6 +98,24 @@ When a model provider plugin is on and running, its side panel offers **Add as p
 says where to find it) and helmstudio checks it and adds the provider. Then pick it for the Assistant in
 **Admin › AI agents**. See [Admin](/studio/admin/).
 
+## Your Claude subscription
+
+A model provider plugin, in the Mac app from 0.1.0-alpha.3. It answers with your own Claude plan: it runs
+[Claude Code](https://claude.com/claude-code) on this Mac, which you install and sign in to yourself.
+
+- **Needs:** Claude Code, installed and signed in by you.
+- **Off** until you turn it on. Then it starts itself on the Mac. If Claude Code is missing or signed out, it says
+  **Install Claude Code and sign in, then Try again**.
+- **Personal:** only you see and use its provider, never other accounts.
+- helmstudio never reads or stores your Claude credentials. It runs your own, unmodified `claude`.
+
+To use it, turn it on, then **Add as provider** in its side panel, and pick it for the Assistant.
+
+:::caution[Personal use only]
+Personal use only. Runs your own Claude login and plan, for you only. Never shared with other accounts.
+See Anthropic's [legal and compliance terms](https://code.claude.com/docs/en/legal-and-compliance.md).
+:::
+
 ## Make your own
 
 See [Write a plugin](/plugins/writing-a-plugin/).
