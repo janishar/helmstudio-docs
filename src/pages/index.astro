@@ -19,11 +19,6 @@ import Showcase from '../layouts/Showcase.astro';
         <img src="/screens/assistant-create.jpg" alt="Create with the Assistant drawer: it has written the prompt, set the model to Qwen Image Turbo, added @mara and Blue hour lighting, and asks before generating 4 images">
       </div>
     </figure>
-    <figure class="hero-shot" style="margin-inline:0;margin-top:32px">
-      <div class="window"><div class="bar"><i></i><i></i><i></i></div>
-        <video src="/screens/assistant-scroll.mp4" poster="/screens/assistant-scroll.jpg" width="2240" height="1218" autoplay muted loop playsinline preload="metadata" aria-label="A real session in helmstudio: the Assistant plans a short film, makes the fisherman's character sheet, saves the look and makes keyframe 1, then suggests the next shots"></video>
-      </div>
-    </figure>
   </header>
 </div>
 
@@ -34,6 +29,12 @@ import Showcase from '../layouts/Showcase.astro';
       <h2 id="assistant-h">A co-director that <span class="grad">works the screen</span> with you.</h2>
       <p>Say what you want in a sentence. The Assistant opens the right screen, picks the model, writes the prompt and sets the look. You watch every change land, with Undo on each one. It never spends GPU time without asking.</p>
     </div>
+    <figure class="hero-shot" style="margin:40px 0 0">
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+        <video src="/screens/assistant-scroll.mp4" poster="/screens/assistant-scroll.jpg" width="2240" height="1292" autoplay muted loop playsinline preload="metadata" aria-label="A real session in helmstudio: the Assistant plans a short film, makes the fisherman's character sheet, saves the look and makes keyframe 1, while the first clip plays on the stage"></video>
+      </div>
+      <figcaption class="cap">A real session · one sentence became a film plan, a character sheet, a saved look and the first keyframe</figcaption>
+    </figure>
     <ol class="flow">
       <li><b>Ask</b><span>"Make a rainy London evening still of @mara, cinematic."</span></li>
       <li><b>It does the work</b><span>Opens Create, sets Qwen Image Turbo, writes the prompt, adds Blue hour. Each step can be undone.</span></li>
