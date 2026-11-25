@@ -145,3 +145,8 @@ a.btn, .copy a, .navlinks a { cursor: pointer; }
 .gallery2 > * { min-width: 0; }
 @media (max-width: 900px) { .gallery2 { grid-template-columns: minmax(0, 1fr); } }
 .window video { display: block; width: 100%; height: auto; }
+/* alpha pill above the hero headline */
+.alpha-pill { display: inline-flex; align-items: center; gap: 10px; max-width: 100%; padding: 6px 14px 6px 6px; border: 1px solid var(--ln);
+  border-radius: 999px; background: var(--s1); color: var(--t2); font-size: 14px; text-decoration: none; text-wrap: balance; }
+.alpha-pill b { padding: 3px 10px; border-radius: 999px; background: var(--a1); color: var(--on1); font-size: 12px; letter-spacing: .04em; text-transform: uppercase; }
+.alpha-pill:hover { color: var(--t1); border-color: var(--a1); }
