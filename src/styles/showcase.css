@@ -160,3 +160,18 @@ a.btn, .copy a, .navlinks a { cursor: pointer; }
   .alpha-pill b::before { animation: alpha-pulse 2.4s ease-in-out infinite; }
   @keyframes alpha-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--on1) 55%, transparent); } 50% { box-shadow: 0 0 0 4px transparent; } }
 }
+/* phone menu: the nav links behind a button below 900px (native <details>, no JS) */
+.nav { position: relative; }
+.navmenu { display: none; }
+.navmenu summary { list-style: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%;
+  background: var(--s2); color: var(--t1); cursor: pointer; }
+.navmenu summary::-webkit-details-marker { display: none; }
+.navmenu summary svg { width: 22px; height: 22px; }
+.navmenu[open] summary { background: var(--a1); color: var(--on1); }
+.navmenu-panel { position: absolute; right: 0; top: calc(100% - 8px); z-index: 20; min-width: 220px; display: grid; padding: 8px;
+  border: 1px solid var(--ln); border-radius: var(--organic); background: var(--s1);
+  box-shadow: 0 24px 48px -16px rgba(0, 0, 0, .5); }
+.navmenu-panel a { padding: 12px 14px; border-radius: 12px; color: var(--t1); text-decoration: none; font-size: 16px; }
+.navmenu-panel a:hover, .navmenu-panel a:focus-visible { background: var(--s2); }
+@media (max-width: 900px) { .navmenu { display: block; } }
+@media (max-width: 520px) { .alpha-pill .long { display: none; } }

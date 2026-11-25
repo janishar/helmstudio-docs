@@ -49,6 +49,23 @@ const base = Astro.url.pathname === '/' ? '' : '/';
         <a href="/start/introduction/">Docs</a>
         <a href="https://github.com/janishar/helmstudio">GitHub</a>
       </div>
+      <details class="navmenu">
+        <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></summary>
+        <div class="navmenu-panel">
+          <a href={`${base}#assistant`}>Assistant</a>
+          <a href="/tour/">Tour</a>
+          <a href={`${base}#machines`}>Your machines</a>
+          <a href="/start/introduction/">Docs</a>
+          <a href="https://github.com/janishar/helmstudio">GitHub</a>
+        </div>
+      </details>
+      <script is:inline>
+        // close the phone menu when a link is tapped or you tap outside it
+        document.addEventListener('click', (e) => {
+          const m = document.querySelector('.navmenu');
+          if (m && m.open && (!m.contains(e.target) || e.target.closest('a'))) m.open = false;
+        });
+      </script>
     </nav>
   </div>
   <slot />
