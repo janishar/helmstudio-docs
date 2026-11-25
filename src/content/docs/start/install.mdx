@@ -59,18 +59,25 @@ You need Docker with Compose 2.26 or later, about 3 GB of disk for the images (p
 1. Install [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/) with the WSL2 backend
    (its default) and start it.
 
-2. Make a folder and download the release's `compose.yml` into it.
+2. Open PowerShell, make a folder and download the release's `compose.yml` into it:
 
-3. Beside `compose.yml`, add a file named `.env` with your admin account:
-
-   ```ini
-   HELMSTUDIO_ADMIN_EMAIL=you@example.com
-   HELMSTUDIO_ADMIN_PASSWORD=10 characters or more
+   ```powershell
+   mkdir helmstudio; cd helmstudio
+   curl.exe -LO https://github.com/janishar/helmstudio/releases/download/v0.1.0-alpha.4/compose.yml
    ```
 
-4. In that folder, in PowerShell, start it:
+3. Beside `compose.yml`, add a file named `.env` with your admin account (a password of 10 characters or more):
 
-   ```sh
+   ```powershell
+   Set-Content -Encoding ascii .env @"
+   HELMSTUDIO_ADMIN_EMAIL=you@example.com
+   HELMSTUDIO_ADMIN_PASSWORD=choose-a-long-password
+   "@
+   ```
+
+4. In the same folder, start it:
+
+   ```powershell
    docker compose up -d --wait
    ```
 
