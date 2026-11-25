@@ -29,7 +29,8 @@ const base = Astro.url.pathname === '/' ? '' : '/';
   </script>
 </head>
 <body>
-  <AlphaBanner />
+  {/* home shows the alpha pill in its hero instead */}
+  {Astro.url.pathname !== '/' && <AlphaBanner />}
   <div class="wrap">
     <nav class="nav" aria-label="Site">
       <a class="brand" href="/" aria-label="helmstudio home">
