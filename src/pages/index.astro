@@ -164,13 +164,12 @@ import Showcase from '../layouts/Showcase.astro';
   </section>
 
   <section class="close" id="start" aria-labelledby="start-h">
-    <p class="eyebrow">Two commands, then sign in</p>
-    <h2 id="start-h">Your studio is <span class="grad">one clone away.</span></h2>
-    <div class="term"><pre><span class="c"># the services, in containers</span>
-<span class="p">$</span> git clone https://github.com/janishar/helmstudio.git && cd helmstudio
-<span class="p">$</span> make up
-<span class="c"># the GPU runners, native on your Mac</span>
-<span class="p">$</span> make runners</pre></div>
+    <p class="eyebrow">Install, then sign in</p>
+    <h2 id="start-h">Your studio is <span class="grad">one download away.</span></h2>
+    <div class="term"><pre><span class="c"># Mac: the app, no Docker needed</span>
+<span class="p">$</span> open helmstudio-0.1.0-alpha.4.dmg
+<span class="c"># Windows and Linux: Docker and the release's compose.yml</span>
+<span class="p">$</span> docker compose up -d --wait</pre></div>
     <div class="ctas">
       <a class="btn primary" href="/start/install/">Read the install guide →</a>
       <a class="btn" href="https://github.com/janishar/helmstudio">View on GitHub</a>

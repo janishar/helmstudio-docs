@@ -10,8 +10,8 @@ sidebar:
 Images, video and sound are always made on your own hosts. Model weights stay on each host's disk.
 
 The only calls that leave are to **remote model providers** (such as OpenAI, Anthropic or DeepSeek), and only when an
-admin turns them on and adds a provider in [Admin](/studio/admin/) › Model providers. They power text jobs only: the
-[Assistant](/studio/assistant/), pipeline agents and session names. They never make images, video or sound. On the
+admin turns them on and adds a provider in [Hub › Providers](/studio/hub/#providers). They power text jobs only: the
+[Assistant](/studio/assistant/), pipeline AI steps and session names. They never make images, video or sound. On the
 local and production stacks they are off until `REMOTE_MODELS=on` is set in `deploy/.env`.
 
 If the Assistant's remote model can see images, downscaled pictures of the takes you hand it go to that provider too.
@@ -39,7 +39,7 @@ Each model's page lists its needs.
 
 ## Can several people use one studio?
 
-Yes. An admin creates every account in [Admin](/studio/admin/) › Users; there is no public sign-up. Each person sees
+Yes. An admin creates every account in [System › Users](/studio/system/#users); there is no public sign-up. Each person sees
 only their own takes, sessions, pipelines and timelines.
 
 ## Can two runs happen at once?

@@ -23,12 +23,15 @@ reserve. Before a run starts, the studio checks that the run's planned peak, plu
 host, fits the budget. If it does not, the studio asks the runners to unload the least recently used parts, and the
 run waits until they have.
 
-Start the Mac's runners with `make runners`. See [Install and run](/start/install/).
+The Mac app starts its runners itself. From source, start them with `make runners`. See [Install and run](/start/install/).
 
 ## NVIDIA hosts
 
 A Linux machine with an NVIDIA GPU joins as one more host. It runs the `torch` runner as a container, and a `native`
 runner for MiniMax H3 video and ZONOS3. Its budget is the GPU's memory minus a reserve.
+
+With Docker on Windows or Linux, `--profile nvidia` runs a `torch` runner on the same machine as host `gpu`. See
+[An NVIDIA card](/start/install/#an-nvidia-card).
 
 Some model variants run on one kind of host only:
 
@@ -54,7 +57,7 @@ run is tried once more on another eligible host, or it fails with the reason.
 
 ## Memory settings
 
-An admin sets each host's memory in [Admin](/studio/admin/) › Hosts. The settings apply to every runner on that host.
+An admin sets each host's memory in [System](/studio/system/) › **Hosts**. The settings apply to every runner on that host.
 
 | Setting | What it does |
 |---|---|
@@ -75,7 +78,8 @@ See [The helm CLI](/mcp/helm-cli/) for the rest.
 
 ## Add an NVIDIA host
 
-An NVIDIA host runs only the runner. It talks to the stack's message bus (NATS) and object store, both over TLS, with
+These steps join a separate NVIDIA machine to a stack run [from source](/start/install/#from-source). They are done
+by hand. An NVIDIA host runs only the runner. It talks to the stack's message bus (NATS) and object store, both over TLS, with
 its own credentials. Its weights stay on its own disk.
 
 <Aside type="caution">
@@ -125,7 +129,7 @@ its own credentials. Its weights stay on its own disk.
 
    MiniMax H3 video and ZONOS3 need the `native` runner too: build and start with `--profile native`.
 
-6. **Check it in the studio.** [Admin](/studio/admin/) › Hosts lists the new host with its GPU and memory. Download
+6. **Check it in the studio.** [System](/studio/system/) › **Hosts** lists the new host with its GPU and memory. Download
    models to it in [Models](/studio/models/), or with `helm model pick --host <h>`.
 
 </Steps>

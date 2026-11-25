@@ -6,7 +6,8 @@ sidebar:
 ---
 
 helmstudio is a studio for making images, video and sound with open models. It runs on your own machines: Macs with
-Apple Silicon and NVIDIA hosts. Nothing you make leaves them.
+Apple Silicon and NVIDIA hosts. Nothing you make leaves them. Install it on a Mac with the app, or on Windows and
+Linux with Docker.
 
 It is self-hosted and multi-user. An admin runs it and adds accounts. Each person sees only their own work.
 
@@ -42,6 +43,13 @@ runners. Each host does one run at a time; other runs wait in a queue.
 **Elements and Looks.** Elements are your characters, places and props, called by name with `@`. Looks are styles for
 film, camera, colour and lighting, set once and reused.
 
+## The screens
+
+The rail on the left holds **Create**, **Pipelines**, **Gallery**, **Timeline** and **Models**. Admins also see
+**Hub**, for everything AI (the Assistant, the model pipelines use, providers and plugins), and **System**, for
+users, hosts and API keys. The **Assistant** and **Settings** come last. See [Hub](/studio/hub/) and
+[System](/studio/system/).
+
 ## How it is built
 
 The studio is a set of small services behind one gateway, plus model runners that run natively on each machine so
@@ -49,5 +57,5 @@ they can use its GPU. See [Architecture](/reference/architecture/) for the detai
 
 ## Next
 
-- [Install and run](/start/install/) the studio on a Mac.
+- [Install and run](/start/install/) the studio on a Mac, Windows or Linux.
 - Take a tour of [Create](/studio/create/), the main screen.

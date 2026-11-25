@@ -2,7 +2,7 @@
 title: Settings
 description: Your own account, theme and password, and signing out.
 sidebar:
-  order: 8
+  order: 10
 ---
 
 Open **Settings** from the foot of the dock. Everything here is yours; the [Assistant](/studio/assistant/) can point
@@ -10,7 +10,7 @@ you here but never changes these for you.
 
 ## Account
 
-Your **Name**, **Email** and **Roles**. Only the admin can change them, in [Admin › Users](/studio/admin/#users).
+Your **Name**, **Email** and **Roles**. Only the admin can change them, in [System › Users](/studio/system/#users).
 
 ## Theme
 

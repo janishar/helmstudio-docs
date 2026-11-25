@@ -27,10 +27,10 @@ machine**, and you answer **Yes** or **Not now**.
 
 It is off until an admin turns it on.
 
-1. Open **Plugins** in the rail.
-2. Click **Web search** and turn it on.
+1. Open **Hub** in the rail, on the **Assistant** tab.
+2. Under **Tools**, turn on **Web search**.
 
-It starts by itself on the Mac and shows **Starting…**, then **Running**. It stays on across app launches until you
+It starts by itself on the Mac and shows **Starting…**, then **Running** in **Hub › Plugins**. It stays on across app launches until you
 turn it off. See [Plugins that start themselves](/plugins/#plugins-that-start-themselves).
 
 ## Limits

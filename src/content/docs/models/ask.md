@@ -34,6 +34,6 @@ answer does not match the schema, the model gets one more try in the same run.
 
 ## Remote and server models
 
-Text jobs, such as the Assistant, pipeline agents and session names, can also use a model provider: a local LLM
-server or a remote API. An admin sets these in Admin › Model providers. They only make text; they never make images,
-video or sound. See [Admin](/studio/admin/).
+Text jobs, such as the Assistant, pipeline AI steps and session names, can also use a model provider: a local LLM
+server or a remote API. An admin adds these in [Hub › Providers](/studio/hub/#providers). They only make text; they
+never make images, video or sound.

@@ -27,8 +27,8 @@ port: the studio is at `http://127.0.0.1:8310`.
 
 <Steps>
 
-1. Download `helmstudio.dmg` from the [GitHub releases](https://github.com/janishar/helmstudio/releases). To check
-   it, compare `shasum -a 256 helmstudio.dmg` with the release's `SHA256SUMS`.
+1. Download `helmstudio-0.1.0-alpha.4.dmg` from the [GitHub releases](https://github.com/janishar/helmstudio/releases). To check
+   it, compare `shasum -a 256 helmstudio-0.1.0-alpha.4.dmg` with the release's `SHA256SUMS`.
 
 2. Open it and drag helmstudio to Applications.
 
@@ -61,15 +61,15 @@ Every later open shows the start screen for about a minute (VM, services, runner
 
 ## Updates
 
-From 0.1.0-alpha.2 the app updates itself. An older app has no updater: download the new `.dmg` and replace it by
-hand once.
+From 0.1.0-alpha.2 the app updates itself: on 0.1.0-alpha.2 or 0.1.0-alpha.3, choose **Check for updates…** to get
+0.1.0-alpha.4. An older app has no updater: download the new `.dmg` and replace it by hand once.
 
 ![The update window: checking, up to date, a new version is out, downloading, checking the download and ready to install](/screens/mac-update.jpg)
 
 The app checks for a new release when it opens and every 24 hours. While it is an alpha, it offers pre-releases too.
 To check now, choose **Check for updates…** in the menu bar menu.
 
-When a new version is out, a small window says so (for example **0.1.0-alpha.3 is out**), with your version, the
+When a new version is out, a small window says so (for example **0.1.0-alpha.4 is out**), with your version, the
 download size, what changed and a **Release notes** link. The menu shows **Update to …** and the menu bar icon gets a
 small blue dot.
 
@@ -123,8 +123,9 @@ is on, and starts again each time you open the app. Your own plugins go in `~/.h
 
 ## Remote models
 
-Remote model providers are on in the app. In [Admin](/studio/admin/) › Model providers, pick a provider and paste
-its key. Remote providers only power text jobs, such as the [Assistant](/studio/assistant/) and pipeline agents.
+Remote model providers are on in the app. In [Hub](/studio/hub/) › **Providers**, pick a provider and paste its key.
+Remote providers only power text jobs, such as the [Assistant](/studio/assistant/) and pipeline agents. To use your
+own Claude plan instead of a key, see [Your Claude subscription](/plugins/#your-claude-subscription).
 
 ## Use it from Claude
 

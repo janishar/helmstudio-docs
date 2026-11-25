@@ -6,7 +6,7 @@ sidebar:
 ---
 
 A plugin is a folder whose name is the plugin's name, with a `plugin.json` manifest in it. Put yours in
-`~/.helm/plugins/` and turn it on in **Plugins** (see [Plugins](/plugins/)).
+`~/.helm/plugins/` and turn it on in **Hub** (see [Plugins](/plugins/)).
 
 ## plugin.json
 
@@ -123,4 +123,4 @@ The smallest skill is a folder `~/.helm/plugins/storyboard/` with two files.
 4. Wait for the user's pick before any video.
 ```
 
-Then turn it on in **Plugins** and type `@storyboard` in the Assistant's chat.
+Then turn it on in **Hub › Assistant** and type `@storyboard` in the Assistant's chat.

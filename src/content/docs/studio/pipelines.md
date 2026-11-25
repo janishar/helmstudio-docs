@@ -55,9 +55,11 @@ up to a cap, go to another node, or fail the row), and its **Trust**:
 **Write** and **Decide** take an instruction or a question. A write can rewrite the row's prompt; a decide routes to
 one of the nodes it is wired to.
 
-These nodes run on the local text model by default. An admin can add other model servers in
-[Model providers](/studio/admin/#model-providers). A pipeline that calls a remote model must have its **Remote
-calls** turned on, and Submit shows exactly what leaves the machine.
+On **Runs on · Auto**, a write, decide or agent node uses the default an admin sets in
+[Hub › In pipelines](/studio/hub/#default-model): the local text model unless changed. A judge on Auto keeps its
+family's vision model. A node can name its own model instead, from the providers in
+[Hub › Providers](/studio/hub/#providers). A pipeline that names a remote model must have its **Remote calls** turned
+on; Submit shows exactly what leaves the machine.
 
 ### Memory
 

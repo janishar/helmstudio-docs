@@ -23,9 +23,11 @@ sheet guide and an edit checklist.
 
 Skills are off until an admin turns them on, like every plugin.
 
-1. Open **Plugins** in the rail.
-2. Click the skill. Its side panel says when it is used, its files and how many recipes it has.
-3. Turn it on. Its status reads **On**.
+1. Open **Hub** in the rail, on the **Assistant** tab.
+2. Under **Skills**, turn the skill on.
+
+To see when a skill is used, its files and how many recipes it has, click it in **Hub › Plugins**. Its status there
+reads **On**.
 
 Once on, every user's Assistant can use it.
 
@@ -50,8 +52,8 @@ You can add a skill without updating helmstudio:
 1. Make a folder named after the skill, with a `plugin.json` and a `SKILL.md` (see
    [Write a plugin](/plugins/writing-a-plugin/#a-skill)).
 2. Drop the folder, or a `.zip` of it, into `~/.helm/plugins/`.
-3. It appears on the Plugins page within a few seconds, **Off**. Press **Rescan** if you don't want to wait.
-4. Turn it on.
+3. It appears in **Hub › Plugins** within a few seconds, **Off**. Press **Rescan** if you don't want to wait.
+4. Turn it on in **Hub › Assistant**.
 
 **Your copy wins.** A skill of yours with the same name as a built-in one is used instead of it. If your copy is
 broken or needs a newer helmstudio, the built-in one stays in use and its row says why, for example "Your copy is

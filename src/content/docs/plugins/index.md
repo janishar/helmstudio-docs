@@ -1,6 +1,6 @@
 ---
 title: Plugins
-description: Add-ons that plug new features into helmstudio. Each one is off until an admin turns it on.
+description: Add-ons that plug new features into helmstudio. Each one is off until an admin turns it on in Hub.
 sidebar:
   order: 1
 ---
@@ -31,28 +31,33 @@ adds **Edit** to the Gallery (crop, trim, resize and more) and the same edits fo
 The studio reads the plugins when it starts, when you press **Rescan**, and when `~/.helm/plugins/` changes. A new
 plugin is always added **Off**.
 
-## The Plugins page
+## Hub › Plugins
 
-**Plugins** is in the rail, between Models and Admin. Only admins see it.
+Plugins live in [Hub](/studio/hub/), on the **Plugins** tab. Only admins see Hub.
 
-![The Plugins page: Assistant tools and skills in tables, each with its kind, what it may do, its status and actions, and a skill's details on the right](/screens/plugins.jpg)
+![Hub › Plugins: every plugin in a table with its kind, what it may do, its status and actions, and the selected plugin's details on the right](/screens/plugins.jpg)
 
 The list shows each plugin with its **Kind**, what it **May do** and its **Status**. Click a row to open its side
-panel: the on switch, its version, source and author, what it may do, any disclaimer, and, by kind, its tools,
-models, files or recipes.
+panel: its version, source and author, what it may do, any disclaimer, and, by kind, its tools, models, files or
+recipes.
 
 | Control | What it does |
 |---|---|
 | **Rescan** | Reads the plugin folders again. It says what is new, for example "1 new plugin: Web search. It stays Off." |
 | **Add plugin** | Shows where plugins come from: **Built in** or **Yours** (`~/.helm/plugins/`). |
-| **Enable** / **Disable** | Turns the plugin on or off. The switch in the side panel does the same. |
 | **Remove** | Drops the plugin from the list, with any provider made from it. The folder stays, so a **Rescan** finds it again, off. |
+
+This tab has no on/off switch for Assistant tools and skills. Their rows say **Turned on in Hub › Assistant**.
 
 ## Turn a plugin on
 
-1. Open **Plugins** in the rail.
-2. Click the plugin and read what it **May do**.
-3. Turn on the switch in its side panel, or press **Enable** in its row.
+Assistant tools and skills:
+
+1. Open **Hub** in the rail, on the **Assistant** tab.
+2. Turn on the tool under **Tools**, or the skill under **Skills**.
+
+To read what a plugin **May do** first, click it in **Hub › Plugins**. A model provider plugin keeps its own switch,
+in its side panel on the **Plugins** tab.
 
 A plugin that is off is never called. Turning it off takes effect at once: the Assistant's next message no longer
 has its tools.
@@ -95,8 +100,9 @@ command to run, with **Copy** and **Try again**.
 ## Model provider plugins
 
 When a model provider plugin is on and running, its side panel offers **Add as provider**. Paste the key (the panel
-says where to find it) and helmstudio checks it and adds the provider. Then pick it for the Assistant in
-**Admin › AI agents**. See [Admin](/studio/admin/).
+says where to find it) and press **Add**; helmstudio checks it and adds the provider. Its row then says **Added**,
+with **Open in Providers** and **Open Assistant** in the side panel. Pick it for the Assistant in
+[Hub › Assistant](/studio/hub/#set-it-up).
 
 ## Your Claude subscription
 
@@ -104,12 +110,15 @@ A model provider plugin, in the Mac app from 0.1.0-alpha.3. It answers with your
 [Claude Code](https://claude.com/claude-code) on this Mac, which you install and sign in to yourself.
 
 - **Needs:** Claude Code, installed and signed in by you.
-- **Off** until you turn it on. Then it starts itself on the Mac. If Claude Code is missing or signed out, it says
+- **Off** until you use it. Then it starts itself on the Mac. If Claude Code is missing or signed out, it says
   **Install Claude Code and sign in, then Try again**.
-- **Personal:** only you see and use its provider, never other accounts.
+- **No key to paste:** it uses your own Claude login, and the Mac hands helmstudio what it needs.
+- **Personal:** only you see and use its provider, never other accounts. It is not offered as the pipelines model.
 - helmstudio never reads or stores your Claude credentials. It runs your own, unmodified `claude`.
 
-To use it, turn it on, then **Add as provider** in its side panel, and pick it for the Assistant.
+To use it, open **Hub › Assistant**, pick **Your Claude subscription** under **Who answers**, pick a model and save.
+That turns the plugin on and adds its provider. You can also turn it on in **Hub › Plugins** and press **Add as
+provider** in its side panel.
 
 :::caution[Personal use only]
 Personal use only. Runs your own Claude login and plan, for you only. Never shared with other accounts.

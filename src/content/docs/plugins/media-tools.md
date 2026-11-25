@@ -15,8 +15,8 @@ machine and no GPU is used.
 
 It is off until an admin turns it on.
 
-1. Open **Plugins** in the rail.
-2. Click **Media tools** and turn it on.
+1. Open **Hub** in the rail, on the **Assistant** tab.
+2. Under **Tools**, turn on **Media tools**.
 
 It runs inside helmstudio itself, the same in the [Mac app](/start/mac-app/) and on a Linux server. There is nothing
 to install. Once it shows **Running**, **Edit** appears in the Gallery.

@@ -10,13 +10,26 @@ you can see each step.
 
 ## Open it
 
-Press **Assistant** in the dock, or **⌘J** (Ctrl+J). It opens over the right edge of any screen; on a phone it is a
-sheet at the bottom.
+Press **Assistant** in the rail, or **⌘J** (Ctrl+J). Every user has it. It opens over the right edge of any screen; on
+a phone it is a sheet at the bottom. For an admin, its header also has a **Hub** button.
 
 The **Sees** chips under its title say what it is reading now: the screen, the session, the workflow, Run on and
 your elements.
 
-If nothing comes up, your admin has not turned it on. See [AI agents](/studio/admin/#ai-agents).
+### Before it is set up
+
+Until an admin sets it up, the drawer shows a welcome instead of a chat: what the Assistant does and what it helps
+with.
+
+![The Assistant drawer before setup: what it helps with, the providers it runs on, and Set up](/screens/assistant-welcome.jpg)
+
+| You are | Not set up | Off |
+|---|---|---|
+| An admin | **Set up the Assistant**, with the providers it runs on and **Set up**, which opens [Hub › Assistant](/studio/hub/#assistant). | **The Assistant is off**, with **Turn on**, which turns it on for everyone. |
+| Anyone else | **The Assistant isn't set up yet · Ask your admin to set it up.** No button. | **Your admin turned it off.** No button. |
+
+The first time an admin signs in to a helmstudio that was never set up, the drawer opens by itself, once. Close it
+and set it up later from **Assistant** or **⌘J**.
 
 ### Size
 
@@ -98,7 +111,7 @@ Some things always stay yours. The Assistant points at them but never does them:
 
 - Saving files to or from your disk.
 - Signing in or out, your password and your theme.
-- Admin changes: users, API keys, model providers, host pins and settings.
+- Admin changes in Hub and System: users, API keys, model providers, host pins and settings.
 - The licence tick when downloading a model, and the voice rights tick when cloning a voice.
 - Messages to a pipeline's director chat.
 
@@ -118,7 +131,7 @@ deletes their takes; on a saved item it deletes the item. **Stop** ends the answ
 When a step still asks, its card shows with a line saying why, such as "Auto stops here: deleting needs you" or "Auto
 paused · 8 of 8 takes this hour". While it works, a chip under the chat counts the takes it has used this hour.
 
-The caps are per user, per hour. The admin sets them in [Admin › AI agents](/studio/admin/#ai-agents):
+The caps are per user, per hour. The admin sets them in [Hub › Assistant](/studio/hub/#caps-per-user):
 
 | Cap | Default |
 |---|---|
@@ -203,7 +216,7 @@ guessing.
 
 Skills teach the Assistant a craft, such as animation or cinematic film-making. The Assistant reads one when your ask
 fits, and a line "Using skill: …" says so. To make it use one, type `@` and pick it from **Skills**. An admin turns
-skills on. See [Skills](/plugins/skills/).
+skills and tools on in [Hub › Assistant](/studio/hub/#assistant). See [Skills](/plugins/skills/).
 
 ## How it keeps long chats
 
@@ -213,16 +226,16 @@ of the chat for the model until the next fold.
 
 The start of each request stays the same from call to call, so providers that cache prompts (such as DeepSeek and
 OpenAI) read most of it from their cache: answers come faster and cost less. The admin sets each model's chat window
-and sees the cache hit rate in [Admin › AI agents](/studio/admin/#ai-agents).
+and sees the cache hit rate in [Hub › Assistant](/studio/hub/#what-you-can-set).
 
 ## Which model powers it
 
-The Assistant runs on a text model your admin picks in [Admin › AI agents](/studio/admin/#ai-agents), from the
-providers set up in [Model providers](/studio/admin/#model-providers). It can be a local server on your own network
-or a remote provider.
+The Assistant runs on a text model your admin picks in [Hub › Assistant](/studio/hub/#set-it-up), from the
+providers in [Hub › Providers](/studio/hub/#providers). It can be a local server on your own network or a
+remote provider.
 
 With a remote provider, your messages and the screen summary go to that provider. If its model sees images, the
 downscaled pictures of the takes you hand it, and of those it looks at, go too. With a text-only model, your images
 never leave.
 
-The admin also sets per-user caps, the Auto caps, and whether it may search the web.
+The admin also sets per-user caps, the Auto caps, and which tools and skills it may use.

@@ -27,8 +27,8 @@ http://localhost:8300
 
 Every `/v1` call needs two things:
 
-- **An API key** in the `x-api-key` header. It identifies the calling application. An admin creates API keys on the
-  Admin screen, under **API keys**.
+- **An API key** in the `x-api-key` header. It identifies the calling application. An admin creates API keys in
+  [System › API keys](/studio/system/#api-keys).
 - **An access token** in the `Authorization: Bearer <token>` header. It identifies the user.
 
 Get a token by signing in with an email and password. The access token is short-lived; use the refresh token to get

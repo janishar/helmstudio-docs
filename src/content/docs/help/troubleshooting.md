@@ -23,7 +23,7 @@ For production, use `make prod-ps` and `make prod-logs s=<service>`.
 After Docker or OrbStack restarts, or the Mac reboots, the local stack does not fully come back on its own. Run `make up`.
 Production restarts its services by itself unless you stopped them with `make prod-down`.
 
-If the Mac no longer shows in [Admin](/studio/admin/) › Hosts afterwards, restart the runners:
+If the Mac no longer shows in [System › Hosts](/studio/system/#hosts) afterwards, restart the runners:
 
 ```sh
 make runners-stop
@@ -38,7 +38,7 @@ make runners
 
 ## The Mac does not show as a host
 
-The Mac appears as host `mac` in [Admin](/studio/admin/) › Hosts once its runners are up.
+The Mac appears as host `mac` in [System › Hosts](/studio/system/#hosts) once its runners are up.
 
 - The runners need a running stack. Run `make up` (or `make prod`) first, then `make runners`.
 - For production, start them with `make runners STACK=prod`. Runners join one stack at a time: run
@@ -86,22 +86,22 @@ another one is free. Choose **Auto** in Run on to let any eligible host take it.
 ## Remote model providers are not offered
 
 On the local and production stacks, calls to remote providers are off by default. Set `REMOTE_MODELS=on` in
-`deploy/.env` and run `make up` (or `make prod`) again. Then add a provider in [Admin](/studio/admin/) › Model
-providers.
+`deploy/.env` and run `make up` (or `make prod`) again. Then add a provider in [Hub › Providers](/studio/hub/#providers).
 
 ## The Assistant
 
-- **It does not open.** The admin has not turned it on, or picked no model. See
-  [Admin › AI agents](/studio/admin/#ai-agents).
+- **It shows a message instead of a chat.** It is not set up yet, or it is off. An admin sets it up or turns it on
+  from the drawer, or in [Hub › Assistant](/studio/hub/#assistant). See
+  [Before it is set up](/studio/assistant/#before-it-is-set-up).
 - **The message box is shut.** You reached a per-user cap. It opens again when the cap resets, or when the admin
   raises it.
 - **"The model gave a broken answer twice."** Press **Retry**. If it keeps happening, the model may be too small for
-  the job; try another in AI agents.
+  the job; the admin can pick another in Hub › Assistant.
 - **Auto mode keeps asking.** A step past this hour's Auto cap, a delete, anything sent off the machine, or a run with
   no time estimate yet always asks. Its line says why. See [Auto mode](/studio/assistant/#auto-mode).
 - **It forgot the start of a long chat.** The oldest part folds into a summary once the chat fills the model's window.
   Plans and shot lists stay: a film's shot list lives in Memory › Projects. The admin can raise the
-  **Chat window** in AI agents if the model allows it.
+  **Chat window** in Hub › Assistant if the model allows it.
 
 ## The Mac app
 

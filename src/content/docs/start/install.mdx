@@ -1,17 +1,168 @@
 ---
 title: Install and run
-description: Run the helmstudio stack on a Mac, sign in, and start the native model runners.
+description: Install helmstudio on a Mac with the app, on Windows or Linux with Docker, or from source.
 sidebar:
   order: 2
 ---
 
-import { Steps, Aside } from '@astrojs/starlight/components';
+import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 
-helmstudio runs as a set of services in Docker, plus model runners that run natively on each machine so they can
-use its GPU. This page sets up the local stack on one Mac. To keep a stack running for real work, see
-[Run in production on a Mac](/start/production/). For a one-window install, see [The Mac app](/start/mac-app/).
+Pick the way that fits your machine:
 
-## Requirements
+| Machine | How |
+|---|---|
+| Mac with Apple Silicon | [The Mac app](#mac-the-app). No Docker needed. |
+| Windows | [Docker Desktop](#windows-and-linux-with-docker), with WSL2 |
+| Linux | [Docker](#windows-and-linux-with-docker) |
+| An NVIDIA card (Windows or Linux) | Docker, plus [the NVIDIA runner](#an-nvidia-card) |
+| A developer setup | [From source](#from-source) |
+
+Every release is on [GitHub releases](https://github.com/janishar/helmstudio/releases). Models are not included:
+download them on the [Models](/studio/models/) screen. Each keeps its own licence.
+
+## Mac: the app
+
+<Steps>
+
+1. Download `helmstudio-0.1.0-alpha.4.dmg` from the [release](https://github.com/janishar/helmstudio/releases).
+
+2. Open it and drag **helmstudio** to Applications.
+
+3. The app is ad-hoc signed: the first time, right-click it › **Open**, then **Open** again.
+
+4. The first open sets everything up in one window and asks for your admin account.
+
+</Steps>
+
+Already on 0.1.0-alpha.2 or 0.1.0-alpha.3? Choose **Check for updates…** in the app's menu, then **Install**. Your
+work and settings stay. From 0.1.0-alpha.1, replace the app by hand once.
+
+Every step, the menu bar and updates: [The Mac app](/start/mac-app/).
+
+## Windows and Linux with Docker
+
+Each release has one file, `compose.yml`, that runs the release's images. Nothing to build and no install script.
+The images are made for Intel/AMD and ARM machines.
+
+<Aside type="caution" title="Windows is untested">
+  The Windows steps follow Docker Desktop's normal setup, but they have not been tried yet. Please
+  [report what breaks](https://github.com/janishar/helmstudio/issues).
+</Aside>
+
+You need Docker with Compose 2.26 or later, about 3 GB of disk for the images (plus your models) and 2 GB of memory.
+
+<Tabs>
+  <TabItem label="Windows">
+
+<Steps>
+
+1. Install [Docker Desktop](https://docs.docker.com/desktop/setup/install/windows-install/) with the WSL2 backend
+   (its default) and start it.
+
+2. Make a folder and download the release's `compose.yml` into it.
+
+3. Beside `compose.yml`, add a file named `.env` with your admin account:
+
+   ```ini
+   HELMSTUDIO_ADMIN_EMAIL=you@example.com
+   HELMSTUDIO_ADMIN_PASSWORD=10 characters or more
+   ```
+
+4. In that folder, in PowerShell, start it:
+
+   ```sh
+   docker compose up -d --wait
+   ```
+
+5. Open `http://localhost:8300` and sign in.
+
+</Steps>
+
+  </TabItem>
+  <TabItem label="Linux">
+
+<Steps>
+
+1. Install [Docker Engine](https://docs.docker.com/engine/install/) with the Compose plugin, or Docker Desktop.
+
+2. Make a folder and download the release's `compose.yml` into it:
+
+   ```sh
+   mkdir helmstudio && cd helmstudio
+   curl -LO https://github.com/janishar/helmstudio/releases/download/v0.1.0-alpha.4/compose.yml
+   ```
+
+3. Start it the first time with your admin account:
+
+   ```sh
+   HELMSTUDIO_ADMIN_EMAIL=you@example.com HELMSTUDIO_ADMIN_PASSWORD='10 characters or more' docker compose up -d --wait
+   ```
+
+4. Open `http://localhost:8300` and sign in.
+
+</Steps>
+
+  </TabItem>
+</Tabs>
+
+The first start makes the stack's secrets and your admin account. The admin is read on the first start only: after
+that, `docker compose up -d` is enough, and a password you change in the app's [Settings](/studio/settings/) is kept.
+There is no public sign-up: add other people in [System](/studio/system/) › **Users**.
+
+Every port is on `127.0.0.1`. To reach the studio from another machine, use an SSH tunnel or a reverse proxy, and set
+`PUBLIC_BASE_URL` and `WEB_COOKIE_SECURE` (see [Settings](#settings)).
+
+### An NVIDIA card
+
+On an Intel/AMD machine with an NVIDIA card, add the GPU runner:
+
+```sh
+docker compose --profile nvidia up -d --wait
+```
+
+- It needs the NVIDIA driver. On Linux it also needs the
+  [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html).
+  On Windows, Docker Desktop passes the card through WSL2.
+- The runner shows as host `gpu` in [System](/studio/system/) › **Hosts**.
+- Use `--profile nvidia` on every later command, or put `COMPOSE_PROFILES=nvidia` in `.env`.
+- Models download into a Docker volume. To use a folder of your own, set `HELMSTUDIO_MODELS_DIR=/path/to/models`
+  in `.env`.
+- ZONOS3 and MiniMax H3 do not run on this runner yet.
+
+Without `--profile nvidia` there is no model runner: the studio opens, but cannot make takes.
+
+### Update
+
+Download the new release's `compose.yml` over the old one, then:
+
+```sh
+docker compose pull
+docker compose up -d --wait
+```
+
+Your data and keys stay in Docker volumes. `docker compose down` stops everything and keeps them;
+`docker compose down -v` deletes them too.
+
+### Settings
+
+Put these in `.env`, beside `compose.yml`:
+
+| Name | Default | What |
+|---|---|---|
+| `HELMSTUDIO_PORT` | 8300 | The studio's port on `127.0.0.1` |
+| `PUBLIC_BASE_URL` | `http://localhost:8300` | The address people open |
+| `WEB_COOKIE_SECURE` | false | `true` behind TLS |
+| `REMOTE_MODELS` | off | `on` allows remote model providers, such as OpenAI |
+| `HELMSTUDIO_MODELS_DIR` | a Docker volume | The NVIDIA runner's models folder |
+| `HELMSTUDIO_VERSION` | the file's release | Run another release's images |
+| `HELM_NET` | 172.30.97 | The stack network's first three numbers, if they clash with yours |
+
+## From source
+
+For developers on a Mac: the services in Docker, the model runners native on the Mac so they can use its GPU. To keep
+a stack running for real work, see [Run in production on a Mac](/start/production/).
+
+### Requirements
 
 - A Mac with Apple Silicon.
 - Docker with Compose 2.20 or later (OrbStack or Docker Desktop).
@@ -20,7 +171,7 @@ use its GPU. This page sets up the local stack on one Mac. To keep a stack runni
 - For the `helm` command-line client: Go.
 - Model weights on disk. See [Models](/models/).
 
-## Start the stack
+### Start the stack
 
 <Steps>
 
@@ -51,7 +202,7 @@ use its GPU. This page sets up the local stack on one Mac. To keep a stack runni
 
 5. Open the studio at `http://localhost:8300` and sign in as the admin.
 
-6. Add accounts for other people in [Admin](/studio/admin/) › Users.
+6. Add accounts for other people in [System](/studio/system/) › **Users**.
 
 </Steps>
 
@@ -63,7 +214,7 @@ use its GPU. This page sets up the local stack on one Mac. To keep a stack runni
 The local stack also runs a small test host with an Echo workflow, so you can try the studio before any model is
 installed. Real models need the native runners below.
 
-## Start the native runners
+### Start the native runners
 
 The runners are the processes that load models and make takes. On a Mac there are three, each in its own process:
 
@@ -90,7 +241,7 @@ HELMSTUDIO_MODELS=~/helmstudio-models make runners
 runner on its own with `make runner-torch`, `make runner-mlx` or `make runner-native`.
 
 Each runner writes a log to `runner_service/.run/runner-mac-<env>.log`. A runner that stalls or is stopped by the
-system restarts on its own. Once they are up, the Mac shows as host `mac` in [Admin](/studio/admin/) › Hosts.
+system restarts on its own. Once they are up, the Mac shows as host `mac` in [System](/studio/system/) › **Hosts**.
 
 Stop them with:
 
@@ -98,7 +249,7 @@ Stop them with:
 make runners-stop
 ```
 
-## Daily commands
+### Daily commands
 
 | Command | What it does |
 |---|---|
@@ -110,7 +261,7 @@ make runners-stop
 | `make runners` | Start the native runners |
 | `make runners-stop` | Stop the native runners |
 
-## Ports
+### Ports
 
 Everything is published on `127.0.0.1` only. The ports are set in `deploy/.env`.
 
@@ -125,5 +276,6 @@ Everything is published on `127.0.0.1` only. The ports are set in `deploy/.env`.
 
 - Take a tour of [Create](/studio/create/).
 - Download models in [Models](/studio/models/) (admins only).
+- Set up the [Assistant](/studio/assistant/) in [Hub](/studio/hub/) (admins).
 - Add an NVIDIA machine: [Hosts and runners](/start/hosts/).
 - Use the studio from Claude: [MCP](/mcp/).

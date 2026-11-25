@@ -13,7 +13,7 @@ shows on the stage, joins the session's strip and lands in the [Gallery](/studio
 - **Top bar**: the session menu, the workflow chip, the **Studio | Graph** switch and the memory chip.
 - **Stage**: the take you are looking at, or the run in progress.
 - **Takes strip**: this session's takes and runs.
-- **Composer** (bottom): the **Image / Video / Audio** switch, the model chip, **Run on**, the prompt, the seed count
+- **Composer** (bottom): the **Image / Video / Audio** tabs on a raised panel, the model chip, **Run on**, the prompt, the seed count
   and **Generate**.
 - **Inspector** (right): the **Preset** chips and the workflow's settings, grouped in sections.
 

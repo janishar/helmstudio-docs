@@ -5,6 +5,7 @@ import starlightOpenAPI, { openAPISidebarGroups } from 'starlight-openapi';
 
 export default defineConfig({
   site: 'https://helmstudio.in',
+  redirects: { '/studio/admin': '/studio/system/' },
   integrations: [
     starlight({
       title: 'helmstudio',
