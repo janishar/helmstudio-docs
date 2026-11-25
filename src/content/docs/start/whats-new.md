@@ -1,12 +1,13 @@
 ---
 title: What's new in 0.1.0-alpha.2
-description: The coming release, with a stronger Assistant, plugins and skills, faster Gallery, and a Mac app that updates itself.
+description: The latest release, with a stronger Assistant, plugins and skills, faster Gallery, and a Mac app that updates itself.
 sidebar:
   label: What's new
   order: 6
 ---
 
-0.1.0-alpha.2 is the coming release. It is not released yet, and it may still change.
+0.1.0-alpha.2 is out, released on 25 November 2026 as a pre-release. Get the Mac app from
+[GitHub releases](https://github.com/janishar/helmstudio/releases); an app from 0.1.0-alpha.2 on updates itself.
 
 ## Assistant
 
