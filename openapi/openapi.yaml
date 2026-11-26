@@ -1,7 +1,7 @@
 openapi: 3.1.0
 info:
   title: helmstudio API
-  version: 1.59.0
+  version: 1.76.0
   description: The HTTP API of helmstudio, served through its gateway. See the API overview for authentication, errors and live updates.
 servers:
   - url: http://localhost:8300
@@ -24,6 +24,7 @@ tags:
   - name: "Admin: users and API keys"
   - name: "Admin: models and hosts"
   - name: "Admin: AI providers"
+  - name: Other
 paths:
   /v1/studio/sessions:
     get:
@@ -1554,6 +1555,83 @@ paths:
           $ref: "#/components/responses/Unprocessable"
         "503":
           $ref: "#/components/responses/Unavailable"
+  /v1/studio/plugin/takes/{take_id}:
+    get:
+      tags:
+        - Other
+      operationId: studioPluginGetTake
+      description: "For a `takes` plugin (its manifest's `takes`, the plugin on) with its call's pass; no API key (Kong lets `/v1/studio/plugin/` through: the pass is the auth). Another user's take, a pending or deleted one is 404. `url` is signed for 10 minutes."
+      security:
+        - PluginPass: []
+      parameters:
+        - $ref: "#/components/parameters/TakeId"
+      responses:
+        "200":
+          description: The take
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginTake"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/studio/plugin/takes:
+    post:
+      tags:
+        - Other
+      operationId: studioPluginCreateTake
+      summary: Start a new take a plugin tool made; answers signed PUT links
+      description: A pending take (source `tool`, `tool` {plugin, tool, input}, `parents`) of the pass's owner, invisible until completed; the key `u/<owner>/uploads/<take_id>.<ext>` (an image or audio) or `u/<owner>/imports/<take_id>.mp4` with its poster beside it (a video), PUT links valid 15 minutes. take is 404. 422 for a kind and type that do not match ("kind and content_type differ"), a missing size ("an image or a video needs width and height", "a video needs video", "an audio take needs duration_s"), an image or audio over 50 MB, an input over 4096 bytes. A pending one not completed within an hour is discarded.
+      security:
+        - PluginPass: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PluginTakeCreate"
+      responses:
+        "201":
+          description: The links
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginTakeUpload"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+  /v1/studio/plugin/takes/{take_id}/complete:
+    post:
+      tags:
+        - Other
+      operationId: studioPluginCompleteTake
+      summary: Check the uploaded objects and show the new take
+      description: "As an import's complete (the size, the header of the declared type and pixel size; a video's `ftyp` box and its poster; an audio's header as an upload's): 409 \"upload not received\" before the PUT, 422 when a check fails (the take is discarded, 404 from then on). Calling it again after success answers the same take."
+      security:
+        - PluginPass: []
+      parameters:
+        - $ref: "#/components/parameters/TakeId"
+      responses:
+        "200":
+          description: The take
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Take"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "503":
+          $ref: "#/components/responses/Unavailable"
   /v1/studio/batches:
     get:
       tags:
@@ -2415,12 +2493,286 @@ paths:
           $ref: "#/components/responses/Conflict"
         "503":
           $ref: "#/components/responses/Unavailable"
+  /v1/studio/admin/plugins:
+    get:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminListPlugins
+      summary: The plugins found in plugins/ (Plugins page)
+      description: Admin only (403). Every plugin studio found, by name, with its manifest, whether it is on and, for one that is on, whether its health path answers now (2 s). `provider` is the caller's own provider made from it.
+      responses:
+        "200":
+          description: The plugins
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+  /v1/studio/admin/plugins/rescan:
+    post:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminRescanPlugins
+      summary: Read plugins/ again (Rescan)
+      description: Admin only (403). `new` names the ones added.
+      responses:
+        "200":
+          description: The plugins after it
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginRescan"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+  /v1/studio/admin/plugins/{plugin}:
+    put:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminPutPlugin
+      summary: Turn a plugin on or off
+      description: "Admin only (403). Off at once: its assistant tools leave the next input's tools, its providers leave every list and pipeline rule (they come back when it is on again). 404 unknown."
+      parameters:
+        - $ref: "#/components/parameters/PluginName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PluginPut"
+      responses:
+        "200":
+          description: The plugin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Plugin"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+    delete:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminRemovePlugin
+      summary: Remove a plugin (its providers go too; the folder stays)
+      description: Admin only (403). Drops the plugin and every provider made from it; the folder stays in plugins/, so a Rescan finds it again, Off. 404 unknown; 409 `<provider> is in use by an unfinished batch`.
+      parameters:
+        - $ref: "#/components/parameters/PluginName"
+      responses:
+        "204":
+          description: Removed
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+  /v1/studio/admin/plugins/{plugin}/provider:
+    post:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminAddPluginProvider
+      summary: Add as provider — a model-provider plugin becomes the caller's own local server provider
+      description: "Admin only (403). The plugin must be a model-provider and on (409 `turn <title> on first`; 409 `<title> is not a model provider`). Studio asks `pipelines.providers.key.write` to check `key` on the plugin's `<url><provider.path>/models` and write it to the key file `plugin-<plugin>-<8 hex of the caller's id>` (as PUT /admin/provider-keys does), then creates or replaces the provider `<plugin>-<8 hex>`: kind server, base_url `<url><provider.path>`, the manifest's models, timeout and memory, host `host` (absent: the first host by name). A personal plugin's provider is Only you (`owner_id` the caller): no other account sees or uses it. for it, then checks and writes it the same way; the key is never in a response, an event or a log. Its errors: 409 `No runner is up on <host>: start helmstudio there`, `<title> is not running: turn it on first`, `<title> makes its key on first start: turn it on, then Try again` (no key yet), `<title> refused its own key: turn it off and on, then Try again` (the check was refused), `the runner on <host> can't read <title>'s key: see its log` (refused or not found by the runner); 503 `the runner on <host> did not answer; try again`. `<title> did not answer: start it, then Try again` (unreachable: nothing saved), a default_model not in its models, an unknown host; 409 `keys are set in files on this deployment`; 503 no answer from pipelines."
+      parameters:
+        - $ref: "#/components/parameters/PluginName"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PluginProviderCreate"
+      responses:
+        "201":
+          description: The provider
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Provider"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+  /v1/studio/skills:
+    get:
+      tags:
+        - Other
+      operationId: studioListSkills
+      summary: The skills that are on
+      description: Every user. The skills an admin turned on, by name; a needs_newer or broken one never shows.
+      responses:
+        "200":
+          description: The skills
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillList"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+  /v1/studio/skills/{skill}:
+    get:
+      tags:
+        - Other
+      operationId: studioGetSkill
+      summary: A skill's guide (SKILL.md), its files and the recipes this install holds
+      description: Every user. 404 unknown, off, needs_newer or broken.
+      parameters:
+        - name: skill
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The skill
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Skill"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/studio/skills/{skill}/files/{file}:
+    get:
+      tags:
+        - Other
+      operationId: studioGetSkillFile
+      summary: One extra file of a skill (text)
+      description: "Every user. `file` is one of the skill's `files` (a plain name: no folders); 404 otherwise or for a skill that is not on."
+      parameters:
+        - name: skill
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: file
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The file
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillFile"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/studio/model-guides/{family}:
+    get:
+      tags:
+        - Other
+      operationId: studioGetModelGuide
+      summary: A model family's assistant guide and recipes
+      description: Every user. The newest guide a known host's runner publishes for the family (registry key guides), downloaded or not. 404 when no host publishes one.
+      parameters:
+        - name: family
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: The guide
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ModelGuide"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/studio/plugins/{plugin}:
+    get:
+      tags:
+        - Other
+      operationId: studioGetPluginUse
+      summary: A takes plugin as every user may use it (the Gallery's Edit)
+      description: "Every user. A plugin that is on, usable, of kind assistant-tools and whose manifest says `takes`; `running` when its health path answers 2xx now (2 s): the Gallery shows Edit only then. 404 otherwise (unknown, off, not a takes plugin)."
+      parameters:
+        - $ref: "#/components/parameters/PluginName"
+      responses:
+        "200":
+          description: The plugin
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginUse"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /v1/studio/plugins/{plugin}/tools/{tool}:
+    post:
+      tags:
+        - Other
+      operationId: studioRunPluginTool
+      summary: Run a takes plugin's tool for you (the Gallery's Save as new)
+      description: "Every user, on their own takes. The plugin as GET /plugins/{plugin} has it, and a tool of its manifest with no risk flag; else 404. Studio signs a pass for the caller and a new call id, as studio.plugins.pass does, and POSTs `<url>/tools/<tool>` {input} with the call's headers (30 s, no redirects). 200: `take_ids` only those studio vouches for (the caller's takes with source tool this plugin made under this call id, as a chat line's), `line` the plugin's. The plugin's 422 is a 422 with its detail; any other failure (no answer, too slow, a non-2xx) is a 502 with a plain detail (its detail, else `<title> did not answer`)."
+      parameters:
+        - $ref: "#/components/parameters/PluginName"
+        - name: tool
+          in: path
+          required: true
+          schema:
+            type: string
+            pattern: ^[a-z][a-z0-9_]{0,23}$
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PluginToolRun"
+      responses:
+        "200":
+          description: What it made
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PluginToolDone"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "502":
+          description: 'The plugin failed: `{"detail"}` in plain words'
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
   /v1/studio/admin/session-names:
     get:
       tags:
         - "Admin: AI providers"
       operationId: studioAdminGetSessionNames
-      summary: How untitled sessions are named (Admin › AI agents)
+      summary: How untitled sessions are named (Hub › In pipelines)
       description: Admin only (403).
       responses:
         "200":
@@ -2454,6 +2806,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/SessionNames"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+        "409":
+          $ref: "#/components/responses/Conflict"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+  /v1/studio/admin/pipeline-model:
+    get:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminGetPipelineModel
+      summary: What Runs on · Auto means for pipeline write, decide and agent steps (Hub › In pipelines)
+      description: Admin only (403). Local LLM (today's behaviour) until the admin sets it.
+      responses:
+        "200":
+          description: The setting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PipelineDefaultModel"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+    put:
+      tags:
+        - "Admin: models and hosts"
+      operationId: studioAdminPutPipelineModel
+      summary: Set the pipelines default model
+      description: "Admin only (403). Applies to pipelines checked and submitted from then on (a batch keeps what it was submitted with). 422 `provider and model are only for remote`, `remote needs a provider`, `<provider> is not an enabled provider`, `<provider> is only yours; pick a shared provider` (an Only-you provider: pipelines run for every account), `<model> is not a model of <provider>`, `the Assistant is not set up` (assistant with no Assistant provider), `the Assistant's provider is only yours; pick a shared provider`; 409 `remote models are off on this deployment` for a provider of kind remote (or an Assistant on one) while the deployment's switch is off."
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PipelineDefaultModelPut"
+      responses:
+        "200":
+          description: The setting
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PipelineDefaultModel"
         "401":
           $ref: "#/components/responses/Unauthorized"
         "403":
@@ -2509,6 +2910,20 @@ paths:
           $ref: "#/components/responses/Unprocessable"
         "503":
           $ref: "#/components/responses/Unavailable"
+  /v1/studio/assistant/first-launch:
+    post:
+      tags:
+        - Assistant
+      operationId: studioMarkAssistantFirstLaunch
+      summary: The drawer opened by itself once for you
+      description: "Every user. Marks the first launch shown for the caller only (stored per user, server side, so the Mac app and a browser agree); `AssistantStatus.first_launch` is false for them from then on. Again: 204, unchanged."
+      responses:
+        "204":
+          description: Marked
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "503":
+          $ref: "#/components/responses/Unavailable"
   /v1/studio/assistant/threads/{thread_id}:
     get:
       tags:
@@ -2529,6 +2944,35 @@ paths:
           $ref: "#/components/responses/Unauthorized"
         "404":
           $ref: "#/components/responses/NotFound"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+    patch:
+      tags:
+        - Assistant
+      operationId: studioPatchAssistantThread
+      summary: Switch the chat's Auto mode on or off
+      description: "Sets the chat's `auto` and sends a `thread` event. It applies from the chat's next input: a running turn reads it when the tab's results or a card's answer resume it. Another user's chat is 404."
+      parameters:
+        - $ref: "#/components/parameters/ThreadId"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AssistantThreadPatch"
+      responses:
+        "200":
+          description: The chat
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssistantThread"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
+        "422":
+          $ref: "#/components/responses/Unprocessable"
         "503":
           $ref: "#/components/responses/Unavailable"
     delete:
@@ -2721,7 +3165,7 @@ paths:
       tags:
         - "Admin: AI providers"
       operationId: studioAdminGetAssistant
-      summary: The assistant's settings (Admin › AI agents)
+      summary: The assistant's settings (Hub › Assistant)
       description: Admin only (403). Off, with no provider, until the admin sets it.
       responses:
         "200":
@@ -2763,6 +3207,26 @@ paths:
           $ref: "#/components/responses/Conflict"
         "422":
           $ref: "#/components/responses/Unprocessable"
+        "503":
+          $ref: "#/components/responses/Unavailable"
+  /v1/studio/admin/assistant/cache:
+    get:
+      tags:
+        - "Admin: AI providers"
+      operationId: studioAdminGetAssistantCache
+      summary: The assistant's prompt cache hit rate per provider and model (Hub › Assistant)
+      description: Admin only (403). Over the last `days` days of every user's assistant model calls, from the hits each reply reported (DeepSeek prompt_cache_hit_tokens, OpenAI cached_tokens, Anthropic cache_read_input_tokens); 503 when pipelines does not answer in 5 s.
+      responses:
+        "200":
+          description: The hit rate per model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/AssistantCacheStats"
+        "401":
+          $ref: "#/components/responses/Unauthorized"
+        "403":
+          $ref: "#/components/responses/AdminRequired"
         "503":
           $ref: "#/components/responses/Unavailable"
   /v1/studio/models:
@@ -3037,7 +3501,7 @@ paths:
         - "Admin: models and hosts"
       operationId: studioAdminPutHostSettings
       summary: Set what stays loaded after a run, the idle timeout and the memory reserve, for every env of a host
-      description: "Admin only (403). `<host>`; each runner of the host applies it at once when idle, else after its run, without a restart, and reports it in its hosts key (`policy.settings_version`; `HostSettings.applied`). A first PUT creates the row with no pins. 404 for a host with no present hosts key. 422 `reserve_gb leaves no memory on <host>` (reserve_gb ≥ the smallest memory the host's keys cut their budget from: `device.memory_total_gb` (VRAM) for a key whose `device.kind` is cuda, else `machine.ram_gb`)."
+      description: "Admin only (403). `<host>`; each runner of the host applies it at once when idle, else after its run, without a restart, and reports it in its hosts key (`policy.settings_version`; `HostSettings.applied`). A first PUT creates the row with no pins. 404 for a host with no present hosts key. 422 `reserve_gb leaves no memory on <host>` (reserve_gb ≥ the smallest memory the host's keys cut their budget from: `device.memory_total_gb` (VRAM) for a key whose `device.kind` is cuda, else `machine.ram_gb`; `reserve_mode`: auto = the budget follows the macOS GPU limit when one is set (`machine.gpu_limit_gb`, at most RAM − 4 GB), else device memory − RUNNER_RESERVE_GB; custom = device memory − `reserve_gb` (as before). Absent on the PUT = unchanged (a new row: custom)."
       parameters:
         - $ref: "#/components/parameters/HostName"
       requestBody:
@@ -3178,7 +3642,7 @@ paths:
         - Timelines
       operationId: studioCreateTimeline
       summary: New sequence, optionally with its first clips (target defaults from the first clip)
-      description: "Creates the sequence (revision 1) and its own session (`session_id`: New shot and Re-render runs go there). Missing `target` fields come from the first take of `take_ids`, else 1280 × 720, 24 fps, 48000 Hz. `take_ids` are added as `POST …/clips` adds them. 409 at 100 sequences (`You have 100 sequences; delete some first.`). 422 `take_ids[2]: take <id> not found` (unknown, another user's, deleted or a pending upload), `name must be 1-80 characters`."
+      description: "Creates the sequence (revision 1) and its own session (`session_id`: New shot and Re-render runs go there). Missing `target` fields come from the first take of `take_ids`, else 1280 × 720, 24 fps, 48000 Hz. `take_ids` are added as `POST …/clips` adds them. 409 at 100 sequences (`You have 100 sequences; delete some first.`). 422 `take_ids[2]: take <id> not found` (unknown, another user's, deleted or a pending upload), `name must be 1-80 characters`. (Timeline › Sequences › Clone): its current revision's clips, sound clips and markers (new clip ids, links kept), its target and `defaults` (unless given), the same takes (nothing rendered again); a pending shot is not carried (its slot stays empty). The clone is revision 1 with its own session; the original is unchanged. A missing name is `<name> clone` (`title_source` user). 422 `from_timeline_id: target and take_ids are not allowed with it`; 404 for an unknown, deleted or another user's sequence. is \"Untitled sequence\" (`title_source` default) and is named once from its first take's prompt."
       requestBody:
         required: true
         content:
@@ -3194,6 +3658,8 @@ paths:
                 $ref: "#/components/schemas/Timeline"
         "401":
           $ref: "#/components/responses/Unauthorized"
+        "404":
+          $ref: "#/components/responses/NotFound"
         "409":
           $ref: "#/components/responses/Conflict"
         "422":
@@ -3267,6 +3733,7 @@ paths:
         - Timelines
       operationId: studioPatchTimeline
       summary: Rename, or set the defaults for new shots (no revision; not undone)
+      description: "A rename makes `title_source` user (`named_by` null), its session's too: the namer never replaces it."
       parameters:
         - $ref: "#/components/parameters/TimelineId"
       requestBody:
@@ -4426,6 +4893,10 @@ components:
       scheme: bearer
       bearerFormat: JWT
       description: The user's RS256 access token from a Session
+    PluginPass:
+      type: http
+      scheme: bearer
+      description: "A plugin tool call's pass (req.studio.plugins.pass): only /v1/studio/plugin/*, no API key"
   parameters:
     SessionId:
       name: session_id
@@ -4546,6 +5017,13 @@ components:
       schema:
         type: string
       description: A provider's name (unknown = 404 on DELETE and test; malformed = 404)
+    PluginName:
+      name: plugin
+      in: path
+      required: true
+      schema:
+        type: string
+      description: A plugin's name (its folder; unknown or malformed = 404)
     Limit:
       name: limit
       in: query
@@ -7655,6 +8133,12 @@ components:
             ram_gb:
               type: number
               minimum: 0
+            gpu_limit_gb:
+              type:
+                - number
+                - "null"
+              minimum: 0
+              description: The macOS GPU memory limit (sysctl iogpu.wired_limit_mb) when one is set; null when unset, on other hosts and from older runners (absent)
         admin:
           $ref: "#/components/schemas/HostAdmin"
     HostAdmin:
@@ -7690,6 +8174,8 @@ components:
                 reserve_gb:
                   type: number
                   minimum: 0
+                reserve_mode:
+                  $ref: "#/components/schemas/ReserveMode"
                 settings_version:
                   type:
                     - integer
@@ -7781,7 +8267,8 @@ components:
         - import
         - export
         - frame
-      description: "Create: an output of a Create run; upload: a file the user uploaded; pipeline: an output of a batch run; import: an item of the old helmstudio gallery, brought in by `helm import` (`legacy`); export: a sequence's export (`export`); frame: a video take's first or last frame (`frame_of`)"
+        - tool
+      description: "Create: an output of a Create run; upload: a file the user uploaded; pipeline: an output of a batch run; import: an item of the old helmstudio gallery, brought in by `helm import` (`legacy`); export: a sequence's export (`export`); frame: a video take's first or last frame (`frame_of`); tool: made by a plugin tool from takes of yours"
     Take:
       type: object
       description: "One item of the caller's gallery: a run output or an upload, pointing at an immutable object (its key is never shown). `title` starts as the first line of the prompt (at most 80 characters; the workflow title when the prompt is empty) for a run output, the file name without its extension for an upload."
@@ -7915,6 +8402,9 @@ components:
         source_map:
           $ref: "#/components/schemas/SourceMap"
           description: "A video made from a media take (retake, extend, audio to video; absent otherwise): how its time lines up with that take"
+        tool:
+          $ref: "#/components/schemas/TakeTool"
+          description: "Source tool only (absent otherwise; `made_with` null): the plugin tool that made it"
         decisions:
           type: array
           maxItems: 16
@@ -8130,6 +8620,10 @@ components:
             - string
             - "null"
           description: The host that ran it (the run's host at the attempt that stored it)
+        render_s:
+          type: number
+          minimum: 0
+          description: Its render time in seconds (0.1 s steps), from the run's start (its attempt's first running status) to this output's file stored; a run's takes each keep their own. a sequence's total is the sum over its clips' takes that have one)
         model:
           description: From the workflow's `<family>/model` node; null without one (echo)
           oneOf:
@@ -11634,6 +12128,14 @@ components:
           additionalProperties:
             $ref: "#/components/schemas/ThinkingInfo"
           description: "(read only): what each saved model offers, for the models its preset's rules cover (absent: no control). The form and the AI agents tab need no copy of the rules"
+        owner_id:
+          type: string
+          format: uuid
+          description: "(read only): an Only-you provider's owner, the admin who added it from a personal plugin. Only that account sees or uses it (every list, the AI agents picker, pipeline rules, the assistant); absent = everyone's"
+        plugin:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+          description: "(read only): the plugin it was made from (Add as provider)"
         created_at:
           type: string
           format: date-time
@@ -11912,6 +12414,15 @@ components:
               maxItems: 8
               items:
                 $ref: "#/components/schemas/ThinkingRule"
+        plugin:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+          description: A plugin's preset (its providers' thinking rules); never in this list (the file only)
+        vision:
+          type: string
+          minLength: 1
+          maxLength: 200
+          description: "A regular expression on the model id (RE2 and JavaScript alike) for the models that see images; absent: none does"
         docs:
           type: string
           pattern: ^https://
@@ -12037,6 +12548,517 @@ components:
           type: string
           maxLength: 300
           description: "Refused or unreachable: our own short text, never the provider's"
+    PluginRisk:
+      type: object
+      required:
+        - uses_gpu
+        - deletes
+        - sends_off_machine
+      additionalProperties: false
+      description: "A tool's risk flags: any true asks the user first"
+      properties:
+        uses_gpu:
+          type: boolean
+        deletes:
+          type: boolean
+        sends_off_machine:
+          type: boolean
+    PluginTool:
+      type: object
+      required:
+        - name
+        - description
+        - risk
+      additionalProperties: false
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][a-z0-9_]{0,23}$
+          description: The model sees `<plugin>__<name>`
+        description:
+          type: string
+          maxLength: 500
+        risk:
+          $ref: "#/components/schemas/PluginRisk"
+        title:
+          type: string
+          maxLength: 40
+          description: "Its name for people (the aside's tools: `Edit image`)"
+        summary:
+          type: string
+          maxLength: 120
+          description: What it does, in a few words (`Crop, resize, rotate, flip, extend, convert`)
+    Plugin:
+      type: object
+      required:
+        - name
+        - title
+        - version
+        - kind
+        - description
+        - author
+        - may_do
+        - personal
+        - enabled
+        - status
+        - provider
+        - updated_at
+      additionalProperties: false
+      description: "One plugin as the admin sees it: its manifest and its state"
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+          description: Its folder under plugins/
+        title:
+          type: string
+          maxLength: 60
+        version:
+          type: string
+          maxLength: 40
+        kind:
+          type: string
+          enum:
+            - model-provider
+            - assistant-tools
+            - skill
+          description: Skill
+        description:
+          type: string
+          maxLength: 300
+        author:
+          type: string
+          maxLength: 60
+        origin:
+          type: string
+          enum:
+            - built_in
+            - yours
+          description: "Built_in (plugins/ in the app) or yours (~/.helm/plugins: a folder or a .zip)"
+        replaces:
+          type: string
+          maxLength: 40
+          description: Yours replaces the built-in plugin of the same name; its version
+        format:
+          type: integer
+          minimum: 1
+          description: A skill's manifest format (this helmstudio reads 1)
+        when:
+          type: string
+          maxLength: 200
+          description: "A skill's: when the Assistant reads it"
+        files:
+          type: array
+          maxItems: 16
+          items:
+            type: string
+            maxLength: 64
+          description: "A skill's files: SKILL.md first, then the extra ones"
+        recipes:
+          type: object
+          required:
+            - ok
+            - skipped
+          additionalProperties: false
+          description: "A skill's recipes checked against this install: how many hold, and each skipped with why"
+          properties:
+            ok:
+              type: integer
+              minimum: 0
+            skipped:
+              type: array
+              maxItems: 16
+              items:
+                type: object
+                required:
+                  - name
+                  - why
+                additionalProperties: false
+                properties:
+                  name:
+                    type: string
+                  why:
+                    type: string
+                    maxLength: 200
+        problem:
+          type: string
+          maxLength: 300
+          description: "Why it can't be used (status needs_newer or broken), in plain words; or, on a built-in one in use, why your copy of the same name is not (`Your copy is broken: <reason>; using built in`)"
+        source:
+          type: string
+          maxLength: 300
+        may_do:
+          type: array
+          maxItems: 8
+          items:
+            type: string
+            maxLength: 120
+        personal:
+          type: boolean
+          description: "Personal use only: its provider is Only you"
+        disclaimer:
+          type: object
+          required:
+            - text
+          additionalProperties: false
+          properties:
+            text:
+              type: string
+              maxLength: 400
+            link:
+              type: string
+              maxLength: 300
+        url:
+          type: string
+          maxLength: 200
+          examples:
+            - http://host.docker.internal:8420
+        start:
+          type: string
+          maxLength: 200
+          description: How to start it (Not running)
+        models:
+          type: array
+          maxItems: 16
+          items:
+            type: string
+          description: "Model-provider: its models"
+        key_hint:
+          type: string
+          maxLength: 120
+          description: "Model-provider: where the key is"
+        key_from_host:
+          type: boolean
+          description: "Its manifest's provider.key_from: Add as provider needs no key (studio gets it from the runner of its host); absent = false"
+        tools:
+          type: array
+          maxItems: 8
+          items:
+            $ref: "#/components/schemas/PluginTool"
+          description: "Assistant-tools: its tools"
+        enabled:
+          type: boolean
+          description: On; off until an admin turns it on
+        status:
+          type: string
+          enum:
+            - off
+            - running
+            - not_running
+            - on
+            - needs_newer
+            - broken
+            - starting
+            - failed
+          description: "Starting (its runner launched it, its health path does not answer yet) and failed (Couldn't start: `problem` is why, the runner tries again after its backoff). off: not on (never called); running: its health path answered 2xx in 2 s; not_running: on, no answer. neither of the last two can be turned on"
+        provider:
+          type:
+            - string
+            - "null"
+          description: The caller's own provider made from it (Add as provider), else null
+        starts:
+          type: object
+          required:
+            - host
+          additionalProperties: false
+          description: "It starts itself (its manifest's `run`): the host whose runner runs it, the log file there and how often it was started again"
+          properties:
+            host:
+              type: string
+              pattern: ^[a-z0-9]{1,32}$
+            log:
+              type: string
+              maxLength: 300
+              examples:
+                - ~/.helm/logs/web-search.log
+            restarts:
+              type: integer
+              minimum: 0
+            since:
+              type: string
+              format: date-time
+        takes:
+          type: boolean
+          description: Its manifest's `takes` (reads your takes, saves new ones); absent = false
+        needs:
+          type: string
+          maxLength: 120
+          description: What it needs on its host, as its manifest says (`ffmpeg (brew install ffmpeg)`)
+        updated_at:
+          type: string
+          format: date-time
+    PluginUse:
+      type: object
+      required:
+        - name
+        - title
+        - running
+        - tools
+      additionalProperties: false
+      description: A takes plugin that is on, as every user sees it (GET /plugins/{plugin})
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+        title:
+          type: string
+          maxLength: 60
+        running:
+          type: boolean
+          description: Its health path answered 2xx now (2 s)
+        tools:
+          type: array
+          maxItems: 8
+          items:
+            type: string
+            pattern: ^[a-z][a-z0-9_]{0,23}$
+          description: Its tools with no risk flag (the ones POST …/tools/{tool} runs)
+    PluginToolRun:
+      type: object
+      required:
+        - input
+      additionalProperties: false
+      description: "A tool's input, as its manifest's input schema has it (the plugin checks it: 422)"
+      properties:
+        input:
+          type: object
+          maxProperties: 16
+          additionalProperties: true
+    PluginToolDone:
+      type: object
+      required:
+        - take_ids
+        - line
+      additionalProperties: false
+      properties:
+        take_ids:
+          type: array
+          maxItems: 8
+          uniqueItems: true
+          items:
+            type: string
+            format: uuid
+          description: The new takes studio vouches for (Undo deletes them)
+        line:
+          type: string
+          maxLength: 300
+          description: The plugin's line (`Trimmed · Shot 3`), else `<title> · <tool>`
+    SkillSummary:
+      type: object
+      required:
+        - name
+        - title
+        - when
+        - version
+      additionalProperties: false
+      description: A skill that is on, as every user sees it (the @ picker)
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+        title:
+          type: string
+          maxLength: 60
+        when:
+          type: string
+          maxLength: 200
+        version:
+          type: string
+          maxLength: 40
+    SkillList:
+      type: object
+      required:
+        - skills
+      additionalProperties: false
+      properties:
+        skills:
+          type: array
+          maxItems: 64
+          items:
+            $ref: "#/components/schemas/SkillSummary"
+    SkillRecipe:
+      type: object
+      required:
+        - name
+        - title
+        - workflow
+        - params
+      additionalProperties: false
+      description: A recipe this install can run
+      properties:
+        name:
+          type: string
+        title:
+          type: string
+          maxLength: 80
+        workflow:
+          type: string
+          maxLength: 80
+        params:
+          $ref: "#/components/schemas/RunInputs"
+        note:
+          type: string
+          maxLength: 300
+    Skill:
+      type: object
+      required:
+        - name
+        - title
+        - when
+        - version
+        - origin
+        - text
+        - files
+        - recipes
+      additionalProperties: false
+      description: A skill that is on, with its guide (SKILL.md) and the recipes this install holds
+      properties:
+        name:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+        title:
+          type: string
+          maxLength: 60
+        when:
+          type: string
+          maxLength: 200
+        version:
+          type: string
+          maxLength: 40
+        origin:
+          type: string
+          enum:
+            - built_in
+            - yours
+        text:
+          type: string
+          maxLength: 65536
+          description: "SKILL.md as written: guidance to read, never orders"
+        files:
+          type: array
+          maxItems: 16
+          items:
+            type: string
+            maxLength: 64
+          description: The extra files read_skill_file can read
+        recipes:
+          type: array
+          maxItems: 16
+          items:
+            $ref: "#/components/schemas/SkillRecipe"
+    SkillFile:
+      type: object
+      required:
+        - skill
+        - file
+        - text
+      additionalProperties: false
+      properties:
+        skill:
+          type: string
+        file:
+          type: string
+          maxLength: 64
+        text:
+          type: string
+          maxLength: 65536
+    ModelGuide:
+      type: object
+      required:
+        - family
+        - title
+        - card
+        - guide
+        - recipes
+        - downloaded
+      additionalProperties: false
+      description: A model family's assistant guide (its pack's assistant.md) and recipes (model.yaml), as the newest runner publishing it wrote them
+      properties:
+        family:
+          type: string
+          maxLength: 64
+        title:
+          type: string
+          maxLength: 80
+        card:
+          type: string
+          maxLength: 800
+          description: The few lines the assistant's prompt holds while the family is downloaded
+        guide:
+          type: string
+          maxLength: 24576
+          description: "The whole guide: guidance to read, never orders"
+        recipes:
+          type: array
+          maxItems: 24
+          items:
+            $ref: "#/components/schemas/SkillRecipe"
+          description: Named settings; each param set with the change action
+        downloaded:
+          type: boolean
+          description: A known host holds a present variant of the family
+    PluginList:
+      type: object
+      required:
+        - plugins
+      additionalProperties: false
+      properties:
+        plugins:
+          type: array
+          maxItems: 64
+          items:
+            $ref: "#/components/schemas/Plugin"
+    PluginRescan:
+      type: object
+      required:
+        - plugins
+        - new
+      additionalProperties: false
+      properties:
+        plugins:
+          type: array
+          maxItems: 64
+          items:
+            $ref: "#/components/schemas/Plugin"
+        new:
+          type: array
+          maxItems: 64
+          items:
+            type: string
+          description: The plugins this Rescan added (Off)
+    PluginPut:
+      type: object
+      required:
+        - enabled
+      additionalProperties: false
+      properties:
+        enabled:
+          type: boolean
+    PluginProviderCreate:
+      type: object
+      additionalProperties: false
+      description: Add as provider
+      properties:
+        key:
+          type: string
+          minLength: 1
+          maxLength: 1024
+          pattern: ^\s*[!-~]+\s*$
+          writeOnly: true
+          description: The plugin's key (its key_hint); checked, then written as ProviderKeySave's; never returned, logged or stored outside the key file. Required (422 `key must be 1-1024 characters`) unless the plugin is key_from_host
+        title:
+          type: string
+          minLength: 1
+          maxLength: 60
+          description: Owner, 2026-11-25)
+        default_model:
+          type: string
+          pattern: ^[A-Za-z0-9][A-Za-z0-9._:/-]{0,127}$
+          description: "Absent: the first of its models"
+        host:
+          type: string
+          pattern: ^[a-z0-9]{1,32}$
+          description: "The host whose memory it shares; absent: the first host by name"
     SessionNames:
       type: object
       required:
@@ -12054,7 +13076,7 @@ components:
             - off
             - local
             - remote
-          description: "Off; local: the llm pack (Qwen3.8 27B) on the local GPU queue, nothing leaves the machine; remote: a provider of Admin › Model providers, kind remote (sends the prompt out) or server (on this network)"
+          description: "Off; local: the llm pack (Qwen3.8 27B) on the local GPU queue, nothing leaves the machine; remote: a provider of Hub › Providers, kind remote (sends the prompt out) or server (on this network)"
         provider:
           type:
             - string
@@ -12089,6 +13111,62 @@ components:
             - off
             - local
             - remote
+        provider:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,31}$
+          description: Remote only, required there
+        model:
+          type: string
+          maxLength: 128
+          description: Remote only; absent = the provider's default_model
+    PipelineDefaultModel:
+      type: object
+      required:
+        - mode
+        - provider
+        - model
+        - remote_enabled
+        - updated_at
+      description: What a write, decide or agent step's Runs on · Auto runs on (a judge keeps its family's vision model).
+      properties:
+        mode:
+          type: string
+          enum:
+            - local
+            - remote
+            - assistant
+          description: "Remote: a provider of Hub › Providers, kind server or remote; assistant: the Assistant's own provider and model (Same as Assistant), followed as it changes"
+        provider:
+          type:
+            - string
+            - "null"
+          description: "Remote: the provider's name; null otherwise"
+        model:
+          type:
+            - string
+            - "null"
+          description: "Remote: one of its models; null otherwise"
+        remote_enabled:
+          type: boolean
+          description: The deployment's remote switch
+        updated_at:
+          type:
+            - string
+            - "null"
+          format: date-time
+          description: Null until first set
+    PipelineDefaultModelPut:
+      type: object
+      required:
+        - mode
+      additionalProperties: false
+      properties:
+        mode:
+          type: string
+          enum:
+            - local
+            - remote
+            - assistant
         provider:
           type: string
           pattern: ^[a-z][a-z0-9-]{0,31}$
@@ -12139,6 +13217,29 @@ components:
                 additionalProperties:
                   $ref: "#/components/schemas/ThinkingLevel"
                 description: "The level set per model (absent: none set), shown where a model is picked"
+        auto:
+          type:
+            - object
+            - "null"
+          required:
+            - kind
+            - provider
+            - model
+            - title
+          additionalProperties: false
+          description: "What Runs on · Auto resolves to now for write, decide and agent steps (PipelineDefaultModel, usable now); null: the local LLM. A judge's Auto is always its family's vision model"
+          properties:
+            kind:
+              type: string
+              enum:
+                - server
+                - remote
+            provider:
+              type: string
+            model:
+              type: string
+            title:
+              type: string
     AssistantCallId:
       type: string
       pattern: ^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}:[1-9][0-9]{0,5}:([0-9]|[1-9][0-9])$
@@ -12206,6 +13307,14 @@ components:
           pattern: ^[a-z][A-Za-z0-9]{0,47}$
         args:
           type: object
+        auto:
+          type: boolean
+          description: "(Auto mode): pipelines lets it run by itself: a generation on your machines within the Auto caps runs without its card, a safe save in a dialog (a new item) saves itself; its line starts `Auto · ` and has Undo. Absent = false"
+        asks:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: "Auto is on but this one still asks: the waiting line above its card (`Auto stops here: deleting needs you`, `Auto paused · 8 of 8 takes this hour`)"
     AssistantLineText:
       type: object
       required:
@@ -12274,6 +13383,19 @@ components:
         memory_id:
           type: string
           format: uuid
+        skill:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+          description: "A Using skill line: the skill read (tap to see: GET /v1/studio/skills/{skill})"
+        take_ids:
+          type: array
+          minItems: 1
+          maxItems: 8
+          uniqueItems: true
+          items:
+            type: string
+            format: uuid
+          description: "A plugin tool's line (media tools): the takes it made; its Undo deletes them (DELETE /v1/studio/takes/{take_id}), no Redo"
         sources:
           type: array
           maxItems: 5
@@ -12310,6 +13432,8 @@ components:
             - look
             - web_search
             - delete
+            - plugin
+          description: "Plugin: a plugin tool with a risk flag"
         title:
           type: string
           minLength: 1
@@ -12373,6 +13497,10 @@ components:
           type: integer
           minimum: 0
           maximum: 8
+        auto_takes_hour:
+          type: integer
+          minimum: 0
+          description: With Auto on, the takes Auto mode started for you in the last hour (the chip `4 of 8 takes this hour`); absent with Auto off
     AssistantError:
       type: object
       required:
@@ -12431,6 +13559,18 @@ components:
           minimum: 1
           maximum: 60
           default: 30
+        auto_takes_per_hour:
+          type: integer
+          minimum: 0
+          maximum: 1000
+          default: 8
+          description: "Takes Auto mode may start for one user in an hour (0: Auto never generates); a PUT without it keeps the current one"
+        auto_gpu_minutes_per_hour:
+          type: integer
+          minimum: 0
+          maximum: 600
+          default: 30
+          description: GPU minutes (the runs' estimates) Auto mode may start for one user in an hour; a PUT without it keeps the current one
     AssistantStatus:
       type: object
       required:
@@ -12439,11 +13579,43 @@ components:
         - web_search
         - limits
         - thinks
+        - sees
+        - set_up
+        - can_set_up
+        - first_launch
+        - tools
       additionalProperties: false
-      description: "What every user may know: on or off (the dock item is hidden when off), where the model runs, web search, the caps, whether the model thinks"
+      description: "What every user may know: on or off, where the model runs, web search, the caps, whether the model thinks, whether it sees images"
       properties:
         enabled:
           type: boolean
+          description: "On and set up: chats work"
+        set_up:
+          type: boolean
+          description: A provider is saved for you and usable (enabled, with that model; a remote one under the deployment's switch), on or off
+        can_set_up:
+          type: boolean
+          description: You are an admin (the drawer offers Set up or Turn on; the routes check the role again)
+        first_launch:
+          type: boolean
+          description: "Open the drawer by itself now: you are an admin, the Assistant was never set up (AssistantSettings.updated_at null) and POST /assistant/first-launch was not called for you"
+        tools:
+          type: array
+          maxItems: 16
+          description: The assistant-tools plugins that are on and usable, by name (the Assistant page's Tools, read-only for anyone)
+          items:
+            type: object
+            required:
+              - name
+              - title
+            additionalProperties: false
+            properties:
+              name:
+                type: string
+                pattern: ^[a-z][a-z0-9-]{0,22}$
+              title:
+                type: string
+                maxLength: 60
         provider:
           oneOf:
             - type: object
@@ -12458,6 +13630,9 @@ components:
                 remote:
                   type: boolean
                   description: "True: your messages leave this machine (the notice shows first)"
+                model:
+                  type: string
+                  description: The model it answers with (`deepseek-chat`)
             - type: "null"
         web_search:
           type:
@@ -12469,6 +13644,9 @@ components:
         thinks:
           type: boolean
           description: The drawer shows `Thinking… N s` while a model call runs. False when off or no provider
+        sees:
+          type: boolean
+          description: "False (a text-only model, a provider with no preset, off): it uses look_at, and the drawer says so once when you attach"
     AssistantPending:
       type: object
       required:
@@ -12500,12 +13678,16 @@ components:
         - client_id
         - pending
         - caps
+        - auto
         - created_at
         - updated_at
       properties:
         id:
           type: string
           format: uuid
+        auto:
+          type: boolean
+          description: "The chat's Auto switch (starts off): safe steps run without asking"
         title:
           type: string
           maxLength: 120
@@ -12548,6 +13730,14 @@ components:
           maxItems: 200
           items:
             $ref: "#/components/schemas/AssistantThread"
+    AssistantThreadPatch:
+      type: object
+      required:
+        - auto
+      additionalProperties: false
+      properties:
+        auto:
+          type: boolean
     AssistantThreadCreate:
       type: object
       required:
@@ -12599,6 +13789,13 @@ components:
             - read
             - next
           description: Absent on other entries
+        takes:
+          type: array
+          maxItems: 8
+          items:
+            type: string
+            format: uuid
+          description: Absent when none
       allOf:
         - if:
             properties:
@@ -12654,9 +13851,17 @@ components:
               type: string
               minLength: 1
               maxLength: 4000
-              description: Trimmed; blank = 422
+              description: Trimmed; blank = 422.
             screen:
               $ref: "#/components/schemas/AssistantScreen"
+            takes:
+              type: array
+              maxItems: 8
+              uniqueItems: true
+              items:
+                type: string
+                format: uuid
+              description: "Images you attached (pasted, dropped or picked with the paperclip, uploaded first): your own ready takes, else 422 `takes: <id> is not one of your takes`; shown above your words"
         - type: object
           required:
             - kind
@@ -12828,6 +14033,56 @@ components:
         updated_at:
           type: string
           format: date-time
+        shots:
+          $ref: "#/components/schemas/AssistantShotList"
+    AssistantShotList:
+      type: object
+      description: A film's shot list, kept as a Projects item (kind project); the item's `text` is its summary, rewritten at each save. Shots by number ascending
+      required:
+        - film
+        - shots
+      additionalProperties: false
+      properties:
+        film:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: The film's title; one list per title (any case)
+        shots:
+          type: array
+          minItems: 1
+          maxItems: 60
+          items:
+            type: object
+            required:
+              - n
+              - what
+            additionalProperties: false
+            properties:
+              n:
+                type: integer
+                minimum: 1
+                maximum: 999
+                description: The shot number, unique in the list
+              what:
+                type: string
+                minLength: 1
+                maxLength: 300
+                description: What happens
+              seconds:
+                type: number
+                exclusiveMinimum: 0
+                maximum: 600
+                description: The planned length
+              line:
+                type: string
+                minLength: 1
+                maxLength: 300
+                description: "The line spoken (`@name: text`), if any"
+              take_id:
+                type: string
+                format: uuid
+                description: The take used, once picked
     AssistantMemoryList:
       type: object
       required:
@@ -12881,7 +14136,7 @@ components:
         - limits
         - remote_enabled
         - updated_at
-      description: The admin's assistant settings (Admin › AI agents)
+      description: The admin's assistant settings (Hub › Assistant)
       properties:
         enabled:
           type: boolean
@@ -12895,6 +14150,9 @@ components:
             - string
             - "null"
           description: One of its models; null = its default_model
+        personal:
+          type: boolean
+          description: "`provider` is the caller's own Only-you provider: only the caller's chats use it; everyone else's use the deployment's provider. A PUT naming an Only-you provider sets the caller's own choice (the deployment's stays); naming another clears it and sets the deployment's"
         web_search:
           type: boolean
           description: Web search's own egress switch (off by default)
@@ -12914,6 +14172,59 @@ components:
             - "null"
           format: date-time
           description: Null before the first PUT
+        window_tokens:
+          type: integer
+          minimum: 8000
+          maximum: 1000000
+          default: 60000
+          description: "The chat window of `provider` and `model` (each model keeps its own; 60000 until set): past 70% of it the oldest half of a chat folds into a running summary"
+    AssistantCacheStats:
+      type: object
+      required:
+        - days
+        - models
+      description: The prompt cache hit rate of the assistant's model calls per provider and model
+      properties:
+        days:
+          type: integer
+          minimum: 1
+          description: The window counted (30)
+        models:
+          type: array
+          maxItems: 100
+          items:
+            type: object
+            required:
+              - provider
+              - model
+              - calls
+              - prompt_tokens
+              - hit_tokens
+              - hit_rate
+            properties:
+              provider:
+                type: string
+              model:
+                type: string
+              calls:
+                type: integer
+                minimum: 0
+                description: Model calls that reported their cache hits
+              prompt_tokens:
+                type: integer
+                minimum: 0
+                description: Their prompt tokens
+              hit_tokens:
+                type: integer
+                minimum: 0
+                description: Of those, read from the provider's cache
+              hit_rate:
+                type:
+                  - number
+                  - "null"
+                minimum: 0
+                maximum: 1
+                description: Hit_tokens / prompt_tokens; null with no prompt tokens
     AssistantSettingsPut:
       type: object
       required:
@@ -12943,6 +14254,11 @@ components:
         limits:
           $ref: "#/components/schemas/AssistantLimits"
           description: Absent = unchanged
+        window_tokens:
+          type: integer
+          minimum: 8000
+          maximum: 1000000
+          description: The chat window of the provider and model this PUT sets; absent = unchanged
     CustomNode:
       type: object
       required:
@@ -13698,7 +15014,15 @@ components:
           minimum: 0
           maximum: 1024
           multipleOf: 0.5
-          description: "The host's budget is its RAM (on cuda: its VRAM) minus this"
+          description: "Custom: the host's budget is its RAM (on cuda: its VRAM) minus this; kept in auto (used again on a switch back to custom)"
+        reserve_mode:
+          $ref: "#/components/schemas/ReserveMode"
+    ReserveMode:
+      type: string
+      enum:
+        - auto
+        - custom
+      description: ": auto = the macOS GPU limit when set (at most RAM − 4 GB), else device memory − RUNNER_RESERVE_GB; custom = device memory − reserve_gb (the default). Absent = custom (a PUT: unchanged)"
     HostPins:
       type: object
       required:
@@ -13718,6 +15042,7 @@ components:
         - after_run
         - idle_unload_min
         - reserve_gb
+        - reserve_mode
         - pins
         - applied
         - updated_at
@@ -13736,6 +15061,8 @@ components:
         reserve_gb:
           type: number
           minimum: 0
+        reserve_mode:
+          $ref: "#/components/schemas/ReserveMode"
         pins:
           type: array
           items:
@@ -14285,6 +15612,10 @@ components:
           description: Clips to start with, in order (the gallery's multi-selection)
         defaults:
           $ref: "#/components/schemas/TimelineDefaults"
+        from_timeline_id:
+          type: string
+          format: uuid
+          description: "Clone this sequence (not with target or take_ids: 422; another user's: 404)"
     TimelineUpdate:
       type: object
       required:
@@ -14405,6 +15736,10 @@ components:
           type:
             - string
             - "null"
+        render_s:
+          type: number
+          minimum: 0
+          description: "`made_with.render_s` (the clip inspector's \"⏱ 3:12\"; the sequence's total sums its clips' takes that have one); absent without one"
     TimelineProblem:
       type: object
       required:
@@ -14504,6 +15839,15 @@ components:
         updated_at:
           type: string
           format: date-time
+        title_source:
+          $ref: "#/components/schemas/TitleSource"
+          description: Who wrote `name`, as a session's title
+        named_by:
+          type:
+            - string
+            - "null"
+          maxLength: 60
+          description: The model that wrote the name while `title_source` is model; null otherwise
     TimelineSummary:
       type: object
       required:
@@ -15989,6 +17333,209 @@ components:
           $ref: "#/components/schemas/Take"
         job:
           $ref: "#/components/schemas/MediaJob"
+    TakeTool:
+      type: object
+      required:
+        - plugin
+        - tool
+        - input
+      additionalProperties: false
+      properties:
+        plugin:
+          type: string
+          pattern: ^[a-z][a-z0-9-]{0,22}$
+          examples:
+            - media-tools
+        tool:
+          type: string
+          pattern: ^[a-z][a-z0-9_]{0,23}$
+          examples:
+            - crop
+        input:
+          type: object
+          description: The tool's input as the plugin reported it (at most 4096 bytes as compact JSON)
+        call:
+          type: string
+          maxLength: 120
+          description: The assistant call whose pass made it (studio records it; a line's Undo deletes only takes of its own call)
+    PluginTake:
+      type: object
+      required:
+        - id
+        - kind
+        - title
+        - content_type
+        - bytes
+        - width
+        - height
+        - url
+      additionalProperties: false
+      properties:
+        id:
+          type: string
+          format: uuid
+        kind:
+          $ref: "#/components/schemas/TakeKind"
+        title:
+          type: string
+          maxLength: 200
+        content_type:
+          type: string
+        bytes:
+          type: integer
+          minimum: 0
+        width:
+          type:
+            - integer
+            - "null"
+        height:
+          type:
+            - integer
+            - "null"
+        url:
+          $ref: "#/components/schemas/SignedUrl"
+          description: The file, signed for 10 minutes
+        duration_s:
+          type: number
+          description: A video's or an audio take's length
+        fps:
+          type: number
+          description: A video's
+        has_audio:
+          type: boolean
+          description: A video's
+    PluginTakeCreate:
+      type: object
+      description: A new take a `takes` plugin made from takes of the pass's owner
+      required:
+        - parents
+        - tool
+        - input
+        - title
+        - kind
+        - content_type
+        - bytes
+      additionalProperties: false
+      properties:
+        parents:
+          type: array
+          minItems: 1
+          maxItems: 8
+          uniqueItems: true
+          items:
+            type: string
+            format: uuid
+          description: The takes it was made from
+        tool:
+          type: string
+          pattern: ^[a-z][a-z0-9_]{0,23}$
+        input:
+          type: object
+          description: At most 4096 bytes as compact JSON
+        title:
+          type: string
+          minLength: 1
+          maxLength: 200
+        kind:
+          $ref: "#/components/schemas/TakeKind"
+        content_type:
+          type: string
+          enum:
+            - image/png
+            - image/jpeg
+            - image/webp
+            - audio/wav
+            - audio/mpeg
+            - audio/mp4
+            - video/mp4
+        bytes:
+          type: integer
+          minimum: 1
+          maximum: 2147483648
+          description: An image or audio at most 52428800 (50 MB); a video at most 2 GB
+        width:
+          type: integer
+          minimum: 1
+          maximum: 16384
+          description: An image's or a video's
+        height:
+          type: integer
+          minimum: 1
+          maximum: 16384
+        duration_s:
+          type: number
+          exclusiveMinimum: 0
+          maximum: 21600
+          description: An audio take's
+        video:
+          type: object
+          description: A video's length, frames, rate, sound and poster (as an import's)
+          required:
+            - duration_s
+            - fps
+            - frames
+            - has_audio
+            - poster
+          additionalProperties: false
+          properties:
+            duration_s:
+              type: number
+              exclusiveMinimum: 0
+              maximum: 21600
+            fps:
+              type: number
+              exclusiveMinimum: 0
+              maximum: 240
+            frames:
+              type: integer
+              minimum: 1
+            has_audio:
+              type: boolean
+            poster:
+              type: object
+              required:
+                - content_type
+                - bytes
+                - width
+                - height
+              additionalProperties: false
+              properties:
+                content_type:
+                  type: string
+                  enum:
+                    - image/png
+                    - image/jpeg
+                    - image/webp
+                bytes:
+                  type: integer
+                  minimum: 1
+                  maximum: 52428800
+                width:
+                  type: integer
+                  minimum: 1
+                height:
+                  type: integer
+                  minimum: 1
+    PluginTakeUpload:
+      type: object
+      required:
+        - take_id
+        - upload_url
+        - expires_at
+      additionalProperties: false
+      properties:
+        take_id:
+          type: string
+          format: uuid
+        upload_url:
+          $ref: "#/components/schemas/SignedUrl"
+          description: PUT the bytes (exactly `bytes`, `content_type`)
+        poster_upload_url:
+          $ref: "#/components/schemas/SignedUrl"
+          description: "A video's: PUT its poster"
+        expires_at:
+          type: string
+          format: date-time
     TakeFrameOf:
       type: object
       required:
