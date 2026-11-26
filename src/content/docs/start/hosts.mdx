@@ -68,7 +68,7 @@ An admin sets each host's memory in [System](/studio/system/) › **Hosts**. The
 |---|---|
 | After the queue drains | **Unload everything** stops the runner processes, the only way to be sure memory goes back to the system. **Keep warm** keeps models loaded until memory is needed or the idle timeout passes. **Keep pinned only** keeps pinned parts and unloads the rest. |
 | Idle timeout, minutes | How long Keep warm waits before unloading. 0 means never. |
-| Memory reserve, GB | Memory kept back for everything else. The budget is the host's memory (the GPU's memory on NVIDIA) minus this. |
+| Memory budget | **Automatic** uses the Mac's GPU memory limit when one is set, else the memory minus a default reserve (on NVIDIA, the GPU's memory minus the default reserve). **Custom** lets you set the **Memory reserve, GB** kept back for everything else; the budget is the host's memory minus it. |
 | Pins | Keep a model part loaded between runs. |
 
 The same settings are available from the command line:

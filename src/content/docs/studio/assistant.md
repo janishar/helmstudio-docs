@@ -41,6 +41,12 @@ and set it up later from **Assistant** or **⌘J**.
 
 The bar moves up rather than cover a **Generate** button.
 
+### Move it
+
+Drag the drawer's header (or its bar) to float it anywhere on the screen. **Dock**, or a double-click on the header,
+puts it back at the right edge. helmstudio remembers the place for you in this browser. **Close** stays on screen
+while a chip shows. When a page opens a side form (for example Edit or Add), a docked drawer minimizes to make room.
+
 ## What it can do
 
 It works every screen:

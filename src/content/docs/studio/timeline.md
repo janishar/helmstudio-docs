@@ -15,9 +15,16 @@ shots in all (for example ⏱ 12:40), its cast and look defaults, undo and redo,
 
 - **New sequence**: give it a name. Its width, height and frame rate come from the first clip; with no clip yet it is
   1280 × 720 at 24 fps. Sound is 48 kHz.
-- **Switch, rename or delete**: open the sequence switcher (**Sequences**). Deleting a sequence keeps its clips in
+- **Switch, rename, clone or delete**: open the sequence switcher (**Sequences**). **Clone** copies a sequence with
+  all its clips, markers, cast and look; the copy uses the same takes, so nothing is rendered again. Deleting a sequence keeps its clips in
   the Gallery and cancels an unfinished export.
+- **Names**: a sequence with no name is named from its shots' prompts, like Create's sessions. A name you type is
+  kept.
+- **Side panel**: the sliders button in the tracks tool bar opens and closes the panel on the right.
 - **Defaults for new shots**: a sequence can carry a cast (elements) and a look. Every new shot starts with them.
+
+Right-click a clip, a gap, a track, the ruler or a selection for its actions, with their shortcuts. Shift +
+right-click gives the browser's menu.
 
 ## Add clips
 
@@ -101,7 +108,7 @@ progress, and the new take also lands in the Gallery.
 
 **New shot.** At the playhead, in a gap, or from a selected clip, choose **New shot**. Create's composer opens docked
 in the timeline, with the sequence's cast and look. Where the workflow has keyframes, you can start from the previous
-clip's last frame or end on the next clip's first frame. Press **Generate shot**.
+clip's last frame or end on the next clip's first frame. Press **Generate shot**. Close it with the **×** or **Esc**.
 
 **Take actions on a clip.** A video clip offers its take's actions under "Generate from this clip", such as Retake
 over the marked range or Extend. Choose where the result goes: **Replace** (keeps the clip's in and out; nothing

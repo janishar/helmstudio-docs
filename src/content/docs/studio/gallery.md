@@ -38,6 +38,8 @@ Click a take to see it in the side panel:
 - Open it **Full screen** (**F**), or double-click the take in the grid: an image opens full size, a video or sound
   plays. A single click only selects it.
 
+Right-click a take for the same actions. Shift + right-click gives the browser's menu.
+
 ## Take actions
 
 | Action | What it does |

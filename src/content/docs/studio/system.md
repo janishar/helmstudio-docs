@@ -40,7 +40,10 @@ Select a host to change its **Host settings**. They apply to every runtime on it
 - **After the queue drains**: **Unload everything**, **Keep warm**, or **Keep pinned only**. Only Unload everything
   is sure to give the memory back.
 - **Idle timeout, minutes** (0 = never).
-- **Memory reserve, GB**: the budget is the machine's memory (the GPU's on an NVIDIA host) minus this reserve.
+- **Memory budget**: **Automatic** or **Custom**. Automatic uses the Mac's GPU memory limit when one is set, else its
+  memory minus a default reserve (on an NVIDIA host, the GPU's memory minus the default reserve). **Custom** shows
+  **Memory reserve, GB**: the budget is the machine's memory (the GPU's on an NVIDIA host) minus the reserve you
+  set. Both are also checked against live memory pressure.
 - **Evict all** empties the host now.
 
 To add a machine, see [Hosts](/start/hosts/).

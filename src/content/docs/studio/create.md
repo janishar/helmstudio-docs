@@ -15,7 +15,12 @@ shows on the stage, joins the session's strip and lands in the [Gallery](/studio
 - **Takes strip**: this session's takes and runs.
 - **Composer** (bottom): the **Image / Video / Audio** tabs on a raised panel, the model chip, **Run on**, the prompt, the seed count
   and **Generate**.
-- **Inspector** (right): the **Preset** chips and the workflow's settings, grouped in sections.
+- **Inspector** (right): the **Preset** chips and the workflow's settings, grouped in sections. It is open by default;
+  the **All settings** button (the sliders icon) in the composer closes and opens it.
+
+Each setting chip under the prompt (model · precision, **Run on**, size, length · fps, audio) opens a small popup for
+just that setting, so a quick change needs no trip to the Inspector. Create offers only the variants that a host
+online now has.
 
 In a narrow window the row of input fields (for example First frame, Elements, Film, Camera and Lighting) wraps onto
 more lines. The fields keep one width, as an even grid.
