@@ -2,7 +2,7 @@
 title: Elements and Looks
 description: Name your characters, places and props once and call them with @; set a film, camera, colour or lighting style once and reuse it.
 sidebar:
-  order: 2
+  order: 3
 ---
 
 Elements and Looks are your own library. You make them once and use them in any prompt: on Create, in a timeline

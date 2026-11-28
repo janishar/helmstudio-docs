@@ -2,7 +2,7 @@
 title: Gallery
 description: Every take you make lands in the Gallery, with how it was made. Find, star, rename, delete and reuse takes from here.
 sidebar:
-  order: 4
+  order: 5
 ---
 
 The Gallery holds every take you have made or uploaded. Each take keeps the settings and inputs that made it, so you
@@ -11,7 +11,7 @@ can repeat it or build on it. Every image, video or sound input in helmstudio is
 ## Find takes
 
 - **Search** prompts, elements and models with the search box.
-- **Filter** with the chips: **All**, **Images**, **Video**, **Audio**, **Starred**, **From Create**, **From
+- **Filter** with the chips: **All**, **Images**, **Video**, **Voice**, **Music**, **Sound**, **Starred**, **From Create**, **From
   Pipelines**, **From Timeline**, **Uploads**, and **This project only** (the session you last opened on Create).
   Chips combine.
 - **Sort**: takes show newest first. Ask the [Assistant](/studio/assistant/) to sort by **Oldest**, **Starred

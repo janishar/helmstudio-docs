@@ -2,12 +2,12 @@
 import Showcase from '../layouts/Showcase.astro';
 import Win from '../components/Win.astro';
 ---
-<Showcase title="Tour · helmstudio" description="Every screen of helmstudio, room by room, with the Assistant first.">
+<Showcase title="Tour · helmstudio" description="Every screen of helmstudio, room by room, with the Assistant first and Magic after Create.">
 <div class="wrap">
   <header class="hero">
     <p class="eyebrow">Tour</p>
     <h1>A look <span class="grad">inside the studio.</span></h1>
-    <p class="lede">Every screen, room by room. Start with the Assistant, then follow a take from Create to the Gallery, the Timeline and a pipeline.</p>
+    <p class="lede">Every screen, room by room. Start with the Assistant, then follow a take from Create and Magic to the Gallery, the Timeline and a pipeline.</p>
     <div class="ctas">
       <a class="btn primary" href="/start/install/">Install helmstudio →</a>
       <a class="btn" href="/start/introduction/">Read the docs</a>
@@ -32,7 +32,7 @@ import Win from '../components/Win.astro';
     <div class="duo">
       <div class="copy">
         <h3>On your phone too.</h3>
-        <p>At phone width the dock becomes a bar and the Assistant slides up from the bottom. Ask for a still, press Generate, and find it in the Gallery later.</p>
+        <p>At phone width the rail becomes a bar and the Assistant slides up from the bottom. Ask for a still, press Generate, and find it in the Gallery later.</p>
         <ul>
           <li>Knows every model's settings and limits</li>
           <li>Remembers what you like, and lets you edit what it remembers</li>
@@ -40,7 +40,7 @@ import Win from '../components/Win.astro';
         </ul>
         <a href="/studio/assistant/">Read the Assistant guide →</a>
       </div>
-      <Win src="assistant-phone" alt="The Assistant at phone width: the dock as a bar, the Assistant sheet over Create, asking before generating" />
+      <Win src="assistant-phone" alt="The Assistant at phone width: the rail as a bar, the Assistant sheet over Create, asking before generating" />
     </div>
   </div>
 </section>
@@ -50,8 +50,8 @@ import Win from '../components/Win.astro';
     <article class="room">
       <div class="copy">
         <p class="eyebrow">Create</p>
-        <h3>One screen for every image, clip and voice.</h3>
-        <p>Pick a model, write a prompt, make takes. Switch between image, video and audio without losing your prompt.</p>
+        <h3>One screen for every image, clip, voice, song and sound.</h3>
+        <p>Pick a kind and a model, write a prompt, make takes. Switch between Image, Video, Voice, Music and Sound without losing your prompt.</p>
         <ul>
           <li>Presets from Draft to Final, with time and peak memory before you run</li>
           <li>Call characters and places by name with @</li>
@@ -63,6 +63,21 @@ import Win from '../components/Win.astro';
     </article>
 
     <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Magic</p>
+        <h3>The whole film, laid out in time.</h3>
+        <p>Lanes for the storyboard, the shots, the voices, the music and the sound. Every block is a generation with a preview and a status. Export the MP4, or send the board to the Timeline as a new sequence.</p>
+        <ul>
+          <li>Characters with views, storyboard frames that become shots</li>
+          <li>Lines and music tied to their shots</li>
+          <li>The Assistant plans first, then draws its changes on the board for you to apply</li>
+        </ul>
+        <a href="/magic/">See Magic →</a>
+      </div>
+      <Win src="magic-board" alt="A Magic board: the Assets row, then Storyboard, Shots, Voice, Music and Sound lanes in time, each block with its preview and status" />
+    </article>
+
+    <article class="room">
       <div class="copy">
         <p class="eyebrow">Video</p>
         <h3>Clips with sound, from a line of text.</h3>
@@ -77,7 +92,7 @@ import Win from '../components/Win.astro';
       <Win src="create-video" alt="Create with LTX-2.5 text to video: an airship over cliffs at sunset in the preview, with presets, canvas, length and quality settings" />
     </article>
 
-    <article class="room">
+    <article class="room flip">
       <div class="copy">
         <p class="eyebrow">Graph</p>
         <h3>The same workflow, as nodes.</h3>
@@ -87,7 +102,7 @@ import Win from '../components/Win.astro';
       <Win src="graph" alt="Graph view of Qwen Image: prompt, encode, model, sample and decode nodes wired together, with the sample node's settings" />
     </article>
 
-    <article class="room flip">
+    <article class="room">
       <div class="copy">
         <p class="eyebrow">Gallery</p>
         <h3>Every take remembers how it was made.</h3>
@@ -102,7 +117,7 @@ import Win from '../components/Win.astro';
       <Win src="gallery" alt="Gallery grid of takes with filters, and the side panel showing how the selected take was made and its Use in actions" />
     </article>
 
-    <article class="room">
+    <article class="room flip">
       <div class="copy">
         <p class="eyebrow">Timeline</p>
         <h3>Cut the film where you make it.</h3>
@@ -117,7 +132,7 @@ import Win from '../components/Win.astro';
       <Win src="timeline" alt="Timeline with shots of a fox in the snow, a new shot being composed in a gap, and clip actions for Extend, Retake and Replace" />
     </article>
 
-    <article class="room flip">
+    <article class="room">
       <div class="copy">
         <p class="eyebrow">Pipelines</p>
         <h3>Batches that check their own work.</h3>

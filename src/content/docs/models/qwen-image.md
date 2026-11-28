@@ -19,7 +19,7 @@ you give it references. Turbo makes it fast enough for quick drafts.
 | Variant | Where | Notes |
 |---|---|---|
 | Base | Mac, NVIDIA | Full quality. Steps 1 to 200, default 40. |
-| Turbo | Mac, NVIDIA | 8 fixed steps, much faster. For drafts and quick looks. |
+| Turbo | Mac, NVIDIA | The default. 8 fixed steps, much faster. For drafts and quick looks. |
 | Base fp8 | NVIDIA only | Smaller community weights. |
 | Turbo fp8 | NVIDIA only | Smaller community weights, 8 fixed steps. |
 

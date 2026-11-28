@@ -2,11 +2,11 @@
 title: Hub
 description: The admin's one place for everything AI. Set up the Assistant, pick the model pipelines use, add model providers and manage plugins.
 sidebar:
-  order: 7
+  order: 8
 ---
 
 **Hub** holds everything AI in helmstudio: the [Assistant](/studio/assistant/) you chat with, and the AI work
-pipelines do without a chat. It is in the rail after **Models**, for admins only. Anyone else does not see it.
+pipelines do without a chat. It is at the foot of the rail (in the **Setup** gear on a short window), for admins only. Anyone else does not see it.
 
 It has four tabs: **Assistant**, **In pipelines**, **Providers** and **Plugins**. Above them, every tab shows the
 Assistant's state (**On**, **Off** or **Not set up**) and the **Assistant on** switch, which turns the Assistant on

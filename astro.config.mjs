@@ -28,7 +28,7 @@ export default defineConfig({
         './src/styles/theme.css',
       ],
       plugins: [
-        starlightLinksValidator({ exclude: ['/reference/http/', '/reference/http/**/*'] }),
+        starlightLinksValidator({ exclude: ['/reference/http/', '/reference/http/**/*', '/assistant/', '/magic/', '/tour/'] }),
         starlightOpenAPI([
           {
             base: 'reference/http',
@@ -38,6 +38,8 @@ export default defineConfig({
         ]),
       ],
       sidebar: [
+        { label: 'Assistant', link: '/assistant/' },
+        { label: 'Magic', link: '/magic/' },
         { label: 'Tour', link: '/tour/' },
         { label: 'Start here', items: [{ autogenerate: { directory: 'start' } }] },
         { label: 'Using the studio', items: [{ autogenerate: { directory: 'studio' } }] },

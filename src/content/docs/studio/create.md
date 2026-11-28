@@ -1,6 +1,6 @@
 ---
 title: Create
-description: Make one image, clip or sound at a time, keep every take, and build on the ones you like.
+description: Make one image, clip, voice line, song or sound at a time, keep every take, and build on the ones you like.
 sidebar:
   order: 1
 ---
@@ -13,7 +13,7 @@ shows on the stage, joins the session's strip and lands in the [Gallery](/studio
 - **Top bar**: the session menu, the workflow chip, the **Studio | Graph** switch and the memory chip.
 - **Stage**: the take you are looking at, or the run in progress.
 - **Takes strip**: this session's takes and runs.
-- **Composer** (bottom): the **Image / Video / Audio** tabs on a raised panel, the model chip, **Run on**, the prompt, the seed count
+- **Composer** (bottom): the **Image / Video / Voice / Music / Sound** tabs on a raised panel, each with its kind's orb, the model chip, **Run on**, the prompt, the seed count
   and **Generate**.
 - **Inspector** (right): the **Preset** chips and the workflow's settings, grouped in sections. It is open by default;
   the **All settings** button (the sliders icon) in the composer closes and opens it.
@@ -27,6 +27,10 @@ more lines. The fields keep one width, as an even grid.
 
 Before the first run, the stage gives way to a short "What will you make?" headline with the composer in the middle.
 
+The kind's main text box (the prompt, Voice's script, Music's lyrics) takes the composer's free height. Every text box
+on Create keeps one height and scrolls inside; **Expand** opens it big. That holds for the dialogue script, an
+element's or look's text, and a take's Cover or Vary style too.
+
 ## Pick a workflow
 
 A workflow is named after its model family, such as "Qwen Image" or "LTX-2.5". One workflow can do several tasks: Qwen
@@ -34,7 +38,8 @@ Image is text to image without references and an edit with them.
 
 To pick one:
 
-1. Choose **Image**, **Video** or **Audio** in the composer. The switch filters which workflows you are offered.
+1. Choose **Image**, **Video**, **Voice**, **Music** or **Sound** in the composer. The tabs filter which workflows you
+   are offered.
 2. Open the workflow chip in the top bar and pick one. **Templates** are the ones that ship; **Mine** are your own.
 3. To pick a variant of the model (for example Base or Turbo, and its precision), open the model chip in the
    composer.
@@ -64,6 +69,9 @@ Switch with the **Studio | Graph** control or **⌘\\** (Ctrl+\\). Editing one e
 
 A preset is a named set of values the workflow offers, such as Draft, Turbo or Quality. Choose one from the
 **Preset** chips at the top of the Inspector. A preset that cannot apply right now is greyed, with the reason.
+
+Image and video start fast: Qwen Image opens on its **Turbo** variant, MiniMax H3 on its **Turbo** preset (the Turbo
+LoRA at 8 steps) and LTX-2.5 on **Distilled**. Switch to Base, or a slower preset, for the final.
 
 ## Run on
 
@@ -105,6 +113,8 @@ A session is a project on Create: your prompts and their takes.
 - **Names**: a new session names itself from its first prompt when your admin has set a model for it. A short
   "named by …" note appears once under the title.
 - **Open or start one**: open the session menu (the title chip) and pick a session, or choose **New session**.
+- **Find one**: type in the menu's search field (press **/** on Create to open it, **Esc** to clear). Every word must
+  match, in any order. Older sessions are found too, under **From older sessions**; **Load older** shows more.
 - **Rename**: in the session menu, choose **Rename**, type the title and press **Save**.
 - **Delete**: in the session menu, choose **Delete**. Its runs go; its takes stay in the Gallery. You cannot delete a
   session while one of its runs is going: stop it first.
@@ -174,3 +184,81 @@ The part you cloned is kept with the voice, so deleting the take later does not 
 
 Some audio workflows have a **Voice-over | Dialogue** switch. In a dialogue, each script line starts with an
 element's `@name`, and the line is spoken in that character's voice. See [Elements and Looks](/studio/elements-and-looks/).
+
+## Music
+
+Choose **Music** to make a song or an instrumental from a style and lyrics. Three models are in the model chip:
+
+- **MiniMax Music 3** is the default. It sounds best, with sung lyrics, but is slow: about 5 seconds of work for each
+  second of song on a Mac. It has no BPM, key, reference song or editing.
+- **ACE-Step 1.5**, **2B turbo** or **XL turbo**, is fast (about 16 s for 30 s of song on a Mac) and can set BPM, key
+  and time, borrow the sound of a reference song, and edit songs.
+
+Generate shows the time before you run. See [MiniMax Music 3](/models/minimax-music3/) and
+[ACE-Step 1.5](/models/ace-step/).
+
+To make a song:
+
+1. Write the **style** in the prompt: genre, mood, voice, instruments and tempo, such as "warm lo-fi pop, Rhodes
+   piano, soft female vocal".
+2. Write the **Lyrics**, with a section tag on its own line before each part: `[intro]`, `[verse]`, `[chorus]`,
+   `[bridge]`, `[outro]`. The tag chips insert one at the cursor. Long lyrics scroll; **Expand** opens them big.
+3. Or turn on **Instrumental** for no vocals. Empty lyrics make an instrumental too.
+4. Set **Length**, or leave it on **Auto**. With ACE-Step, the **BPM · key** chip sets tempo, key and time, and
+   **Vocal language** the language sung.
+5. Press **Generate**.
+
+A chip the picked model can't use stays in place, greyed, with the reason on hover.
+
+On ACE-Step, a planner runs first: it rewrites the style and picks the values left on Auto. What it picked shows in
+the settings. To keep your style as written, turn on **No rewrite** under **Advanced**; the length is then 30 s
+unless you set it.
+
+An ACE-Step song with tagged lyrics shows its sections over the waveform on the stage. Click one to play from there.
+
+### Change a song
+
+ACE-Step's edits work on any music take, MiniMax Music 3's too. They are on the strip and in a take's right-click
+menu:
+
+- **Repaint**: drag across the waveform, or click a section, to make that part again. The rest stays.
+- **Cover**: the same song in a new style. **Keep the song** sets how close it stays to the melody and words.
+- **Extend**: add seconds at the **End** or the **Start**, in the same style. New lyrics are optional.
+
+Each edit makes a new take beside the old one.
+
+## Sound effects
+
+Choose **Sound** for effects and ambiences. Two models are in the model chip:
+
+- **Stable Audio 3 Small-SFX** makes sound from words, fast.
+- **MMAudio** makes sound from words, or matches a sound to a video.
+
+From words, Generate makes 4 variations at once (up to 8), shown as a grid on the stage. Each plays on its own; click
+one to keep it in the strip, or press **Keep all**. The others stay in the Gallery.
+
+See [Stable Audio 3](/models/stable-audio-3/) and [MMAudio](/models/mmaudio/).
+
+With Stable Audio 3:
+
+- **From a sound** starts from an audio take instead of noise; **Change** sets how far it may move from it.
+- On a sound take, **Repaint** makes a part again, **Vary** makes a new sound from it, and **Extend** adds seconds
+  at the end or the start.
+
+### Sound for a video
+
+1. Pick **MMAudio**, or press **Match a video** on Stable Audio 3, which switches to MMAudio.
+2. Pick a video take from the Gallery picker, or drop a video file.
+3. A prompt is optional; it steers what is heard. **Avoid** says what should not be heard.
+4. Leave **Length** on Auto to cover the whole video, then press **Generate**.
+
+One run gives two takes: the **sound**, and the **video with that sound**. The video you picked is not changed. The
+stage has a tab for each.
+
+On a sound take made earlier, **Save with the video** makes the video with that sound. On the video take, **Sound
+only** opens the sound alone.
+
+### In the Gallery
+
+The [Gallery](/studio/gallery/)'s filters are **Voice**, **Music** and **Sound**. A music take shows as an album
+cover; a sound or voice take as an orb.

@@ -15,13 +15,14 @@ still works through its own tools and asks as it always does.
 |---|---|---|
 | **Cinematic filmmaker** | `@cinematic-filmmaker` | A short film that looks live action, end to end: script and shot list, character sheets saved as elements with voices, places and a look, a keyframe then a video per shot, dialogue and sound, and the edit on the Timeline to an MP4. |
 | **Animator** | `@animator` | A cartoon film end to end: script and shot list, character model sheets, elements and voices, keyframes, animation in one held style, dialogue, the Timeline edit and MP4 export. |
+| **Magic director** | (by itself on Magic) | Planning and running a [Magic](/studio/magic/) board: a plan you approve first, then the assets and their views, the characters' voices, frames, shots, sound, a review and the send. Always on: the Assistant reads it on every Magic board. |
 
 Each comes with extra files the Assistant can read when it needs them, such as a shot list template, a character
 sheet guide and an edit checklist.
 
 ## Turn a skill on
 
-Skills are off until an admin turns them on, like every plugin.
+Skills are off until an admin turns them on, like every plugin. The Magic director is the exception: it is always on, and its switch in **Hub › Assistant** shows on and greyed.
 
 1. Open **Hub** in the rail, on the **Assistant** tab.
 2. Under **Skills**, turn the skill on.

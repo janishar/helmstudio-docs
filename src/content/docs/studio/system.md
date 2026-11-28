@@ -2,10 +2,10 @@
 title: System
 description: Manage accounts, GPU hosts and API keys.
 sidebar:
-  order: 8
+  order: 9
 ---
 
-**System** is for admins only. It is in the rail after **Hub**, and has three tabs: **Users**, **Hosts** and **API
+**System** is for admins only. It is at the foot of the rail after **Hub** (in the **Setup** gear on a short window), and has three tabs: **Users**, **Hosts** and **API
 keys**. Everything AI (the Assistant, models for pipelines, model providers and plugins) is in [Hub](/studio/hub/).
 
 The admin account itself is set on the server when helmstudio is installed. Its row is locked: its roles, password
@@ -55,6 +55,7 @@ their prefix, dates and last use, and **Revoked** ones.
 
 - **New key**: keys are made on the server, not in the browser. Copy the command shown (**Copy command**) and run it
   where the auth service runs. The full key is printed once.
-- **Revoke** a key: every request with it is refused from then on.
+- **Revoke** a key: every request with it is refused from then on. Revoked keys are hidden until you turn on **Show
+  revoked**.
 
 See [helm CLI](/mcp/helm-cli/) for using a key.

@@ -1,8 +1,8 @@
 ---
 title: Models
-description: See every model family, its variants and add-ons, and which machine has them; download weights per machine; keep your LoRAs.
+description: See every model family, its variants and add-ons, and which machine and folder has them; download weights per machine; keep your LoRAs.
 sidebar:
-  order: 6
+  order: 7
 ---
 
 The **Models** screen has two tabs: **Models** and **LoRAs**. Everyone can see both. Only admins download or delete
@@ -27,16 +27,56 @@ Select a variant to see its folder, its parts and their sizes, and its state on 
 - **missing**: they are not.
 - **partial**: some parts are there.
 - **hash mismatch**: a file does not match; download it again.
+- **not connected**: the only copy is in a folder that is not there now, such as an unplugged drive. It can't run
+  until the drive is back. See [Model folders](#model-folders).
 - A download in progress shows its progress.
 
 The host filter (**All hosts**) shows one machine at a time. Runs go only to a machine that has the weights; see
 [Run on](/studio/create/#run-on).
 
+## Model folders
+
+A host can keep models in more than one folder, for example a folder on the Mac and an external drive. When a host
+has more than one, the Models screen shows a **Folders** strip for it: each folder's name, path and free space, and
+a **Downloads** tag on the folder new downloads go to.
+
+- A host chip shows which folder its copy is in, and **also on …** when another folder has a second copy.
+- Select a variant: **Copies on** the host, in the side panel, lists each copy, the one **used** and any **spare**.
+
+### Which copy is used
+
+The list is a priority order. When a model is in more than one folder, the host loads it from the first folder in
+the list that has a complete copy. When that folder is missing or its drive is unplugged, it loads from the next one
+that has it, with no prompt. A model whose only copy is on an unplugged drive shows **not connected**, not missing.
+
+Parts that two variants share are found in any folder of the list, so a variant on a drive can still load a shared
+part from the Mac.
+
+### Edit the list (admins)
+
+1. Choose **Edit…** on the Folders strip.
+2. Drag the folders into the order you want, or use the row's right-click menu: **Move up** and **Move down**.
+3. Pick the folder downloads go to with its **Downloads** choice (or **Use for downloads** in its menu). The order
+   and the downloads folder are separate.
+4. To add a folder, type its path as the host sees it (absolute, or starting with `~/`), or press **Browse…** in the
+   Mac app. The host checks that it exists; the downloads folder must also be writable.
+5. Press **Save**. The host looks through its folders again.
+
+A host takes up to 8 folders. **Remove** (✕, or **Remove…** in its menu) takes a folder off the list only; its files stay on disk. The last
+folder can't be removed. In the Mac app, a folder's menu also has **Open in Finder**, and a model's menu **Show in
+Finder**.
+
+When the downloads folder is unplugged, downloads go to the next connected folder in the list.
+
+On Windows and Linux with Docker, a runner in a container sees only the folders mounted into it. A folder that is
+not mounted shows as not connected.
+
 ## Download a model (admins)
 
 1. Select the variant, or an add-on.
 2. Choose **Download…**.
-3. Check where it goes (**To host**), its **Size** and the free space, and read the licence text.
+3. Check where it goes (**To host**, and **Folder** when the host has more than one), its **Size** and the free
+   space, and read the licence text. The downloads folder is picked first; an unplugged folder is greyed.
 4. Tick **I accept this licence**. Some licences are non-commercial: read them.
 5. Start the download. It runs on that machine, and the list shows its progress.
 
@@ -45,7 +85,9 @@ Each machine downloads its own copy. To put a model on a second machine, downloa
 Some weights are gated on Hugging Face (LTX-2.5, for example). The dialog says so; the machine then needs a Hugging
 Face token. See [Hosts](/start/hosts/).
 
-To free disk space, choose **Delete from host**.
+To free disk space, choose **Delete from host**. When the model is in more than one folder of that host, pick which
+copy to delete, or **Both**. Each copy shows the space it gives back and the free space after; the copy in use is
+marked. A copy that is loaded or used by a run can't be deleted until it is free; the spare copy can always go.
 
 ## The LoRA library
 

@@ -2,7 +2,7 @@
 title: Assistant
 description: The in-app Assistant works every screen for you, asks before anything costly, sees your images, keeps your film's shot list, and can run safe steps by itself in Auto mode.
 sidebar:
-  order: 9
+  order: 10
 ---
 
 The Assistant is a chat that works the app for you. Say what you want in plain words; it does it on screen, where
@@ -12,6 +12,9 @@ you can see each step.
 
 Press **Assistant** in the rail, or **⌘J** (Ctrl+J). Every user has it. It opens over the right edge of any screen; on
 a phone it is a sheet at the bottom. For an admin, its header also has a **Hub** button.
+
+While it is closed or minimized, the rail's **Assistant** item shows a dot when it has something for you: yellow
+when a card waits for your answer, the accent colour for an answer you have not read yet.
 
 The **Sees** chips under its title say what it is reading now: the screen, the session, the workflow, Run on and
 your elements.
@@ -52,11 +55,13 @@ while a chip shows. When a page opens a side form (for example Edit or Add), a d
 It works every screen:
 
 - **Anywhere**: take you to any screen with the right thing open, explain what is on screen, and answer "how do I…".
-- **Create**: write prompts with `@elements`, pick looks and voices, switch Image, Video or Audio, pick the workflow,
+- **Create**: write prompts with `@elements`, pick looks and voices, switch Image, Video, Voice, Music or Sound, pick the workflow,
   variant, Run on and preset, set size, steps, seeds and LoRAs, and prepare **Generate**. It can stop a run and
   explain a failed one. When it switches to a voice workflow, it writes the spoken line (or a dialogue script) itself.
 - **Graph**: build a workflow from a description and fix its problems.
 - **Pipelines**: turn a brief into a pipeline, test a judge, and start, pause, resume, retry or stop a batch.
+- **Magic**: build a board from a brief, change blocks, run them, compare and pin takes, and send the board to the
+  Timeline. See [On a Magic board](#on-a-magic-board).
 - **Timeline**: place, trim, split and order clips, make shots and voice lines, re-render and export.
 - **Gallery**: find takes, filter, sort, star, rename and delete them.
 - **Models**: explain variants, add-ons, licences and machines. For an admin, it prepares a download.
@@ -66,9 +71,62 @@ It can also read how long each take took to render, to tell you what a change wi
 It chains steps. "Make an image, then animate it" prepares the image, waits for your OK and the run, then prepares
 the video with the new take.
 
-Each step shows as a line in the chat, such as "Opened Timeline", with **Undo** where the screen can undo it.
+Each step shows as a line in the chat as it starts, such as "Reading the board…", and turns into a tick when it is
+done, such as "Opened Timeline", with **Undo** where the screen can undo it. An answer shows its steps first, then
+the answer, then any choices.
+
+It starts from the fast defaults, as Create does: Turbo for Qwen Image and MiniMax H3, Distilled for LTX-2.5. Ask
+for Base, or the Quality preset, when you want the final.
 
 Try: "Take me to my newest batch", "What is on this screen?" or "Why did my last run fail?"
+
+## On a Magic board
+
+On [Magic](/studio/magic/), the Assistant reads the board you have open: its lanes, blocks and their status, the
+takes and the pinned one, a failed block's error, the assets with their views, voices and notes, ties, joins, levels,
+and the GPU-time estimate. Ask it, for example, "Make a 30 s story of a fisherman who finds a lost boat" or "Finish
+the story: she gets on the last train."
+
+![The Assistant on a Magic board: its change drawn with Apply and Discard, History, and a card asking to run 3 shots](/screens/magic-assistant.jpg)
+
+### How it builds a board
+
+On every Magic board it reads its **Magic director** skill once per chat ("Using skill: Magic director"). It works in
+this order:
+
+1. **The plan.** A style line, the characters, props and places, and the beats with their lengths, plus the board's
+   size and frame rate. It shows the plan and waits for your OK before any GPU time.
+2. **The board.** It makes the board, the assets and the lanes. Assets live in the Assets row, never on a lane.
+3. **Views.** It makes each asset's views, all at once (one answer can start up to 12 steps).
+4. **Voices.** For a character who speaks, it designs a voice from the character's note and plays you a line. When
+   you like one, it keeps it as the character's voice: its card's **Yes** is your tick that you have the right to use
+   this voice.
+5. **Frames**, in the film's own style, drafted on Turbo.
+6. **Shots** from the frames you like.
+7. **Sound**: lines, music and sound, tied to their shots.
+8. **Review**, then **Send to Timeline** when you say so.
+
+### What it asks first
+
+- **It proposes, you apply.** Its change is drawn on the board first: new blocks dashed green, moved or changed ones
+  dashed blue, removed ones faded. **Apply** keeps it; **Discard** drops it. The same choice is on its card in the
+  chat. While a change is drawn, your own edits wait until you apply or discard it. Once you apply, it goes straight
+  on.
+- **History** marks its edits **by Assistant**, with a summary such as "Added 3 shots and Frame 4; moved Line 2".
+  **Undo** takes one back, as for your own edits.
+- **Runs and your limit.** Runs within your **Ask before runs over N GPU min** limit start at once; so do storyboard
+  frames. Above the limit, or without an estimate, a card asks first, such as "Run 3 shots, about 6 min?". Make views
+  and voice designs follow the same rule. With [Auto mode](#auto-mode) on, its Magic runs count toward the hourly
+  caps.
+- **Restore and Send ask.** Restoring an older revision, and **Send to Timeline**, show a card first. The send card
+  lists the clips, the joins it will bake, the time and any warnings.
+
+It can also select a block, open it, play the board, move the playhead, set a block's level and fades, add a
+crossfade, turn Duck music on or off, pick a variant ("use Turbo"), and stop the board's runs when you ask. It checks
+music and sound by their facts, and listens to a take when that helps (see [Watch and listen](#watch-and-listen)).
+
+While runs finish, new takes land on the board. Its edits still apply on top of them. If something else changed the
+board since it read it, the change says so, and the Assistant reads the board again.
 
 ## Reading its answers
 
@@ -85,7 +143,9 @@ Try: "Take me to my newest batch", "What is on this screen?" or "Why did my last
 - When you send a new message, the steps of the previous answer fold into one summary line, such as "14 steps ·
   2 takes · 1 memory". Tap it to open them again.
 - When an answer offers choices, they show as cards, with the recommended one marked **Best next**. Click a card, or
-  press its number (1–4), to send it as your reply. Only the newest answer's cards work.
+  press its number (1–4), to send it as your reply. Only the newest answer's cards work. While a card that asks (such
+  as **Apply** or **Generate**) waits for you, the choices are off ("Answer the card first"): the card's own button is
+  the answer.
 
 ![Pick-one cards in an answer: three options as cards, the recommended one marked, the picked one checked](/screens/assistant-answers.jpg)
 
@@ -100,7 +160,8 @@ Try: "Take me to my newest batch", "What is on this screen?" or "Why did my last
 
 When the Assistant's model can see images, it looks at them itself: the takes you attach or pick with `@`, and the
 ones it finds while it works. A line "Looked at …" says which. Pictures go to the model downscaled (about 1024 px on
-the long side; a video as its poster frame). It also looks at what it just made, to check it against your ask.
+the long side). A video goes as one picture of 12 frames, each with its time. It also looks at what it just made, to
+check it against your ask. For sound, see [Watch and listen](#watch-and-listen).
 
 When the model is text-only, the chat says once "This model can't see images; it will use Look at." It then uses
 [Look at](#look-at-takes) instead.
@@ -150,8 +211,22 @@ Turning Auto off during an answer takes effect at its next step.
 
 Ask "Which of these four is sharpest?" or "Does the video match the prompt?". With a model that sees images, it just
 looks. With a text-only model, it runs **Look at**: an "Ask" workflow's model on one of your machines looks at up to 8
-takes at a time (a video as a few keyframes). Look at needs a card, except on takes you attached or picked in that
-chat. See [Ask](/models/ask/).
+takes at a time (a video as its 12-frame picture). Look at needs a card, except on takes you attached or picked in
+that chat. See [Ask](/models/ask/).
+
+## Watch and listen
+
+**Facts.** For a video or audio take, the Assistant gets exact facts: the real length, loudness (LUFS), true peak,
+silence at each end, whether it ends abruptly (no fade), and a video's scene cuts. They are measured the first time it
+asks for that take, then kept. It trusts them over its own guess, so it can say "the music take is 20 s but its block
+is 26 s" or "Cue A stops abruptly at 22 s".
+
+**Listen.** Ask "Does the music fit the picture?" or "Is Mara's line clear?". The Assistant asks a local model that
+hears the sound and watches the picture: [Qwen Omni](/models/qwen-omni/), the 30B model, or the smaller 3B one when
+the 30B can't run. It gets a transcript of the speech too. A line says which model answered. It listens to up to the
+first 120 s of a take. Listening needs no card: it is a short run on your own machine.
+
+When no listen model can run, the Assistant does not offer to listen, and says why if you ask.
 
 ## Edit takes and look at video
 
@@ -180,10 +255,10 @@ You do not have to wait for it to finish. While it works, the message box reads 
 reads it at its next step.
 
 Press **Stop** to stop the answer. It stops at once, even while the model is still thinking: the button reads
-**Stopping…** until it has.
+**Stopping…** until it has. On a Magic board, when its runs are still going, Stop offers **Stop its runs too**.
 
 While it works, a bubble at the bottom of the chat counts the seconds: **Thinking… N s** for a model that thinks,
-**Working… N s** for one that does not. The reply replaces it.
+**Working… N s** for one that does not. It starts again at each step. The reply replaces it.
 
 ## When something goes wrong
 
@@ -194,7 +269,8 @@ While it works, a bubble at the bottom of the chat counts the seconds: **Thinkin
 
 ## Chats and memory
 
-- **Chats** lists your conversations. **New chat** starts another.
+- **Chats** lists your conversations. **New chat** starts another. Type in its search field to find a chat by its
+  words, older ones too.
 - The Assistant remembers useful things across chats, such as your preferences and what worked. It shows a
   "Remembered: …" line with **Undo** when it saves one. Memories are in plain words.
 - **Memory** lists everything it remembers, in four tabs: **Likes**, **Projects**, **Worked** and **Chats**. Long items

@@ -5,9 +5,8 @@ import '@fontsource-variable/bricolage-grotesque';
 import '@fontsource-variable/jetbrains-mono';
 import '../styles/showcase.css';
 import AlphaBanner from '../components/AlphaBanner.astro';
-interface Props { title: string; description: string }
-const { title, description } = Astro.props;
-const base = Astro.url.pathname === '/' ? '' : '/';
+interface Props { title: string; description: string; image?: string; imageAlt?: string }
+const { title, description, image = 'assistant-create', imageAlt = "helmstudio's Create screen with the Assistant beside it" } = Astro.props;
 ---
 <!doctype html>
 <html lang="en">
@@ -22,8 +21,8 @@ const base = Astro.url.pathname === '/' ? '' : '/';
   <link rel="canonical" href={new URL(Astro.url.pathname, Astro.site)} />
   <meta property="og:title" content={title} />
   <meta property="og:description" content={description} />
-  <meta property="og:image" content={new URL('/screens/assistant-create.jpg', Astro.site)} />
-  <meta property="og:image:alt" content="helmstudio's Create screen with the Assistant beside it" />
+  <meta property="og:image" content={new URL(`/screens/${image}.jpg`, Astro.site)} />
+  <meta property="og:image:alt" content={imageAlt} />
   <meta property="og:type" content="website" />
   <meta property="og:url" content={new URL(Astro.url.pathname, Astro.site)} />
   <meta property="og:site_name" content="helmstudio" />
@@ -43,18 +42,18 @@ const base = Astro.url.pathname === '/' ? '' : '/';
         helmstudio
       </a>
       <div class="navlinks">
-        <a href={`${base}#assistant`}>Assistant</a>
+        <a href="/assistant/">Assistant</a>
+        <a href="/magic/">Magic</a>
         <a href="/tour/">Tour</a>
-        <a href={`${base}#machines`}>Your machines</a>
         <a href="/start/introduction/">Docs</a>
         <a href="https://github.com/janishar/helmstudio">GitHub</a>
       </div>
       <details class="navmenu">
         <summary aria-label="Menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></summary>
         <div class="navmenu-panel">
-          <a href={`${base}#assistant`}>Assistant</a>
+          <a href="/assistant/">Assistant</a>
+          <a href="/magic/">Magic</a>
           <a href="/tour/">Tour</a>
-          <a href={`${base}#machines`}>Your machines</a>
           <a href="/start/introduction/">Docs</a>
           <a href="https://github.com/janishar/helmstudio">GitHub</a>
         </div>
@@ -69,6 +68,18 @@ const base = Astro.url.pathname === '/' ? '' : '/';
     </nav>
   </div>
   <slot />
+  <script is:inline>
+    {
+      // hero screens rise, tilt flat and come into focus one after another
+      const io = new IntersectionObserver((es) => es.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+      }), { threshold: 0.15 });
+      document.querySelectorAll('.hero-shot').forEach((f) => { f.classList.add('reveal'); io.observe(f); });
+      if (matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        document.querySelectorAll('.hero-shot video').forEach((v) => { v.pause(); v.controls = true; });
+      }
+    }
+  </script>
   <div class="wrap">
     <footer>
       <span>helmstudio · Apache-2.0 · <a href="/start/introduction/" style="color:inherit">Docs</a></span>

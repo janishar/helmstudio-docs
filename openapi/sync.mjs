@@ -9,7 +9,7 @@ if (!src) throw new Error('usage: node openapi/sync.mjs <contracts/openapi.yaml>
 const doc = YAML.parse(fs.readFileSync(src, 'utf8'))
 
 const internal =
-  /\bfrom 1\.\d+|\b1\.\d\d\b|contracts\/|README|\bplan\b|owner's|decision|\bM\d+\b|docs\/|\.py\b|\.go\b|\.json\b|\bboard\b|golden|ponytail|helmgo|test_|_service|\bBFF\b|NATS|outbox|projector|GOTCHAS|packs\/|\bAPI 1\.|twin of|\.env\b|ADMIN_EMAIL|GenAI|deploy\/|\bKV\b|evt\.|cmd\.|\b\d+\.\d+\)/i
+  /\bfrom 1\.\d+|\b1\.\d\d\b|contracts\/|README|\bplan\b|owner's|decision|\bM\d+\b|docs\/|\.py\b|\.go\b|\.json\b|golden|ponytail|helmgo|test_|_service|\bBFF\b|NATS|outbox|projector|GOTCHAS|packs\/|\bAPI 1\.|twin of|\.env\b|ADMIN_EMAIL|GenAI|deploy\/|\bKV\b|\b(Hosts|Timeline|Create|Gallery|Models) board\b|\bboard \d|evt\.|cmd\.|\b\d+\.\d+\)/i
 
 function clean(text) {
   let t = text.replace(/^\s*from 1\.\d+[,:.]?\s*/i, '')
@@ -20,7 +20,7 @@ function clean(text) {
     .filter((s) => s.trim() && !internal.test(s))
     .join(' ')
     .trim()
-  t = t.replace(/[;,:—-]\s*$/, '').trim()
+  t = t.replace(/[;,:—-]\s*$/, '').replace(/^[:;,]\s*/, '').trim()
   return t ? t[0].toUpperCase() + t.slice(1) : ''
 }
 

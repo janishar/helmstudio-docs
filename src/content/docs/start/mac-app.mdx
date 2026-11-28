@@ -27,8 +27,8 @@ port: the studio is at `http://127.0.0.1:8310`.
 
 <Steps>
 
-1. Download `helmstudio-0.1.0-alpha.5.dmg` from the [GitHub releases](https://github.com/janishar/helmstudio/releases). To check
-   it, compare `shasum -a 256 helmstudio-0.1.0-alpha.5.dmg` with the release's `SHA256SUMS`.
+1. Download `helmstudio-0.1.0-alpha.6.dmg` from the [GitHub releases](https://github.com/janishar/helmstudio/releases). To check
+   it, compare `shasum -a 256 helmstudio-0.1.0-alpha.6.dmg` with the release's `SHA256SUMS`.
 
 2. Open it and drag helmstudio to Applications.
 
@@ -63,15 +63,15 @@ The window itself never scrolls; only the panels inside it do.
 
 ## Updates
 
-From 0.1.0-alpha.2 the app updates itself: on 0.1.0-alpha.2 to 0.1.0-alpha.4, choose **Check for updates…** to get
-0.1.0-alpha.5. An older app has no updater: download the new `.dmg` and replace it by hand once.
+From 0.1.0-alpha.2 the app updates itself: on 0.1.0-alpha.2 to 0.1.0-alpha.5, choose **Check for updates…** to get
+0.1.0-alpha.6. An older app has no updater: download the new `.dmg` and replace it by hand once.
 
 ![The update window: checking, up to date, a new version is out, downloading, checking the download and ready to install](/screens/mac-update.jpg)
 
 The app checks for a new release when it opens and every 24 hours. While it is an alpha, it offers pre-releases too.
 To check now, choose **Check for updates…** in the menu bar menu.
 
-When a new version is out, a small window says so (for example **0.1.0-alpha.5 is out**), with your version, the
+When a new version is out, a small window says so (for example **0.1.0-alpha.6 is out**), with your version, the
 download size, what changed and a **Release notes** link. The menu shows **Update to …** and the menu bar icon gets a
 small blue dot.
 
@@ -104,12 +104,16 @@ If something goes wrong, the window says so and nothing changes ("Nothing change
 ## The menu bar
 
 The helmstudio icon in the menu bar has a status dot: green is Ready, yellow is Starting…, red is Something is down.
+Its title says what, such as **Runner down** or **Studio down**, as the red dot on the studio's logo does. When
+something goes wrong, the app opens a window that says what and how to fix it; see
+[Troubleshooting](/help/troubleshooting/#the-mac-app).
 Its menu:
 
 | Item | What it does |
 |---|---|
 | **Update to …** | Shown when an update waits, with a blue dot. Opens the update window. While it downloads it reads **Updating… N%**. |
 | **Open** | Shows the studio window |
+| **Restart stack** | Restarts the services and the runners |
 | **Restart runners** | Restarts the model runners, after a runner stalls or a new model is added |
 | **Open logs** | The app's log and one log per runner |
 | **Keep running** | On by default. Closing the window or Cmd+Q only hides the app; the studio keeps running. |

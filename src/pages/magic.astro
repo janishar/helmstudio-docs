@@ -1,0 +1,171 @@
+---
+import Showcase from '../layouts/Showcase.astro';
+import Win from '../components/Win.astro';
+---
+<Showcase title="Magic · helmstudio" description="Magic lays out a short film in time, and the Assistant drives it: it plans the film, builds the board, checks it by eye and by ear, proposes each edit and runs the models when you say so." image="magic-director" imageAlt="A Magic board in helmstudio with the Assistant beside it, offering the next steps">
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">Magic, with the Assistant</p>
+    <h1>Tell it the film.<br><span class="grad">Watch the board fill.</span></h1>
+    <p class="lede">Magic lays out a short film in time: assets, a storyboard, shots, voices, music and sound on one ruler. The Assistant drives it. It reads the board, listens to the music, finds what needs fixing, draws each edit for you to apply, and runs the models when you say yes.</p>
+    <div class="ctas">
+      <a class="btn primary" href="/studio/assistant/#on-a-magic-board">The Assistant on Magic →</a>
+      <a class="btn" href="/studio/magic/">Read the Magic guide</a>
+    </div>
+    <figure class="hero-shot" style="margin-inline:0">
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+        <img src="/screens/magic-director.jpg" alt="A Magic board, Ink and the Sunflower, with the Assistant beside it. Asked to listen to the music, it reports per cue: Cue A has a woman singing in a wordless film and stops mid-phrase; Cue C opens with a hum and ends on a harsh chord; each with a fix">
+      </div>
+      <figcaption class="cap">A real board · asked to listen to the music, the Assistant heard singing in a wordless film and a cue that ends on a harsh chord, and gives a fix for each</figcaption>
+    </figure>
+  </header>
+</div>
+
+<section class="stage" aria-labelledby="director-h">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="eyebrow">The Assistant drives it</p>
+      <h2 id="director-h">A director that <span class="grad">plans, builds and checks.</span></h2>
+      <p>Give it a brief in a sentence. It works as a director with its built-in Magic director skill, and it never spends GPU time on a plan you have not seen.</p>
+    </div>
+    <ol class="flow">
+      <li><b>It plans</b><span>The style, the cast, the places and the beats with their lengths, and the board's size and frame rate. It waits for your OK.</span></li>
+      <li><b>It builds</b><span>The board, the assets and their views, a voice for each speaking character, frames, shots from the frames you like, then sound.</span></li>
+      <li><b>It checks, by eye and ear</b><span>Every block's status, takes and errors; each video as 12 frames; each sound's exact length, loudness and ends. It listens to a take on a local model, then offers the next steps, the best one marked.</span></li>
+      <li><b>It runs the models</b><span>Within your limit it just runs. Above it, a card shows the estimate first. Stop ends its runs at any time.</span></li>
+    </ol>
+    <div class="duo">
+      <Win src="magic-assistant" caption="It proposes, you apply · its change drawn on the board, History marks it by Assistant" alt="The Assistant on a Magic board: its change drawn with Apply and Discard, History by you and by Assistant, and a card asking to run 3 shots, about 6 min" />
+      <Win src="magic-board" caption="The board itself · assets, 14 frames, 14 shots, 3 music cues and 14 sounds, each in its place in time" alt="A Magic board: the Assets row, then Storyboard, Shots, Voice, Music and Sound lanes in time, each block with its preview and status, the side panel and the floating player" />
+    </div>
+    <div class="chips" aria-label="What the Assistant does on Magic">
+      <span class="chip">Reads every block</span>
+      <span class="chip">Finds what needs fixing</span>
+      <span class="chip">Listens to the music and lines</span>
+      <span class="chip">Fades, crossfades and ducking</span>
+      <span class="chip">Draws each edit for Apply</span>
+      <span class="chip">Views and voices for the cast</span>
+      <span class="chip">Sets a block's level</span>
+      <span class="chip">Asks before costly runs</span>
+      <span class="chip">Plays the board</span>
+      <span class="chip">Sends to the Timeline when you say</span>
+    </div>
+  </div>
+</section>
+
+<section class="stage" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="eyebrow">Or by hand</p>
+      <h2 id="how-h">Add, fill, run, <span class="grad">export.</span></h2>
+      <p>Everything the Assistant does, you can do yourself. A board is a plan you can play. Blocks show what is done, running, a draft or out of date, so you only run what changed.</p>
+    </div>
+    <ol class="flow">
+      <li><b>Add at a point</b><span>Click a lane at a time. Pick a shot, a still, a line, a dialogue, a cue, a sound or a storyboard frame, 5 s or 10 s long.</span></li>
+      <li><b>Fill the request</b><span>The same few fields for every model of a kind. A field the model can't do is greyed with the reason.</span></li>
+      <li><b>Run and pick</b><span>Run a block, a lane or the whole board. The GPU time shows first; pin the take you like.</span></li>
+      <li><b>Export</b><span>One button makes the MP4. Or send the board to the Timeline as a new sequence; the board stays as it is.</span></li>
+    </ol>
+    <div class="duo">
+      <Win src="magic-add" caption="Add · the kind, the length, Insert or Overwrite, and where it starts from" alt="Add at a point on a Magic board: kinds Video, Image, Voice, Dialogue, Music, Sound and Board frame, lengths 5 s, 10 s or Custom, and From Gallery" />
+      <Win src="magic-block" caption="A block opened · references, notes, run history, the request and its takes" alt="A shot block opened: its @ references, what is tied to it, notes, run history, the request with Advanced, and the takes with one pinned" />
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="rooms" aria-label="What it does">
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Assets</p>
+        <h3>Your cast, drawn once.</h3>
+        <p>Characters, props and places are the board's own. Make views picks the missing ones, front, side and back, and draws them on Qwen Image Turbo at about 1K: 3:4 for a character, square for a prop.</p>
+        <ul>
+          <li>Add your own views, such as "smiling"</li>
+          <li>Change the size, variant and precision in one line</li>
+          <li>Click a view to see it full screen</li>
+        </ul>
+        <a href="/studio/magic/#make-views">Make views →</a>
+      </div>
+      <Win src="magic-views" alt="An asset opened: its sheet of views, the views to make with Add a view, and the size, variant and precision line under Make" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Storyboard</p>
+        <h3>Sketch it first, then make the shot.</h3>
+        <p>A frame is a quick picture in the film's own style, or a sketch. Set who is in it, the framing, the angle and the move. Generate from board makes the shot under it from that frame.</p>
+        <ul>
+          <li>Characters, props and places as the board's own assets, called with @</li>
+          <li>Rough cut plays the frames in order with their lines</li>
+          <li>Change a frame and its shot shows out of date</li>
+        </ul>
+        <a href="/studio/magic/#storyboard-frames">Storyboard frames →</a>
+      </div>
+      <Win src="magic-storyboard" alt="A storyboard frame opened: Sketch, Rough and Full takes, who and where, framing, angle and move, the line, and Generate from board" />
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Voice, music and sound</p>
+        <h3>Sound that moves with its shot.</h3>
+        <p>A line or a music cue added under a shot is tied to it. Move the shot and they come too. A sound can be made from the shot's own video. Every sound block has its own level and fades, cues crossfade into each other, and music dips under voice by itself.</p>
+        <ul>
+          <li>Dialogue: each line on its speaker's voice</li>
+          <li>Songs from a style and lyrics, with sections on the block</li>
+          <li>Sound effects from words, or matched to a shot</li>
+          <li>Fade handles, crossfades and Duck music, in Play and Export</li>
+        </ul>
+        <a href="/studio/magic/#voice-music-and-sound">Voice, music and sound →</a>
+      </div>
+      <Win src="magic-tied" alt="Voice and music tied to shots: selecting a shot lights up its tied line and the music cue that spans the shots" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">Export and send</p>
+        <h3>An MP4 in one press, or a new sequence.</h3>
+        <p>Export sends the board, bakes its joins and exports the MP4. Send to Timeline makes a new sequence to keep cutting: shots on the picture track, lines, music and sound on audio tracks, linked to their shots.</p>
+        <ul>
+          <li>Storyboard frames and assets stay on the board</li>
+          <li>The sends list opens each one, or restores the board as it was</li>
+        </ul>
+        <a href="/studio/magic/#export">Export and send →</a>
+      </div>
+      <Win src="magic-send" alt="Send to Timeline: the new sequence's name, what goes on which track, the joins kept or baked, and the sends list" />
+    </article>
+  </section>
+
+  <section class="band" aria-labelledby="kinds-h">
+    <div class="copy" style="max-width:46rem">
+      <p class="eyebrow">Every kind, the models you have</p>
+      <h3 id="kinds-h">One request per kind.</h3>
+      <p>Each kind asks for the same few fields whatever the model. Switch the model and only what it can't do greys out.</p>
+    </div>
+    <div class="specs">
+      <div class="spec"><small>Picture</small><b>Frames, stills and shots</b><span>Qwen Image 2.1, MiniMax H3 Image, LTX-2.5 and MiniMax H3.</span></div>
+      <div class="spec"><small>Voice</small><b>Lines and dialogue</b><span>Qwen3-TTS and ZONOS3, on your characters' voices.</span></div>
+      <div class="spec"><small>Music and sound</small><b>Cues and effects</b><span>MiniMax Music 3, ACE-Step 1.5, Stable Audio 3 and MMAudio.</span></div>
+    </div>
+    <div class="chips" aria-label="Also on the board">
+      <span class="chip">Cut, dissolve, fade, wipe and morph</span>
+      <span class="chip">Grade, slow and stabilize</span>
+      <span class="chip">Compare and pin takes</span>
+      <span class="chip">Snapshots and history</span>
+      <span class="chip">Play the board, or its rough cut</span>
+      <span class="chip">Drag the playhead from any lane</span>
+      <span class="chip">Stop runs at any time</span>
+      <span class="chip">One list of what needs you</span>
+      <span class="chip">Boards name themselves</span>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="start-h">
+    <h2 id="start-h">Lay out your <span class="grad">first film.</span></h2>
+    <div class="ctas">
+      <a class="btn primary" href="/studio/magic/">Read the Magic guide →</a>
+      <a class="btn" href="/assistant/">Meet the Assistant</a>
+    </div>
+  </section>
+</div>
+</Showcase>

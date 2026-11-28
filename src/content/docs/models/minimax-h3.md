@@ -34,8 +34,8 @@ references: images, videos and sounds together. It is slower than [LTX-2.5](/mod
 | Width, Height | 256 to 1344 px, step 32, at most 768 × 1344 pixels in all | 864 × 480 (16:9) | The clip size. |
 | Length | 5 to 362 frames, on a 5 + 17k grid | 124 (about 5 s) | 362 frames is about 15 s. |
 | Frame rate | 24 | 24 | MiniMax H3 runs at 24 fps only. |
-| Steps | 2 to 50 | 20 | 50 is reference quality, 4 a draft. |
-| LoRA | none, turbo | none | Turbo: 8 steps, near the 50-step look. Needs the Turbo LoRA add-on (Turbo Ref LoRA for References). Use 8 steps. |
+| Steps | 2 to 50 | 8 | 50 is reference quality, 4 a draft. The default is the Turbo preset's 8. |
+| LoRA | none, turbo | turbo | Turbo: 8 steps, near the 50-step look. Needs the Turbo LoRA add-on (Turbo Ref LoRA for References). Use 8 steps. |
 | Seed | -1 or a number | -1 | -1 is random. |
 
 ### Speed settings on a Mac (Base)
@@ -62,7 +62,7 @@ references: images, videos and sounds together. It is slower than [LTX-2.5](/mod
 |---|---|
 | Draft | 4 steps |
 | Fast | 20 steps, 45 layers, Reuse 2, Token reduction on |
-| Turbo | 8 steps with the Turbo LoRA (an add-on) |
+| Turbo | The default. 8 steps with the Turbo LoRA (an add-on) |
 | Default | 20 steps, 45 layers, Reuse 2 |
 | Reference | 50 steps, every layer |
 

@@ -2,14 +2,15 @@
 title: Pipelines and batches
 description: Chain workflows into saved pipelines with review gates and agent nodes, and run a workflow or pipeline over a list while you are away.
 sidebar:
-  order: 3
+  order: 4
 ---
 
 The **Pipelines** screen is for work that runs without you: a workflow run once per row of a list, or a chain of
 steps that hands its takes from one workflow to the next.
 
 The screen lists your saved pipelines (search and filter them) and **Recent batches** (the newest four; **All
-batches** shows the rest). Select a pipeline to see its steps, the models it will load, its memory, and **Run**,
+batches** shows the rest, with a search field and **All**, **Running**, **Waiting for you**, **Paused**, **Done** and
+**Failed** chips). Select a pipeline to see its steps, the models it will load, its memory, and **Run**,
 **Open graph** and **Duplicate**. **Rename** and **Delete** are in the **⋯** menu by its title.
 
 ## Pipelines

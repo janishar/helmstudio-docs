@@ -2,10 +2,10 @@
 title: Settings
 description: Your own account, theme and password, and signing out.
 sidebar:
-  order: 10
+  order: 11
 ---
 
-Open **Settings** from the foot of the dock. Everything here is yours; the [Assistant](/studio/assistant/) can point
+Open **Settings** from the foot of the rail (in the **Setup** gear on a short window, for admins). Everything here is yours; the [Assistant](/studio/assistant/) can point
 you here but never changes these for you.
 
 ## Account

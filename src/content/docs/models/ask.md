@@ -2,7 +2,7 @@
 title: Ask
 description: Local vision-language models that answer questions about takes, for pipelines and the Assistant.
 sidebar:
-  order: 7
+  order: 11
 ---
 
 The **Ask** workflows answer one question about one or more takes, in text. Pipeline agent nodes (judge, write and

@@ -1,6 +1,6 @@
 ---
 title: Use helmstudio from Claude (MCP)
-description: Connect Claude Code or Claude Desktop to helmstudio with helm mcp, so an agent can run workflows, read takes and edit timelines.
+description: Connect Claude Code or Claude Desktop to helmstudio with helm mcp, so an agent can run workflows, read takes, edit timelines and build Magic boards.
 sidebar:
   order: 1
 ---
@@ -9,7 +9,7 @@ import { Steps, Tabs, TabItem, Aside } from '@astrojs/starlight/components';
 
 `helm mcp` is an MCP server that runs on your machine. It lets Claude, or any MCP client, do what you do in the
 studio: find a workflow, run it, wait, look at the takes, start a batch, answer a review gate, put takes on a timeline
-and export it.
+and export it, and build, run and send [Magic](/studio/magic/) boards.
 
 It calls the studio as you, with your `helm login`, so the agent sees only your own work. Admin tools are not offered.
 
@@ -93,8 +93,8 @@ The tools tell your client what kind of action each one is. What your client doe
 | Kind | Tools | Asks first? |
 |---|---|---|
 | Reads | Listing workflows, searching takes, reading batches and timelines, waiting for a run | Never |
-| Writes | Starting runs and batches, uploading images, answering gates, adding to a timeline, exporting | Depends on your client |
-| Destructive | Editing or restoring a timeline, deleting a take, run or session | Most clients ask before each one |
+| Writes | Starting runs and batches, uploading images, answering gates, adding to a timeline, exporting, making and running Magic boards | Depends on your client |
+| Destructive | Editing or restoring a timeline or a Magic board, deleting a take, run or session | Most clients ask before each one |
 
 Deletes cannot be undone. A timeline edit can: Undo in the app, or `restore_timeline`. Every tool is listed in
 [MCP tools](/mcp/tools/).
@@ -106,7 +106,9 @@ Deletes cannot be undone. A timeline edit can: Undo in the app, or `restore_time
 - Local paths (an image to upload, a folder to save files in) must be absolute or start with `~/`. The server runs in
   your client's folder, not yours.
 - Errors come back as the studio's own text, for example `404: take not found`.
-- Timeline edits made through MCP show as `via mcp` in the sequence's history.
+- Timeline and Magic board edits made through MCP show as `via mcp` in their history.
+- Over MCP, Magic runs never ask first, even above your GPU-minute limit: call `plan_board` before `run_blocks`.
+  `save_voice` needs `consent: true`.
 
 ## Try it
 
@@ -118,3 +120,8 @@ Ask Claude:
 Then:
 
 > Cut the clip at 1 s, drop the second half and show me the frame at 0.5 s.
+
+Or a Magic board:
+
+> Make a Magic board with two shots of a fox in the rain, show me what running them costs, run them, then send the
+> board to the Timeline.

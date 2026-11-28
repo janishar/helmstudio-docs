@@ -2,7 +2,7 @@
 title: Timeline
 description: Cut takes into a sequence, direct new shots and voice lines in place, re-render, and export an MP4.
 sidebar:
-  order: 5
+  order: 6
 ---
 
 The Timeline is where takes become a film. You arrange clips in a sequence, cut them, generate new shots and voice
@@ -17,7 +17,8 @@ shots in all (for example ⏱ 12:40), its cast and look defaults, undo and redo,
   1280 × 720 at 24 fps. Sound is 48 kHz.
 - **Switch, rename, clone or delete**: open the sequence switcher (**Sequences**). **Clone** copies a sequence with
   all its clips, markers, cast and look; the copy uses the same takes, so nothing is rendered again. Deleting a sequence keeps its clips in
-  the Gallery and cancels an unfinished export.
+  the Gallery and cancels an unfinished export. Type in the dialog's search field to find a sequence, older ones
+  too.
 - **Names**: a sequence with no name is named from its shots' prompts, like Create's sessions. A name you type is
   kept.
 - **Side panel**: the sliders button in the tracks tool bar opens and closes the panel on the right.
@@ -79,6 +80,7 @@ Drags snap to cuts, the playhead, the range's in and out, and markers. Press **N
 - **←** and **→** step one frame (with ⇧, one second). **↑** and **↓** jump to the previous or next cut.
 - **Home** and **End** go to the start and end.
 - **Hover scrub** (**⇧S**) shows the frame under the pointer.
+- Drag the playhead by its line anywhere down the tracks, not only on the ruler.
 
 ### Zoom
 
@@ -99,7 +101,23 @@ points. A sequence holds up to 200.
 ### The clip inspector
 
 Select a clip to set its in and out, a dissolve (**Transition in**), its gain in dB and mute, or to **Replace with
-another take**. The line under its title names the take it comes from and the take's render time (⏱).
+another take**. An audio clip also has **Fade in** and **Fade out**. The line under its title names the take it comes
+from and the take's render time (⏱).
+
+### Fades, crossfades and ducking
+
+- **Fades.** Every audio clip has a fade in and a fade out, 0 to 10 s each. Drag the handle at the clip's top left or
+  top right corner inward, type the seconds in the inspector, or right-click the clip: **Fade in…**, **Fade out…** and
+  **Remove fades**.
+- **Crossfades.** Right-click an audio clip and choose **Crossfade into next** to blend it into the clip touching its
+  end on the same track. When the clip's take has sound past the cut, it is a true blend. When it has none, it dips
+  (each side fades over half the length): the badge turns amber, with a hint to trim the clip shorter, or **Remove**.
+- **Duck music.** In the sequence's panel (no clip selected), **Duck music** dips music under voice, by 12 dB by
+  default. It is off for a new sequence; a sequence sent from a Magic board keeps the board's setting.
+
+![An audio clip on the Timeline with fade handles, and the inspector's Fade in and Fade out](/screens/timeline-fades.jpg)
+
+Playback and Export use all of it.
 
 ## Generate in place
 
@@ -126,7 +144,7 @@ workflow, seed and inputs; each result becomes its slot's take.
 1. Press **Export**. The plan shows first:
    - **Stream copy** when every clip matches the sequence's size, frame rate and codec. It is fast and loses nothing.
    - **Re-encode** otherwise, to H.264. On a Mac it uses VideoToolbox.
-   - Sound is always re-encoded (AAC), so cuts stay in sync.
+   - Sound is always re-encoded (AAC), so cuts stay in sync. Fades, crossfades and Duck music are applied.
 2. Start the export. You can leave the screen: the export keeps going.
 3. The MP4 lands in the Gallery as a take (**From Timeline**). Open it from the dialog when it is done.
 

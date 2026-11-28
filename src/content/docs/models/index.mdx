@@ -21,7 +21,12 @@ helmstudio runs open models on your own machines. Models come in **families**. E
 | [MiniMax H3](/models/minimax-h3/) | Video with sound | Native (h3 on a Mac, SGLang on NVIDIA) | Base | Base fp8 |
 | [Qwen3-TTS](/models/qwen3-tts/) | Voice | PyTorch | Custom voice, Voice design | Custom voice, Voice design |
 | [ZONOS3](/models/zonos3/) | Voice | Native | Mini | Mini |
+| [ACE-Step 1.5](/models/ace-step/) | Music, song edits | PyTorch | 2B turbo, XL turbo | Listed, not tested yet |
+| [MiniMax Music 3](/models/minimax-music3/) | Music | PyTorch | Base | Listed, not tested yet |
+| [Stable Audio 3](/models/stable-audio-3/) | Sound effects | PyTorch | Small SFX | Listed, not tested yet |
+| [MMAudio](/models/mmaudio/) | Sound effects, sound for a video | PyTorch | Large 44k v2 | Listed, not tested yet |
 | [Ask](/models/ask/) | Text answers about takes | MLX (Qwen3.8 27B), PyTorch (Qwen3-VL 8B) | Both | Qwen3-VL 8B |
+| [Qwen Omni](/models/qwen-omni/) | Listens to a take and answers | MLX | Q8_0 (30B), 3B Q8_0 | Not offered |
 
 A workflow can do more than one task. Qwen Image and MiniMax H3 Image make an image from text, and turn into an edit
 as soon as you add reference images. The mode shows as a badge on Create.
@@ -33,6 +38,8 @@ A variant is one set of weights for a family. You pick it with the model chip on
 - **Base** is the full-quality model.
 - **Turbo** runs a small, fixed number of steps. It is much faster and good for drafts.
 - **Distilled** (LTX-2.5) runs 8 steps without guidance, about 10 times faster than **Dev**, the guided model.
+
+Image and video open on the fast ones: Qwen Image on Turbo, MiniMax H3 on its Turbo preset, LTX-2.5 on Distilled.
 - **fp8 and int8 community variants** are smaller, pre-quantised weights published by the community. They run on
   NVIDIA hosts only.
 
@@ -72,10 +79,15 @@ the size, the machine and the licence. Some licences must be accepted before the
 | MiniMax H3 | MiniMax H3 Community License |
 | Qwen3-TTS | Apache License 2.0 |
 | ZONOS3 | Apache License 2.0 |
+| ACE-Step 1.5 | MIT License |
+| MiniMax Music 3 | MiniMax-Music3 Community License |
+| Stable Audio 3 | Stability AI Community License and Gemma Terms of Use |
+| MMAudio | CC BY-NC 4.0 (non-commercial), with Apple's research licence (DFN5B CLIP) and MIT (BigVGAN) for its helpers |
 | Qwen3.8 27B | Apache License 2.0 |
+| Qwen Omni | Apache License 2.0 (Qwen3-Omni 30B); Qwen Research License Agreement (Qwen2.5-Omni 3B) |
 
 <Aside type="note">
-LTX-2.5 is gated on Hugging Face. The host that downloads it needs a Hugging Face access token.
+LTX-2.5 and Stable Audio 3 are gated on Hugging Face. The host that downloads them needs a Hugging Face access token.
 </Aside>
 
 Read each licence before you use a model's output commercially.
@@ -103,7 +115,12 @@ preset for the final.
 | Higher-quality clips, first and last frames, video from references | [MiniMax H3](/models/minimax-h3/) |
 | Preset speakers with a style in words, or a voice designed from a description | [Qwen3-TTS](/models/qwen3-tts/) |
 | Cloned voices, many languages, fine control of delivery | [ZONOS3](/models/zonos3/) |
+| The best-sounding songs, with sung lyrics | [MiniMax Music 3](/models/minimax-music3/) |
+| Fast songs, set BPM or key, a reference song, or editing a song | [ACE-Step 1.5](/models/ace-step/) |
+| Quick sound effects and ambiences from words | [Stable Audio 3](/models/stable-audio-3/) |
+| A sound matched to a video | [MMAudio](/models/mmaudio/) |
 | Questions about takes, in pipelines and the Assistant | [Ask](/models/ask/) |
+| Listening to a take's sound for the Assistant | [Qwen Omni](/models/qwen-omni/) |
 
 **Mind memory.** Larger sizes, longer clips, `bf16` and Base variants raise the peak. If a run does not fit, lower
 the size, the length or the precision, or pick another host.

@@ -5,6 +5,52 @@ sidebar:
   order: 1
 ---
 
+## "helmstudio is starting"
+
+The app is restarting or can't be reached yet, for example while it updates. The page retries by itself every few
+seconds and loads the studio as soon as it answers. **Retry** tries at once.
+
+## A red dot on the logo
+
+When a runner or the studio is down, the helmstudio logo above the rail gets a red dot, and its label says what:
+**Runner down**, **No runner** or **Studio down**. Click the logo (or press Enter on it) to open the status panel:
+the studio, each runner on each host, and each NVIDIA host, with its state. **Esc** closes it.
+
+- In the Mac app, **Restart runners** restarts this Mac's runners. In a browser, restart them from helmstudio on the
+  Mac.
+- **Open Models** shows which models are on which machine.
+
+The dot turns red only for a runner that was up since you opened helmstudio and then stopped. A machine that was
+already off, such as a remote Mac you keep off, and an NVIDIA host you turn off show grey, **Offline since …**, in the
+status panel. A runner off for over an hour no longer raises the dot either. When all is well, there is no dot and
+the logo goes home.
+
+## "Studio isn't answering"
+
+A banner at the top of every page says **Studio isn't answering. Retrying…**, with the time to the next try. While it
+shows, Generate and other keys that need the studio are greyed. **Retry** checks at once. When the studio answers, the
+banner says **Back online** and every page loads again. A Magic edit made meanwhile is kept and sent when the studio
+is back.
+
+## Generate says "No runner for …"
+
+No runner for that model's runtime is on, for example **No runner for mlx**. The line under the composer says what to
+do: start helmstudio on your Mac, or pick another model or machine in Run on. Generate comes back by itself a few
+seconds after a runner starts. A Magic block's Generate says the same.
+
+**On T9 · not connected · Models** means every copy of the model is on a drive that is unplugged. Plug it in, or
+download a copy to a connected folder. See [Model folders](/studio/models/#model-folders).
+
+## A run stopped or waits
+
+- **Runner on … stopped · trying again (2 of 2)**: the runner stopped mid-run, and the run starts again once on a
+  runner.
+- **This run stopped**: the run failed, with the reason in plain words. **Retry** makes the same run again, with the
+  same seed. **Show details** has the full error text.
+- **Waiting · 2 ahead on …**: the machine is busy; the run starts when its turn comes.
+- **Live updates paused**: the progress may be behind. It catches up when the connection is back; click it to try
+  now.
+
 ## The stack does not become healthy
 
 `make up` waits until every service is healthy and stops with an error if one is not.
@@ -108,8 +154,23 @@ On the local and production stacks, calls to remote providers are off by default
 
 - **A first-open step failed.** The screen says which step. **Show log** opens its log; **Try again** goes on from
   that step.
-- **A runner stalled, or you added a model.** Choose **Restart runners** in the menu bar menu.
+- **A runner stalled, or you added a model.** Choose **Restart runners** in the menu bar menu. **Restart stack**
+  restarts the services and the runners.
 - **Something is down** (red dot in the menu bar). Choose **Open logs** to see the app's log and each runner's log.
+- **"helmstudio stopped answering".** A window lists what is down. What you made is saved; runs that were going show
+  as failed. **Restart** starts the services and the runners again (about a minute). It also comes back by itself
+  when the studio answers.
+- **"The mlx runner keeps stopping"** (or "didn't start"). After 5 stops in 10 minutes a runner is not restarted
+  until you say so. **Restart runner** starts it again; **Show log** opens its log.
+- **"Port … is in use".** Another app holds a port helmstudio needs. Quit that app, or type another port and press
+  **Try again**.
+- **"Your models folder on … isn't connected".** Plug the drive in and the start goes on by itself, or press
+  **Continue** to start with the models on this Mac, or **Choose folder…** to pick another.
+- **"Only N GB free".** helmstudio needs about 10 GB free to make takes and load models. Free some space, or press
+  **Continue anyway**.
+- **Quitting while runs are going.** The app asks first; the runs show as failed in Create, and **Retry** starts them
+  again.
+- **"The studio page didn't load".** **Reload** tries again; it also reloads by itself when the studio answers.
 
 ## Claude does not see helmstudio
 

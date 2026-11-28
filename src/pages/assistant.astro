@@ -1,0 +1,125 @@
+---
+import Showcase from '../layouts/Showcase.astro';
+import Win from '../components/Win.astro';
+---
+<Showcase title="Assistant · helmstudio" description="helmstudio's Assistant works every screen with you: it sets up Create, builds Magic boards, places shots on the Timeline, and asks before anything that uses the GPU.">
+<div class="wrap">
+  <header class="hero">
+    <p class="eyebrow">The Assistant</p>
+    <h1>Tell it the shot.<br><span class="grad">Watch it set up.</span></h1>
+    <p class="lede">A co-director in a drawer on every screen. It sees what you see, works the same controls you do, and stops to ask before anything that uses the GPU, downloads weights or deletes work.</p>
+    <div class="ctas">
+      <a class="btn primary" href="/studio/assistant/">Read the Assistant guide →</a>
+      <a class="btn" href="/start/install/">Install helmstudio</a>
+    </div>
+    <figure class="hero-shot" style="margin-inline:0">
+      <div class="window"><div class="bar"><i></i><i></i><i></i></div>
+        <video src="/screens/assistant-scroll.mp4" poster="/screens/assistant-scroll.jpg" width="2240" height="1292" autoplay muted loop playsinline preload="metadata" aria-label="A real session in helmstudio: the Assistant plans a short film, makes the fisherman's character sheet, saves the look and makes keyframe 1, while the first clip plays on the stage"></video>
+      </div>
+      <figcaption class="cap">A real session · one sentence became a film plan, a character sheet, a saved look and the first keyframe</figcaption>
+    </figure>
+  </header>
+</div>
+
+<section class="stage" aria-labelledby="how-h">
+  <div class="wrap">
+    <div class="stage-head">
+      <p class="eyebrow">How it works</p>
+      <h2 id="how-h">You say it. <span class="grad">It does it on screen.</span></h2>
+      <p>Each step shows as a line the moment it starts, and ticks when it is done, with Undo where the screen can undo it. Anything costly waits for your click.</p>
+    </div>
+    <ol class="flow">
+      <li><b>Ask</b><span>"Make a rainy London evening still of @mara, cinematic." Hand it takes with @ or drop an image.</span></li>
+      <li><b>It does the work</b><span>Opens the right screen, picks the model, writes the prompt, sets the look. Each change can be undone.</span></li>
+      <li><b>It asks first</b><span>A card shows the model, size, seeds, the host and the time. Its button is your click.</span></li>
+      <li><b>Steer it live</b><span>Type while it works. Your words are read at its next step, and it changes course.</span></li>
+    </ol>
+    <div style="margin-top:40px">
+      <Win src="assistant-create" caption="Create · ringed controls are the ones it just changed" alt="Create with the Assistant drawer: the elements, prompt, model and lighting it changed are ringed, and a card asks before generating 4 images" />
+    </div>
+    <div class="duo">
+      <Win src="assistant-steer" caption="Steer while it answers · Enter adds your words, Stop ends it" alt="Steering: the box stays open while it works; messages wait for the next step; then it switches to Qwen Image Turbo at 16:9" />
+      <Win src="assistant-timeline" caption="Timeline · from a written scene to new shots, each placed with Undo" alt="Timeline with the Assistant: it looked at four takes, named the sharpest, then placed three new shots from a written scene" />
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <section class="rooms" aria-label="What it does">
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">On a Magic board</p>
+        <h3>From a brief to a board, plan first.</h3>
+        <p>On Magic it works as a director. It writes a plan of the style, the cast, the places and the beats, and waits for your OK. Then views, voices, frames, shots and sound, each change drawn on the board for you to apply.</p>
+        <ul>
+          <li>New blocks dashed green, moved or changed ones dashed blue</li>
+          <li>History marks its edits "by Assistant", and Undo takes them back</li>
+          <li>Runs above your GPU-minute limit ask with the estimate; Stop can stop its runs too</li>
+        </ul>
+        <a href="/studio/assistant/#on-a-magic-board">The Assistant on Magic →</a>
+      </div>
+      <Win src="magic-assistant" alt="The Assistant on a Magic board: its change is drawn with Apply and Discard, History lists edits by you and by Assistant, and a card asks to run 3 shots, about 6 min" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">It sees and hears your takes</p>
+        <h3>Answers you can click.</h3>
+        <p>Takes, elements and voices show as chips and players, never as ids. When its model sees images, it looks at your takes itself, and at what it just made. A video comes as 12 frames with their times, every sound with its exact length and loudness, and a local model listens when it needs to hear.</p>
+        <ul>
+          <li>Open and Use in… under every take it shows</li>
+          <li>Choices as cards, the recommended one marked</li>
+          <li>Look at runs on your own machines for a text-only model</li>
+        </ul>
+        <a href="/studio/assistant/#reading-its-answers">Reading its answers →</a>
+      </div>
+      <Win src="assistant-media" alt="Media in an answer: an image take with Open and Use in…, a playable video and a voice take with its waveform" />
+    </article>
+
+    <article class="room">
+      <div class="copy">
+        <p class="eyebrow">Memory</p>
+        <h3>It keeps your film's shot list.</h3>
+        <p>Plan a film once. The shot list, with each shot's line and the take you picked, is in Memory, so "make shot 3" works in a new chat too.</p>
+        <ul>
+          <li>Remembers what you like, in plain words you can edit</li>
+          <li>Shots go onto the Timeline in order, with a marker each</li>
+        </ul>
+        <a href="/studio/assistant/#chats-and-memory">Chats and memory →</a>
+      </div>
+      <Win src="assistant-memory" alt="Memory › Projects with a film's shot list: numbered shots with what happens, length and the spoken line" />
+    </article>
+
+    <article class="room flip">
+      <div class="copy">
+        <p class="eyebrow">On your phone</p>
+        <h3>The same co-director, in your pocket.</h3>
+        <p>At phone width the Assistant slides up from the bottom. Ask for a still, press Generate, and find it in the Gallery later.</p>
+        <a href="/studio/assistant/#open-it">Open it →</a>
+      </div>
+      <Win src="assistant-phone" alt="The Assistant at phone width: the rail as a bar, the Assistant sheet over Create, asking before generating" />
+    </article>
+  </section>
+
+  <section class="band" aria-labelledby="where-h">
+    <div class="copy" style="max-width:46rem">
+      <p class="eyebrow">Where it runs</p>
+      <h3 id="where-h">Your model, your rules.</h3>
+      <p>The Assistant runs on a text model your admin picks: a local server on your own network or a provider. The admin sets the caps, and which tools and skills it may use.</p>
+    </div>
+    <div class="specs">
+      <div class="spec"><small>Asks first</small><b>Your click runs it</b><span>GPU runs, deletes and anything sent off the machine wait at a card.</span></div>
+      <div class="spec"><small>Auto mode</small><b>Safe steps on its own</b><span>Runs on your machines within hourly caps; deletes still ask.</span></div>
+      <div class="spec"><small>Private</small><b>Text-only stays local</b><span>With a text-only model, your images never leave your machines.</span></div>
+    </div>
+  </section>
+
+  <section class="close" aria-labelledby="start-h">
+    <h2 id="start-h">Meet your <span class="grad">co-director.</span></h2>
+    <div class="ctas">
+      <a class="btn primary" href="/studio/assistant/">Read the Assistant guide →</a>
+      <a class="btn" href="/magic/">See Magic</a>
+    </div>
+  </section>
+</div>
+</Showcase>
